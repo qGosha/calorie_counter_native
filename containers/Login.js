@@ -1,17 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import FontAwesome from 'react-fontawesome';
-import { PasswordEye } from "../components/password-eye";
-import { StyleSheet, Text, View } from 'react-native';
-import '../style/auth.css';
-import {
-  Button,
-  FormGroup,
-  ControlLabel,
-  FormControl,
-  Alert,
-  InputGroup
-} from 'react-bootstrap';
+// import FontAwesome from 'react-fontawesome';
+// import { PasswordEye } from "../components/password-eye";
+import { StyleSheet, Text, View, Button } from 'react-native';
 import {
   signInUser,
   signInUserSuccess,

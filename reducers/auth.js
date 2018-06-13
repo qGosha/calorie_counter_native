@@ -1,15 +1,15 @@
 import {SHOWSPIN, SIGNUP, SIGNIN, SIGNINERROR, SIGNINSUCCESS, SIGNOUT, SIGNUPSUCCESS, SIGNUPERROR, SIGNUPVIEWON, SIGNUPVIEWOFF} from '../actions/index';
-import jwtLib from 'jsonwebtoken';
-
-const jwt = localStorage.getItem('jwt');
-const jwtVerify = jwtLib.decode(jwt);
+// import jwtLib from 'jsonwebtoken';
+//
+// const jwt = localStorage.getItem('jwt');
+// const jwtVerify = jwtLib.decode(jwt);
 
 export function auth (state = {
-  logged: (jwt && jwtVerify.exp > Date.now()/1000 - 5000) ? true : false,
-  signup: false, error: false,
+  logged: false,
+  signup: false,
+  error: false,
   isFetching: false
   }, action) {
-let error;
   switch (action.type) {
   case SIGNUP:
     return { ...state, error: false };

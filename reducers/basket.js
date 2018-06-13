@@ -1,15 +1,15 @@
-import { 
-  GETDETAILEDFOODINFO, 
-  GETDETAILEDFOODINFOFAILURE, 
-  GETDETAILEDFOODINFOSUCCESS, 
+import {
+  GETDETAILEDFOODINFO,
+  GETDETAILEDFOODINFOFAILURE,
+  GETDETAILEDFOODINFOSUCCESS,
   SETNEWBASKET,
   LOGBASKETFOOD,
   LOGBASKETFOODSUCCESS,
-  LOGBASKETFOODFAILURE 
+  LOGBASKETFOODFAILURE
   } from '../actions/index';
 
-const storagedBasket = localStorage.getItem('basket');
-const initialState = storagedBasket ? JSON.parse(storagedBasket) : [];
+// const storagedBasket = localStorage.getItem('basket');
+// const initialState = storagedBasket ? JSON.parse(storagedBasket) : [];
 
 export function basket(state = initialState, action) {
   const payload = action.payload;
@@ -27,7 +27,7 @@ export function basket(state = initialState, action) {
     case LOGBASKETFOODSUCCESS:
       return [];
     case LOGBASKETFOODFAILURE:
-      return state;      
+      return state;
     default:
       return state;
   }

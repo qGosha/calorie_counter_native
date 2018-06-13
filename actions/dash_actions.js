@@ -62,7 +62,7 @@ export const hideLoadingScreen = () => ({
 })
 
 export const signOutUser = () => {
-  localStorage.removeItem('jwt');
+  // localStorage.removeItem('jwt');
   return {
     type: SIGNOUT
   }
@@ -97,5 +97,3 @@ export const setDailyCalFailure = response => ({
 export const setDailyCalNoteRemove = response => ({
   type: SETDAILYCALNOTEREMOVE
 });
-
-

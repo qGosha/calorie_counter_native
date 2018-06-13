@@ -13,27 +13,27 @@ class AppRoot extends Component {
   //     return (
   //      <View>
   //       {Comp}
-  //       <ModalRoot/>
-  //       <ErrorHandle />
   //      </View>
   //   )
   // }
   //   if (this.props.auth.logged) return combinedComps(<Dashboard />);
   //   else if (this.props.auth.signup) return combinedComps(<Signup />);
   //   else return combinedComps(<Login />);
-  // }
-  return (
-       <View style={{
-         flex: 1,
-         backgroundColor: '222'
-       }}>
-        <Text>Hello World</Text>
-       </View>
-    )
+    return (
+         <View style={{
+           flex: 1,
+           backgroundColor: '222'
+         }}>
+          <Text>Hello World</Text>
+         </View>
+      )
+  }
+
 }
+
 
 const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(AppRoot);
+export default connect(mapStateToProps, null)(AppRoot);

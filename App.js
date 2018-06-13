@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Component } from "react";
 import AppRoot from "./containers/AppRoot";
 import { Provider } from "react-redux";
-import reducers from "./reducers";
+import rootReducer from "./reducers";
 import ReduxPromise from "redux-promise";
 import { createStore, applyMiddleware, compose } from "redux";
+import { StyleSheet, Text, View } from 'react-native';
 
-const store = createStore(reducers, composeEnhancers(applyMiddleware(ReduxPromise)));
-
+const store = createStore(rootReducer, applyMiddleware(ReduxPromise));
 
 export default class App extends Component {
   render() {
@@ -25,11 +25,11 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '222',
+    backgroundColor: '#fff',
     marginTop: 50
   }
 });
-
+//
 // import { StyleSheet, Text, View } from 'react-native';
 //
 // export default class App extends React.Component {

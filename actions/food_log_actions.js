@@ -14,7 +14,6 @@ export const UPDATEQTYFAILURE = "UPDATEQTYFAILURE";
 
 const ROOT_URL = "https://trackapi.nutritionix.com/v2/";
 
-const jwt = localStorage.getItem('jwt');
 
 export const getFoodLog = (jwt, date) => {
   const headers = {
