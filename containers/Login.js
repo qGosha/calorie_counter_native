@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import FontAwesome from 'react-fontawesome';
 // import { PasswordEye } from "../components/password-eye";
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import {
   signInUser,
   signInUserSuccess,
@@ -19,8 +19,6 @@ class Login extends Component {
       password: "",
       showPassword: false
     };
-    this.onInputEmailChange = this.onInputEmailChange.bind(this);
-    this.onInputPasswordChange = this.onInputPasswordChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onPasswordVisibilityChange = this.onPasswordVisibilityChange.bind(this);
     this.onCreateAccount = this.onCreateAccount.bind(this);
@@ -32,17 +30,6 @@ class Login extends Component {
     this.setState({ showPassword });
   }
 
-  onInputEmailChange(event) {
-    this.setState({
-      email: event.target.value
-    });
-  }
-
-  onInputPasswordChange(event) {
-    this.setState({
-      password: event.target.value
-    });
-  }
 
   onFormSubmit(event) {
     event.preventDefault();
@@ -66,73 +53,77 @@ class Login extends Component {
 
   render() {
     const loginErr = this.props.err ?
-      <Alert bsStyle="danger">
-        <div>{this.props.err}</div>
-    </Alert> :
+      <View>
+        <Text>{this.props.err}</Text>
+    </View> :
     null;
     return (
-      <form className='form-signin' horizontal='true' onSubmit={this.onFormSubmit}>
-      <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
-      <FormGroup bsSize="lg" controlId="email">
-          <ControlLabel htmlFor="email" className="sr-only">Email address</ControlLabel>
-            <FormControl
-              type="email"
-              value={this.state.email}
-              placeholder="Email address"
-              onChange={this.onInputEmailChange}
-              required="true"
-            />
-          </FormGroup>
-      <FormGroup bsSize="lg" controlId="password">
-          <ControlLabel htmlFor="password" className="sr-only">Password</ControlLabel>
-          <InputGroup bsSize="lg">
-            <FormControl
-              type={this.state.showPassword ? "text" : "password"}
-              value={this.state.password}
-              placeholder="Password"
-              onChange={this.onInputPasswordChange}
-              required="true"
-              minLength="6"
-             maxLength="20"
-            />
-            <InputGroup.Button>
-              <PasswordEye onClick={this.onPasswordVisibilityChange}
-             showPassword={this.state.showPassword} />
-          </InputGroup.Button>
-           </InputGroup>
-          </FormGroup>
-      <Button type="submit" className="btn-fetch btn btn-primary btn-lg btn-block">{this.props.isFetching ?
-      <FontAwesome
-              className='fas fa-spinner spinner'
-              name='spinner'
-              spin
-              size='2x'
-          /> : ''}
-                Sign in
+      <KeyboardAvoidingView behavior='padding' style={styles.container}>
+          <TextInput
+            value={this.state.email}
+            onChangeText={(email) => this.setState({ email })}
+            placeholder={'Your email'}
+            onSubmitEditing={() => this.passwordInput.focus()}
+            returnKeyType='next'
+            keywordType='email-address'
+            autoCapitalize='none'
+            autoCorrect={false}
+            style={styles.input}
+          />
+          <TextInput
+            value={this.state.password}
+            onChangeText={(password) => this.setState({ password })}
+            placeholder={'Password'}
+            returnKeyType='go'
+            secureTextEntry={true}
+            style={styles.input}
+            ref={(input) => this.passwordInput = input}
+          />
 
-          </Button>
-
-          <p className="switch-login-singup">
-             Not registered?{" "}
-            <a href="#" onClick={this.onCreateAccount}>
-             Create an account
-            </a>
-          </p>
-          <p className="switch-login-singup">
-           For testing purposes click <a href="#" onClick={this.onTestLogin}>Test login</a>
-          </p>
-          {loginErr}
-        </form>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={this.onTestLogin}
+          >
+          <Text style={styles.buttonText}>LOGIN</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#3498db',
+  },
+  input: {
+    height: 40,
+    width: 300,
+    padding: 10,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    color: '#FFFFFF',
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    width: 300,
+    backgroundColor: '#2980b9',
+    paddingVertical: 15
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: '700'
+  }
+});
 
 const mapDispatchToProps = dispatch => {
   return {
     signInUser: data => {
       dispatch(signInUser(data)).then(response => {
         if(!response.error) {
-          localStorage.setItem('jwt', response.payload.data['x-user-jwt']);
+          // localStorage.setItem('jwt', response.payload.data['x-user-jwt']);
           dispatch(signInUserSuccess(response.payload.data));
         } else {
           dispatch(signInUserFailure(response.payload.response.data.message));
