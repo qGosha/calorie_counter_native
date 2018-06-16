@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 // import Dashboard from "./Dashboard";
-// import  Signup  from "./Signup";
+import  Signup  from "./Signup";
 import Login from "./Login";
 // import ModalRoot from "./Modal";
 // import ErrorHandle from "./ErrorHandle";
@@ -18,7 +18,7 @@ class AppRoot extends Component {
        </View>
     )
   }
-    if (this.props.auth.logged) return combinedComps(<Dashboard />);
+    if (this.props.auth.logged) return combinedComps(<Login />);
     else if (this.props.auth.signup) return combinedComps(<Signup />);
     else return combinedComps(<Login />);
   }

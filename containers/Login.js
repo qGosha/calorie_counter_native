@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import FontAwesome from 'react-fontawesome';
-// import { PasswordEye } from "../components/password-eye";
-import { StyleSheet, Text, View, Button, TextInput, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { StyleSheet, Text, View, Button, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
 import {
   signInUser,
   signInUserSuccess,
@@ -57,8 +57,16 @@ class Login extends Component {
         <Text>{this.props.err}</Text>
     </View> :
     null;
+    const button = (text, func) => {
+      return <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={func}
+          >
+          <Text style={styles.buttonText}>{text}</Text>
+          </TouchableOpacity>
+    }
     return (
-      <KeyboardAvoidingView behavior='padding' style={styles.container}>
+      <KeyboardAwareScrollView scrollEnabled={true} style={styles.container}>
           <TextInput
             value={this.state.email}
             onChangeText={(email) => this.setState({ email })}
@@ -80,13 +88,9 @@ class Login extends Component {
             ref={(input) => this.passwordInput = input}
           />
 
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={this.onTestLogin}
-          >
-          <Text style={styles.buttonText}>LOGIN</Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
+          {button("LOGIN", this.onFormSubmit)}
+          {button("SIGN UP", () => Actions.signup() )}
+        </KeyboardAwareScrollView>
     );
   }
 }
@@ -99,17 +103,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#3498db',
   },
   input: {
-    height: 40,
+    height: 50,
     width: 300,
     padding: 10,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    color: '#FFFFFF',
+    backgroundColor: '#fff',
+    fontSize: 20,
     marginBottom: 10,
   },
   buttonContainer: {
     width: 300,
     backgroundColor: '#2980b9',
-    paddingVertical: 15
+    paddingVertical: 15,
+    marginTop: 15
   },
   buttonText: {
     textAlign: 'center',
