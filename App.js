@@ -15,7 +15,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxPromise));
 export default class App extends Component {
   render() {
         return (
-    
+
     <Provider store={store}>
     <Router>
       <Scene key="root">
@@ -23,18 +23,16 @@ export default class App extends Component {
           component={Login}
           title="Login"
           initial
-          hideNavBar
         />
         <Scene
           key="signup"
           component={Signup}
-          title="Signup"
-          hideNavBar    
+          title="Signup"    
         />
       </Scene>
       </Router>
       </Provider>
-    
+
   );
   }
 }
