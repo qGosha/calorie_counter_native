@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { StyleSheet, Text, View, Button, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView } from 'react-native';
+import { CustomButton } from '../components/customButton'
+import t from 'tcomb-form-native';
+
 import {
   signInUser,
   signInUserSuccess,
@@ -11,45 +14,81 @@ import {
   showSpinner
 } from "../actions/index";
 
+const Password = t.refinement(t.String, pass => {
+  return pass.length > 5;
+});
+
+const Email = t.refinement(t.String, email => {
+  const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  return reg.test(email);
+});
+
+const Log = t.struct({
+  email: Email,
+  password: Password
+});
+
+const Form = t.form.Form;
+
+const options = {
+  auto: 'placeholders',
+  fields: {
+    email: {
+      keyboardType: 'email-address',
+      error: 'Wrong email format',
+      autoCapitalize: 'none'
+    },
+    password: {
+      error: 'Password must be 6 characters long',
+      secureTextEntry: true,
+      autoCapitalize: 'none'
+    },
+
+  }
+};
+
+
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
-      showPassword: false
+      isSubmitDisabled: true,
+      value: {
+        email: '',
+        password: ''
+      },
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
-    this.onPasswordVisibilityChange = this.onPasswordVisibilityChange.bind(this);
-    this.onCreateAccount = this.onCreateAccount.bind(this);
-    this.onTestLogin = this.onTestLogin.bind(this);
+
+    this.onFormChange = this.onFormChange.bind(this);
+    // this.onTestLogin = this.onTestLogin.bind(this);
   }
 
-  onPasswordVisibilityChange() {
-    const showPassword = !this.state.showPassword
-    this.setState({ showPassword });
+  onFormChange = (value) => {
+    this.setState({value}, () => {
+      const stateVal = this.state.value;
+      const disable = Object.keys(stateVal).some(i => !stateVal[i]);
+      this.setState({isSubmitDisabled: disable})
+    })
   }
-
 
   onFormSubmit(event) {
-    event.preventDefault();
-    this.props.signInUser(this.state);
-    this.props.showSpinner();
-    this.setState({ email: "", password: "" });
+    const value = this.refs.form.getValue();
+    const { email, password } = this.state.value;
+    alert(password);
+    // this.props.signInUser(this.state.value);
+    // this.props.showSpinner();
+    // this.setState({ email: "", password: "" });
   }
 
-  onCreateAccount(event) {
-    event.preventDefault();
-    this.props.showSignUp();
-  }
 
-  onTestLogin() {
-    const data = {
-      email: "zxoxz@mail.ru",
-      password: "123456"
-    }
-    this.props.signInUser(data);
-  }
+  // onTestLogin() {
+  //   const data = {
+  //     email: "zxoxz@mail.ru",
+  //     password: "123456"
+  //   }
+  //   this.props.signInUser(data);
+  // }
 
   render() {
     const loginErr = this.props.err ?
@@ -57,42 +96,26 @@ class Login extends Component {
         <Text>{this.props.err}</Text>
     </View> :
     null;
-    const button = (text, func) => {
-      return <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={func}
-          >
-          <Text style={styles.buttonText}>{text}</Text>
-          </TouchableOpacity>
-    }
-    return (
-    <View style={styles.container}>
-      <KeyboardAwareScrollView scrollEnabled={true} contentContainerStyle={styles.containerAware}>
-          <TextInput
-            value={this.state.email}
-            onChangeText={(email) => this.setState({ email })}
-            placeholder={'Your email'}
-            onSubmitEditing={() => this.passwordInput.focus()}
-            returnKeyType='next'
-            keywordType='email-address'
-            autoCapitalize='none'
-            autoCorrect={false}
-            style={styles.input}
-          />
-          <TextInput
-            value={this.state.password}
-            onChangeText={(password) => this.setState({ password })}
-            placeholder={'Password'}
-            returnKeyType='go'
-            secureTextEntry={true}
-            style={styles.input}
-            ref={(input) => this.passwordInput = input}
-          />
 
-          {button("LOGIN", this.onFormSubmit)}
-          {button("SIGN UP", () => Actions.signup() )}
+    return (
+      <View style={styles.container}>
+       <KeyboardAwareScrollView scrollEnabled={true} contentContainerStyle={styles.containerAware}>
+         <Form
+         ref="form"
+         type={Log}
+         options={options}
+         value={this.state.value}
+         onChange={this.onFormChange}/>
+          <CustomButton
+          text={"LOGIN"}
+          func={() => Actions.error()}
+          isDisabled={this.state.isSubmitDisabled}
+          customStyle={{opacity: this.state.isSubmitDisabled ? 0.4 : 1}} />
+          <CustomButton
+          text={"SIGN UP"}
+          func={() => Actions.signup()} />
         </KeyboardAwareScrollView>
-      </View>
+        </View>
     );
   }
 }
@@ -100,32 +123,14 @@ class Login extends Component {
 const styles = StyleSheet.create({
   containerAware: {
     flex: 1,
+    width: 300,
     justifyContent: 'center'
   },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3498db',
-  },
-  input: {
-    height: 50,
-    width: 300,
-    padding: 10,
-    backgroundColor: '#fff',
-    fontSize: 20,
-    marginBottom: 10,
-  },
-  buttonContainer: {
-    width: 300,
-    backgroundColor: '#2980b9',
-    paddingVertical: 15,
-    marginTop: 15
-  },
-  buttonText: {
-    textAlign: 'center',
-    color: '#fff',
-    fontWeight: '700'
+    backgroundColor: '#3498db'
   }
 });
 

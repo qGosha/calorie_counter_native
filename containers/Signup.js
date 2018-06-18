@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { Actions } from 'react-native-router-flux';
-import { StyleSheet, Label, Text, View, Button, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
-import cloneDeep from 'lodash/cloneDeep';
-
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView } from 'react-native';
+import { CustomButton } from '../components/customButton'
 import t from 'tcomb-form-native';
 import {
   signUpUser,
@@ -63,17 +61,7 @@ const options = {
   }
 };
 
-const CustomButton = ({text, func, isDisabled, customStyle}) => {
-  return (
-    <TouchableOpacity
-        style={[styles.buttonContainer, customStyle]}
-        onPress={func}
-        disabled={isDisabled}
-      >
-      <Text style={styles.buttonText}>{text}</Text>
-      </TouchableOpacity>
-    );
-}
+
 
 class Signup extends Component {
   constructor(props) {
@@ -90,7 +78,7 @@ class Signup extends Component {
     };
    this.onFormChange = this.onFormChange.bind(this);
    this.onFormSubmit = this.onFormSubmit.bind(this);
-    this.onLoginAccount = this.onLoginAccount.bind(this);
+   this.onLoginAccount = this.onLoginAccount.bind(this);
 
   }
 
@@ -148,7 +136,6 @@ onFormSubmit = () => {
           func={this.onFormSubmit}
           isDisabled={this.state.isSubmitDisabled}
           customStyle={{opacity: this.state.isSubmitDisabled ? 0.4 : 1}} />
-
         </KeyboardAwareScrollView>
         </View>
     );
@@ -166,22 +153,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#3498db'
-  },
-
-  buttonContainer: {
-    width: 180,
-    borderColor: '#2980b9',
-    borderWidth: 1,
-    borderRadius: 8,
-    alignSelf: 'center',
-    backgroundColor: '#2980b9',
-    paddingVertical: 15,
-    marginTop: 15
-  },
-  buttonText: {
-    textAlign: 'center',
-    color: '#fff',
-    fontWeight: '700'
   }
 });
 

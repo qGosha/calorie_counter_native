@@ -4,7 +4,7 @@ import FontAwesome from 'react-fontawesome';
 import '../style/dashboard.css';
 import { Container, Row, Col } from 'react-grid-system';
 import { DashboardPanel } from '../components/dashboardPanel';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 import {
   signOutUser,
   getUser,

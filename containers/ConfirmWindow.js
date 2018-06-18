@@ -1,66 +1,44 @@
 import React from "react";
-import {
-  Modal,
-  Button,
-  ListGroupItem,
-  Image,
-  FormGroup,
-  form,
-  FormControl
-} from 'react-bootstrap';
-import { Container, Row, Col } from 'react-grid-system';
 import { connect } from "react-redux";
-import { CONFIRM } from '../containers/Modal';
-import {
-  hideModal
-} from "../actions/index";
+import { StyleSheet, Text, View, TextInput, Modal, TouchableHighlight } from 'react-native';
+// import { CONFIRM } from '../containers/Modal';
+// import {
+//   hideModal
+// } from "../actions/index";
 
 
 const ConfirmWindow = props => {
-  const hideModal = props.hideModal;
-  const modalText = props.text;
-  const confirmFunc = () => {
-    props.confirmFunk();
-    hideModal(CONFIRM);
-  };
+  // const hideModal = props.hideModal;
+  // const modalText = props.text;
+  // const confirmFunc = () => {
+  //   props.confirmFunk();
+  //   hideModal(CONFIRM);
+  // };
 
  return (
-   <div className="static-modal">
+    <View style={{marginTop: 22}}>
    <Modal
-     show={true}
-     keyboard={true}
-     onHide={() => hideModal(CONFIRM)}
-     aria-labelledby="confirm-modal-title">
-     <Modal.Header closeButton>
-       <Modal.Title id="confirm-modal-title-lg">
-       Confirm
-       </Modal.Title>
-     </Modal.Header>
-     <Modal.Body>
-     <Container fluid>
-     <Row>
-      <Col style={{padding:'30px 15px'}}>
-       {modalText}
-      </Col>
-     </Row>
-       <Row style={{justifyContent:'center'}}>
-        <Col style={{margin:'0 20px 20px 0'}}>
-         <Button
-           bsStyle="danger"
-           style={{margin: '0 20px 0 0'}}
-           onClick={confirmFunc}>
-           Yes
-         </Button>
-          <Button
-            onClick={() => hideModal(CONFIRM)}>
-            No
-          </Button>
-         </Col>
-       </Row>
-     </Container>
-     </Modal.Body>
+     animationType="slide"
+     transparent={false}
+     visible={true}
+     style={{marginTop: 70}}
+     onRequestClose={() => {
+       alert('Modal has been closed.');
+     }}>
+     <View style={{marginTop: 22}}>
+       <View>
+         <Text>Hello World!</Text>
+
+         <TouchableHighlight
+           onPress={() => {
+             alert('svasvasvasv.');
+           }}>
+           <Text>Hide Modal</Text>
+         </TouchableHighlight>
+       </View>
+     </View>
    </Modal>
-   </div>
+   </View>
  )
 }
 

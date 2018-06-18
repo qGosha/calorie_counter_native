@@ -5,9 +5,10 @@ import rootReducer from './reducers';
 import ReduxPromise from 'redux-promise';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { StyleSheet, Text, View } from 'react-native';
-import { Router, Scene } from 'react-native-router-flux';
+import { Router, Scene, Lightbox } from 'react-native-router-flux';
 import Signup from "./containers/Signup";
 import Login from "./containers/Login";
+import ConfirmWindow from "./containers/ConfirmWindow";
 
 const store = createStore(rootReducer, applyMiddleware(ReduxPromise));
 
@@ -17,20 +18,25 @@ export default class App extends Component {
         return (
 
     <Provider store={store}>
-    <Router>
-      <Scene key="root">
-        <Scene key="login"
-          component={Login}
-          title="Login"
-          initial
-        />
-        <Scene
-          key="signup"
-          component={Signup}
-          title="Signup"    
-        />
-      </Scene>
-      </Router>
+      <Router>
+        <Lightbox>
+          <Scene key="root">
+            <Scene key="login"
+              component={Login}
+              title="Login"
+              initial
+              navigationBarStyle={styles.nav}
+            />
+            <Scene
+              key="signup"
+              component={Signup}
+              title="Signup"
+              navigationBarStyle={styles.nav}
+            />
+            </Scene>
+            <Scene key="error" component={ConfirmWindow} hideNavBar />
+          </Lightbox>
+        </Router>
       </Provider>
 
   );
@@ -41,9 +47,9 @@ export default class App extends Component {
 
 
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//   },
-// });
+const styles = StyleSheet.create({
+  nav: {
+    backgroundColor: '#3498db',
+    borderBottomWidth: 0
+  },
+});

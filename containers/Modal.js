@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import Basket from "./Basket";
-import DetailedNutr from "./DetailedNutr";
+import { StyleSheet, Text, View, TextInput, Modal } from 'react-native';
+// import Basket from "./Basket";
+// import DetailedNutr from "./DetailedNutr";
 import ConfirmWindow from './ConfirmWindow';
-import IntakeLog from './IntakeLog';
+// import IntakeLog from './IntakeLog';
 
 
 export const BASKET = 'BASKET';
@@ -29,7 +30,7 @@ const ModalRoot = ({...modal}) => {
   const SpecificModal = MODAL_COMPONENTS[window];
   return <SpecificModal {...modalProps} key={window}/>;
   })
-  return <div> {modals} </div>;
+  return <View style={{flex: 1}}> {modals} </View>;
 
 };
 
