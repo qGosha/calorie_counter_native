@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Actions } from 'react-native-router-flux';
 import { StyleSheet, Label, Text, View, Button, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
+import cloneDeep from 'lodash/cloneDeep';
+
 import t from 'tcomb-form-native';
 import {
   signUpUser,
@@ -25,6 +27,8 @@ const Password = t.refinement(t.String, pass => {
   return pass.length > 5;
 });
 
+// const stylesheet = cloneDeep(t.form.Form.stylesheet);
+
 const Sign = t.struct({
   name: t.String,
   email: Email,
@@ -34,9 +38,15 @@ const Sign = t.struct({
 
 const Form = t.form.Form;
 
+  t.form.Form.stylesheet.textbox.normal.height = 45;
+  t.form.Form.stylesheet.textbox.normal.backgroundColor = '#fff';
+  t.form.Form.stylesheet.textbox.normal.fontSize = 18;
+  t.form.Form.stylesheet.textbox.error.height = 45;
+  t.form.Form.stylesheet.textbox.error.backgroundColor = '#fff';
+  t.form.Form.stylesheet.textbox.error.fontSize = 18;
+
 const options = {
   fields: {
-    error: 'Passwords must match',
     email: {
       keyboardType: 'email-address',
       error: 'Example: abc@abc.com'
@@ -44,7 +54,7 @@ const options = {
     repeatpassword: {
       label: 'Repeat password',
       secureTextEntry: true,
-      error: 'Password must be 6 characters long' 
+      error: 'Password must be 6 characters long'
     },
     password: {
       error: 'Password must be 6 characters long',
@@ -53,18 +63,44 @@ const options = {
   }
 };
 
+const CustomButton = ({text, func, isDisabled, customStyle}) => {
+  return (
+    <TouchableOpacity
+        style={[styles.buttonContainer, customStyle]}
+        onPress={func}
+        disabled={isDisabled}
+      >
+      <Text style={styles.buttonText}>{text}</Text>
+      </TouchableOpacity>
+    );
+}
+
 class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     value: null,
+     isSubmitDisabled: true,
+     value: {
+       name: '',
+       email: '',
+       password: '',
+       repeatpassword: ''
+     },
      options: options
     };
-    this.onFormSubmit = this.onFormSubmit.bind(this);
+   this.onFormChange = this.onFormChange.bind(this);
+   this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onLoginAccount = this.onLoginAccount.bind(this);
 
   }
-  
+
+onFormChange = (value) => {
+  this.setState({value}, () => {
+    const stateVal = this.state.value;
+    const disable = Object.keys(stateVal).some(i => !stateVal[i]);
+    this.setState({isSubmitDisabled: disable})
+  })
+}
 
 onFormSubmit = () => {
     const value = this.refs.form.getValue();
@@ -83,7 +119,7 @@ onFormSubmit = () => {
       } else {
         alert(this.state.value);
       }
-  
+
   }
 
   onLoginAccount(event) {
@@ -97,45 +133,47 @@ onFormSubmit = () => {
         <Text>{this.props.err}</Text>
     </View> :
     null;
-    const button = (text, func) => {
-      return <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={func}
-          >
-          <Text style={styles.buttonText}>{text}</Text>
-          </TouchableOpacity>
-    }
+
     return (
-       <KeyboardAwareScrollView scrollEnabled={true} style={styles.container}>
-         <Form 
+      <View style={styles.container}>
+       <KeyboardAwareScrollView scrollEnabled={true} contentContainerStyle={styles.containerAware}>
+         <Form
          ref="form"
          type={Sign}
          options={this.state.options}
          value={this.state.value}
-         onChange={(value) => this.setState({value})}/>
-          {button("SIGN UP", this.onFormSubmit)}
-          {button("Already have an account?", () => Actions.pop() )}
+         onChange={this.onFormChange}/>
+          <CustomButton
+          text={"SIGN UP"}
+          func={this.onFormSubmit}
+          isDisabled={this.state.isSubmitDisabled}
+          customStyle={{opacity: this.state.isSubmitDisabled ? 0.4 : 1}} />
+
         </KeyboardAwareScrollView>
+        </View>
     );
   }
 }
+
 const styles = StyleSheet.create({
+  containerAware: {
+    flex: 1,
+    width: 300,
+    justifyContent: 'center'
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3498db',
+    backgroundColor: '#3498db'
   },
-  input: {
-    height: 50,
-    width: 300,
-    padding: 10,
-    backgroundColor: '#fff',
-    fontSize: 20,
-    marginBottom: 10,
-  },
+
   buttonContainer: {
-    width: 300,
+    width: 180,
+    borderColor: '#2980b9',
+    borderWidth: 1,
+    borderRadius: 8,
+    alignSelf: 'center',
     backgroundColor: '#2980b9',
     paddingVertical: 15,
     marginTop: 15
@@ -146,6 +184,7 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   }
 });
+
 
 const mapDispatchToProps = dispatch => {
   return {

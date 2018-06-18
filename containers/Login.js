@@ -66,7 +66,8 @@ class Login extends Component {
           </TouchableOpacity>
     }
     return (
-      <KeyboardAwareScrollView scrollEnabled={true} style={styles.container}>
+    <View style={styles.container}>
+      <KeyboardAwareScrollView scrollEnabled={true} contentContainerStyle={styles.containerAware}>
           <TextInput
             value={this.state.email}
             onChangeText={(email) => this.setState({ email })}
@@ -91,11 +92,16 @@ class Login extends Component {
           {button("LOGIN", this.onFormSubmit)}
           {button("SIGN UP", () => Actions.signup() )}
         </KeyboardAwareScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  containerAware: {
+    flex: 1,
+    justifyContent: 'center'
+  },
   container: {
     flex: 1,
     alignItems: 'center',
