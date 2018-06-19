@@ -1,11 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 import { StyleSheet, Text, View, TextInput, Modal, TouchableHighlight } from 'react-native';
+import PopupDialog, {DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
+import { Actions } from 'react-native-router-flux';
+import { CustomButton } from '../components/customButton'
 // import { CONFIRM } from '../containers/Modal';
 // import {
 //   hideModal
 // } from "../actions/index";
-
+const slideAnimation = new SlideAnimation({
+  slideFrom: 'top',
+});
 
 const ConfirmWindow = props => {
   // const hideModal = props.hideModal;
@@ -16,29 +21,27 @@ const ConfirmWindow = props => {
   // };
 
  return (
-    <View style={{marginTop: 22}}>
-   <Modal
-     animationType="slide"
-     transparent={false}
-     visible={true}
-     style={{marginTop: 70}}
-     onRequestClose={() => {
-       alert('Modal has been closed.');
-     }}>
-     <View style={{marginTop: 22}}>
-       <View>
-         <Text>Hello World!</Text>
-
-         <TouchableHighlight
-           onPress={() => {
-             alert('svasvasvasv.');
-           }}>
-           <Text>Hide Modal</Text>
-         </TouchableHighlight>
-       </View>
-     </View>
-   </Modal>
+   <PopupDialog
+   ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+   dismissOnTouchOutside={false}
+   width={200}
+   dialogAnimation={slideAnimation}
+   show={true}
+ >
+ <DialogTitle title={props.title} />
+   <View style={{
+     paddingLeft: 10,
+     paddingRight:10,
+     flex: 1,
+     justifyContent: 'space-around'
+   }}>
+     <Text style={{alignSelf: 'center'}}>{props.text}</Text>
+     <CustomButton
+     text={"Hide"}
+     func={() => Actions.pop()}
+     customStyle={{backgroundColor: '#007bff'}} />
    </View>
+ </PopupDialog>
  )
 }
 

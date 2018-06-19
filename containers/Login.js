@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { CustomButton } from '../components/customButton'
 import t from 'tcomb-form-native';
 
@@ -72,10 +72,12 @@ class Login extends Component {
     })
   }
 
-  onFormSubmit(event) {
-    const value = this.refs.form.getValue();
-    const { email, password } = this.state.value;
-    alert(password);
+  onFormSubmit() {
+    Keyboard.dismiss();
+    Actions.error({title: 'Login failed', text: 'Credentials are wrong'})
+    // const value = this.refs.form.getValue();
+    // const { email, password } = this.state.value;
+    // alert(password);
     // this.props.signInUser(this.state.value);
     // this.props.showSpinner();
     // this.setState({ email: "", password: "" });
@@ -98,24 +100,33 @@ class Login extends Component {
     null;
 
     return (
-      <View style={styles.container}>
-       <KeyboardAwareScrollView scrollEnabled={true} contentContainerStyle={styles.containerAware}>
+
+       <KeyboardAwareScrollView
+       extraHeight={200}
+       scrollEnabled={true}
+       style={{backgroundColor: '#3498db'}}
+       contentContainerStyle={styles.containerAware}>
+       <View style={styles.container}>
          <Form
          ref="form"
          type={Log}
          options={options}
          value={this.state.value}
          onChange={this.onFormChange}/>
+
+         <View style={{paddingTop:15}}>
           <CustomButton
           text={"LOGIN"}
-          func={() => Actions.error()}
+          func={this.onFormSubmit}
           isDisabled={this.state.isSubmitDisabled}
           customStyle={{opacity: this.state.isSubmitDisabled ? 0.4 : 1}} />
           <CustomButton
           text={"SIGN UP"}
           func={() => Actions.signup()} />
+          </View>
+          </View>
         </KeyboardAwareScrollView>
-        </View>
+
     );
   }
 }
@@ -123,12 +134,13 @@ class Login extends Component {
 const styles = StyleSheet.create({
   containerAware: {
     flex: 1,
-    width: 300,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '#3498db'
   },
   container: {
     flex: 1,
-    alignItems: 'center',
+    paddingLeft:15,
+    paddingRight:15,
     justifyContent: 'center',
     backgroundColor: '#3498db'
   }
