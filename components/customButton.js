@@ -1,16 +1,23 @@
 import React from "react";
-import { StyleSheet,Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet,Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 
 
-export const CustomButton = ({text, func, isDisabled, customStyle}) => {
+export const CustomButton = ({text, func, isDisabled, customStyle, indicate}) => {
   return (
     <TouchableOpacity
         style={[styles.buttonContainer, customStyle]}
         onPress={func}
         disabled={isDisabled}
+
       >
-      <Text style={styles.buttonText}>{text}</Text>
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+      }}>
+        { indicate ? <ActivityIndicator size="small" color="#0000ff" /> : null}
+        <Text style={styles.buttonText}>{text}</Text>
+      </View>
       </TouchableOpacity>
     );
 }
@@ -29,6 +36,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: 'center',
     color: '#fff',
-    fontWeight: '700'
+    fontWeight: '700',
+    marginLeft: 5
   }
 });

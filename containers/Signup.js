@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { CustomButton } from '../components/customButton'
 import t from 'tcomb-form-native';
 import {
@@ -47,16 +48,19 @@ const options = {
   fields: {
     email: {
       keyboardType: 'email-address',
-      error: 'Example: abc@abc.com'
+      error: 'Example: abc@abc.com',
+      autoCapitalize: 'none'
     },
     repeatpassword: {
       label: 'Repeat password',
       secureTextEntry: true,
-      error: 'Password must be 6 characters long'
+      error: 'Password must be 6 characters long',
+      autoCapitalize: 'none'
     },
     password: {
       error: 'Password must be 6 characters long',
-      secureTextEntry: true
+      secureTextEntry: true,
+      autoCapitalize: 'none'
     }
   }
 };
@@ -91,9 +95,10 @@ onFormChange = (value) => {
 }
 
 onFormSubmit = () => {
+  Keyboard.dismiss();
     const value = this.refs.form.getValue();
     const { password, repeatpassword } = this.state.value;
-    alert(password);
+   Actions.error({title: 'Signup failed', text: 'Credentials are wrong'})
       if (password !== repeatpassword) {
         const options = t.update(this.state.options, {
           fields: {
@@ -105,7 +110,7 @@ onFormSubmit = () => {
         })
         this.setState({options: options});
       } else {
-        alert(this.state.value);
+        return;
       }
 
   }
@@ -123,21 +128,31 @@ onFormSubmit = () => {
     null;
 
     return (
-      <View style={styles.container}>
-       <KeyboardAwareScrollView scrollEnabled={true} contentContainerStyle={styles.containerAware}>
-         <Form
-         ref="form"
-         type={Sign}
-         options={this.state.options}
-         value={this.state.value}
-         onChange={this.onFormChange}/>
-          <CustomButton
+       <KeyboardAwareScrollView
+       keyboardShouldPersistTaps='handled'
+       showsVerticalScrollIndicator={false}
+       enableOnAndroid={true}
+       extraHeight={200}
+       scrollEnabled={true}
+       style={{backgroundColor: '#3498db'}}
+       contentContainerStyle={styles.containerAware}>
+       <View style={styles.container}>
+            <Form
+        ref="form"
+        type={Sign}
+        options={this.state.options}
+        value={this.state.value}
+        onChange={this.onFormChange}/>
+
+         <View style={{paddingTop:15}}>
+           <CustomButton
           text={"SIGN UP"}
           func={this.onFormSubmit}
           isDisabled={this.state.isSubmitDisabled}
           customStyle={{opacity: this.state.isSubmitDisabled ? 0.4 : 1}} />
+          </View>
+          </View>
         </KeyboardAwareScrollView>
-        </View>
     );
   }
 }
@@ -145,12 +160,13 @@ onFormSubmit = () => {
 const styles = StyleSheet.create({
   containerAware: {
     flex: 1,
-    width: 300,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '#3498db'
   },
   container: {
     flex: 1,
-    alignItems: 'center',
+    paddingLeft:15,
+    paddingRight:15,
     justifyContent: 'center',
     backgroundColor: '#3498db'
   }

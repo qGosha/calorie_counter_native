@@ -5,13 +5,12 @@ import rootReducer from './reducers';
 import ReduxPromise from 'redux-promise';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { StyleSheet, Text, View } from 'react-native';
-import { Router, Scene, Lightbox } from 'react-native-router-flux';
+import { Router, Scene, Lightbox, Modal } from 'react-native-router-flux';
 import Signup from "./containers/Signup";
 import Login from "./containers/Login";
 import ConfirmWindow from "./containers/ConfirmWindow";
 
 const store = createStore(rootReducer, applyMiddleware(ReduxPromise));
-
 
 export default class App extends Component {
   render() {
@@ -26,12 +25,14 @@ export default class App extends Component {
               title="Login"
               initial
               navigationBarStyle={styles.nav}
+              navBarButtonColor='#fff'
             />
             <Scene
               key="signup"
               component={Signup}
               title="Signup"
               navigationBarStyle={styles.nav}
+              navBarButtonColor='#fff'
             />
             </Scene>
             <Scene key="error" component={ConfirmWindow} hideNavBar />
@@ -42,10 +43,6 @@ export default class App extends Component {
   );
   }
 }
-
-
-
-
 
 const styles = StyleSheet.create({
   nav: {

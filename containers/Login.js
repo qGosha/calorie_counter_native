@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
 import { CustomButton } from '../components/customButton'
 import t from 'tcomb-form-native';
 
@@ -74,7 +74,21 @@ class Login extends Component {
 
   onFormSubmit() {
     Keyboard.dismiss();
-    Actions.error({title: 'Login failed', text: 'Credentials are wrong'})
+    const value = this.refs.form.getValue();
+    if (value) {
+    const data = this.state.value;
+    // try {
+    //   const jsonData = JSON.stringify(data);
+    //   AsyncStorage.setItem('credentials', jsonData);
+    // } catch (er) {
+    //  Actions.error({title: 'Data upload failed', text: er})
+    // }
+    this.props.showSpinner();
+    this.props.signInUser(data);
+
+    }
+
+
     // const value = this.refs.form.getValue();
     // const { email, password } = this.state.value;
     // alert(password);
@@ -93,15 +107,13 @@ class Login extends Component {
   // }
 
   render() {
-    const loginErr = this.props.err ?
-      <View>
-        <Text>{this.props.err}</Text>
-    </View> :
-    null;
-
+   const isSubmitDisabled = this.state.isSubmitDisabled;
+   const isFetching = this.props.isFetching;
     return (
-
        <KeyboardAwareScrollView
+       keyboardShouldPersistTaps='handled'
+       showsVerticalScrollIndicator={false}
+       enableOnAndroid={true}
        extraHeight={200}
        scrollEnabled={true}
        style={{backgroundColor: '#3498db'}}
@@ -118,11 +130,27 @@ class Login extends Component {
           <CustomButton
           text={"LOGIN"}
           func={this.onFormSubmit}
-          isDisabled={this.state.isSubmitDisabled}
-          customStyle={{opacity: this.state.isSubmitDisabled ? 0.4 : 1}} />
+          isDisabled={isSubmitDisabled || isFetching}
+          customStyle={{opacity: (isSubmitDisabled || isFetching) ? 0.4 : 1}}
+          indicate={isFetching}/>
           <CustomButton
           text={"SIGN UP"}
-          func={() => Actions.signup()} />
+          func={() => {
+            try {
+              AsyncStorage.getItem('credentials')
+              .then( result => {
+                if (result !== null) {
+                alert(result);
+              } else {
+                throw Error(result);
+              }
+              })
+            } catch (er) {
+              Actions.error({title: 'Data fetch failed', text: er})
+            }
+          }}
+          // func={() => Actions.signup()}
+          />
           </View>
           </View>
         </KeyboardAwareScrollView>
@@ -149,14 +177,22 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = dispatch => {
   return {
     signInUser: data => {
-      dispatch(signInUser(data)).then(response => {
+      dispatch(signInUser(data))
+      .then(response => {
         if(!response.error) {
           // localStorage.setItem('jwt', response.payload.data['x-user-jwt']);
           dispatch(signInUserSuccess(response.payload.data));
         } else {
-          dispatch(signInUserFailure(response.payload.response.data.message));
+          return Promise.reject(response.payload.response.data.message);
         }
-      });
+      })
+      .catch(er => {
+        dispatch(signInUserFailure());
+          const message = er && er.response && er.response.data.message || 'Error';
+          Actions.error({title: 'Login failed', text: message});
+
+      }
+    );
     },
     showSignUp: () => dispatch(showSignUp()),
     showSpinner: () => dispatch(showSpinner())
