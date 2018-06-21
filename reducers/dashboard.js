@@ -15,7 +15,6 @@ import {
   const initialState = {
     userInfo: false,
     loading: false,
-    error: false,
     suggestedFood:false,
     dailyCalUpSuccess: false,
     calLimitError: false
@@ -32,7 +31,7 @@ export function dash (state = initialState, action) {
     case FETCHSUGGESTEDFOODSUCCESS:
       return {...state, suggestedFood: action.payload }
     case FETCHDASHINFOFAILURE:
-      return { ...state, error: action.payload, loading:false }
+      return { ...state, loading:false }
     case DASHBOARDLOADING:
       return { ...state, loading: true }
     case DASHBOARDLOADED:
@@ -44,7 +43,7 @@ export function dash (state = initialState, action) {
     case SETDAILYCALFAILURE:
       return { ...state, calLimitError: action.payload, dailyCalUpSuccess: false }
     case SETDAILYCALNOTEREMOVE:
-      return { ...state, dailyCalUpSuccess: false, calLimitError: false} 
+      return { ...state, dailyCalUpSuccess: false, calLimitError: false}
 
     default:
       return state;

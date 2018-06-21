@@ -6,8 +6,7 @@ import axios from "axios";
 // };
 const ROOT_URL = "https://trackapi.nutritionix.com/v2/";
 
-export const SIGNUPVIEWON = "SIGNUPVIEWON";
-export const SIGNUPVIEWOFF = "SIGNUPVIEWOFF";
+
 export const SIGNUP = "SIGNUP";
 export const SIGNINSUCCESS = "SIGNINSUCCESS";
 export const SIGNINERROR = "SIGNINERROR";
@@ -16,16 +15,6 @@ export const SIGNUPERROR = "SIGNUPERROR";
 export const SIGNIN = "SIGNIN";
 export const SHOWSPIN = "SHOWSPIN";
 
-
-
-
-export const showSignUp = () => ({
-  type: SIGNUPVIEWON
-});
-
-export const hideSignUp = () => ({
-  type: SIGNUPVIEWOFF
-});
 
 export const signUpUser = data => {
   const path = "auth/signup";

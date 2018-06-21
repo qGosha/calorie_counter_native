@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import { Font } from 'expo';
 import { DashboardPanel } from '../components/dashboardPanel';
 import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -68,6 +69,11 @@ constructor(props) {
       return this.props.getSuggestedFood(jwt);
     })
     .then( () => {
+      return Font.loadAsync({
+        'FontAwesome': require('../assets/fonts/FontAwesome.ttf'),
+      });
+    })
+    .then( () => {
       if (this.props.loading) {
         this.props.hideLoadingScreen()
       } } )
@@ -83,16 +89,14 @@ constructor(props) {
     const error = this.props.error;
     const loading = this.props.loading;
     const suggestedFood = this.props.suggestedFood;
-    if(loading && !error) {
+    if(loading) {
       return (
       <View style={{ flex: 1 }}>
         <Spinner visible={true} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
       </View>
       )
-    } else if (!userInfo && !error && !suggestedFood) {
-      return <View style={{ flex: 1 }}>
-           <Text>Some error + {JSON.stringify(userInfo)} + {JSON.stringify(error)} + {JSON.stringify(suggestedFood)}</Text>
-          </View>
+    } else if(!loading && !suggestedFood) {
+      return null;
     } else {
      return  <DashboardPanel
      onSignOut={this.onSignOut}

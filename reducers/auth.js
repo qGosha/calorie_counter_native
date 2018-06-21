@@ -1,4 +1,4 @@
-import {SHOWSPIN, SIGNUP, SIGNIN, SIGNINERROR, SIGNINSUCCESS, SIGNOUT, SIGNUPSUCCESS, SIGNUPERROR, SIGNUPVIEWON, SIGNUPVIEWOFF} from '../actions/index';
+import {SHOWSPIN, SIGNUP, SIGNIN, SIGNINERROR, SIGNINSUCCESS, SIGNOUT, SIGNUPSUCCESS, SIGNUPERROR} from '../actions/index';
 // import jwtLib from 'jsonwebtoken';
 //
 // const jwt = localStorage.getItem('jwt');
@@ -6,7 +6,6 @@ import {SHOWSPIN, SIGNUP, SIGNIN, SIGNINERROR, SIGNINSUCCESS, SIGNOUT, SIGNUPSUC
 
 export function auth (state = {
   logged: false,
-  signup: false,
   error: false,
   isFetching: false
   }, action) {
@@ -20,17 +19,13 @@ export function auth (state = {
   case SIGNINSUCCESS:
     return {...state, logged: true, isFetching: false, jwt: action.payload};
   case SIGNINERROR:
-    return {...state, error: action.payload, isFetching: false};
+    return {...state, isFetching: false};
   case SIGNOUT:
       return { ...state, logged: false, userInfo: false}
-  case SIGNUPVIEWON:
-      return { ...state, signup: true, error: false};
   case SIGNUPSUCCESS:
-      return { ...state, logged: true, isFetching: false};
+      return { ...state, logged: true, isFetching: false, jwt: action.payload};
   case SIGNUPERROR:
-      return { ...state, error: action.payload, isFetching: false};
-  case SIGNUPVIEWOFF:
-      return { ...state, signup: false, error: false};
+      return { ...state, isFetching: false};
   default:
     return state;
   }

@@ -63,7 +63,7 @@ class Login extends Component {
     this.onFormChange = this.onFormChange.bind(this);
     // this.onTestLogin = this.onTestLogin.bind(this);
   }
-  
+
 
   onFormChange = (value) => {
     this.setState({value}, () => {
@@ -72,7 +72,7 @@ class Login extends Component {
       this.setState({isSubmitDisabled: disable})
     })
   }
-  
+
 
   onFormSubmit() {
     Keyboard.dismiss();
@@ -83,12 +83,12 @@ class Login extends Component {
     this.props.signInUser(data);
     }
   }
-  
+
   // clearForm() {
   //   const value = this.state.value;
   //   value.email = '';
   //   value.password ='';
-    
+
   // }
 
   // onTestLogin() {
@@ -188,7 +188,6 @@ const mapDispatchToProps = dispatch => {
         dispatch(signInUserFailure());
         const message = er && er.response && er.response.data.message || 'Error';
         Actions.error({title: 'Login failed', text: message});
-
       }
     );
     },

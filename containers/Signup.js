@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard, AsyncStorage } from 'react-native';
 import { CustomButton } from '../components/customButton'
 import t from 'tcomb-form-native';
 import {
   signUpUser,
   signUpUserSuccess,
   signUpUserFailure,
-  hideSignUp,
   showSpinner
 } from "../actions/index";
 
@@ -29,7 +28,7 @@ const Password = t.refinement(t.String, pass => {
 // const stylesheet = cloneDeep(t.form.Form.stylesheet);
 
 const Sign = t.struct({
-  name: t.String,
+  first_name: t.String,
   email: Email,
   password: Password,
   repeatpassword: RepeatPassword
@@ -46,6 +45,9 @@ const Form = t.form.Form;
 
 const options = {
   fields: {
+    first_name: {
+      label: 'Your name',
+    },
     email: {
       keyboardType: 'email-address',
       error: 'Example: abc@abc.com',
@@ -73,7 +75,7 @@ class Signup extends Component {
     this.state = {
      isSubmitDisabled: true,
      value: {
-       name: '',
+       first_name: '',
        email: '',
        password: '',
        repeatpassword: ''
@@ -82,8 +84,6 @@ class Signup extends Component {
     };
    this.onFormChange = this.onFormChange.bind(this);
    this.onFormSubmit = this.onFormSubmit.bind(this);
-   this.onLoginAccount = this.onLoginAccount.bind(this);
-
   }
 
 onFormChange = (value) => {
@@ -98,7 +98,7 @@ onFormSubmit = () => {
   Keyboard.dismiss();
     const value = this.refs.form.getValue();
     const { password, repeatpassword } = this.state.value;
-   Actions.error({title: 'Signup failed', text: 'Credentials are wrong'})
+   // Actions.error({title: 'Signup failed', text: 'Credentials are wrong'})
       if (password !== repeatpassword) {
         const options = t.update(this.state.options, {
           fields: {
@@ -109,23 +109,25 @@ onFormSubmit = () => {
           }
         })
         this.setState({options: options});
-      } else {
         return;
+      }
+      if(value) {
+        const initialState = {
+          first_name: '',
+          email: '',
+          password: '',
+          repeatpassword: ''
+        }
+        this.props.showSpinner();
+        this.setState({value: initialState});
+        this.props.signUpUser(value);
       }
 
   }
 
-  onLoginAccount(event) {
-    event.preventDefault();
-    this.setState({ email: "", password: "", first_name: "" });
-    this.props.hideSignUp();
-  }
   render() {
-  const loginErr = this.props.err ?
-      <View>
-        <Text>{this.props.err}</Text>
-    </View> :
-    null;
+    const isSubmitDisabled = this.state.isSubmitDisabled;
+    const isFetching = this.props.isFetching;
 
     return (
        <KeyboardAwareScrollView
@@ -148,8 +150,9 @@ onFormSubmit = () => {
            <CustomButton
           text={"SIGN UP"}
           func={this.onFormSubmit}
-          isDisabled={this.state.isSubmitDisabled}
-          customStyle={{opacity: this.state.isSubmitDisabled ? 0.4 : 1}} />
+          isDisabled={isSubmitDisabled || isFetching}
+          customStyle={{opacity: (isSubmitDisabled || isFetching) ? 0.4 : 1}}
+          indicate={isFetching}/>
           </View>
           </View>
         </KeyboardAwareScrollView>
@@ -177,17 +180,29 @@ const mapDispatchToProps = dispatch => {
   return {
     signUpUser: data => {
       dispatch(signUpUser(data)).then(response => {
-        !response.error
-          ? dispatch(signUpUserSuccess(response.payload.data))
-          : dispatch(signUpUserFailure(response.payload.response.data.message));
-      });
+        if(!response.error) {
+          const data = response.payload.data['x-user-jwt'];
+          dispatch(signUpUserSuccess(data));
+          try {
+            AsyncStorage.setItem('jwt', data, () => Actions.dashboard())
+          } catch (er) {
+            Actions.error({title: 'Data upload failed', text: er})
+          }
+        } else {
+          return Promise.reject(response.payload.response.data.message);
+        }
+      })
+      .catch(er => {
+        dispatch(signUpUserFailure());
+        const message = er && er.response && er.response.data.message || 'Error';
+        Actions.error({title: 'Signup failed', text: message});
+      }
+    );
     },
-    hideSignUp: () => dispatch(hideSignUp()),
     showSpinner: () => dispatch(showSpinner())
   };
 };
 const mapStateToProps = state => ({
-  err: state.auth.error,
   isFetching: state.auth.isFetching
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);

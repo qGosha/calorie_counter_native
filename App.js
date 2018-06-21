@@ -8,6 +8,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Router, Scene, Lightbox, Modal } from 'react-native-router-flux';
 import Signup from "./containers/Signup";
 import Login from "./containers/Login";
+import Dashboard from "./containers/Dashboard";
 import ConfirmWindow from "./containers/ConfirmWindow";
 
 const store = createStore(rootReducer, applyMiddleware(ReduxPromise));
@@ -34,6 +35,13 @@ export default class App extends Component {
               navigationBarStyle={styles.nav}
               navBarButtonColor='#fff'
             />
+            <Scene key="dashboard"
+              component={Dashboard}
+              title="Dashboard"
+              navigationBarStyle={styles.nav}
+              navBarButtonColor='red'
+              // hideNavBar
+            />
             </Scene>
             <Scene key="error" component={ConfirmWindow} hideNavBar />
           </Lightbox>
@@ -43,6 +51,10 @@ export default class App extends Component {
   );
   }
 }
+
+
+
+
 
 const styles = StyleSheet.create({
   nav: {
