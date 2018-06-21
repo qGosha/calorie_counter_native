@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import FontAwesome from 'react-fontawesome';
-import '../style/dashboard.css';
-import { Container, Row, Col } from 'react-grid-system';
+import { Actions } from 'react-native-router-flux';
 import { DashboardPanel } from '../components/dashboardPanel';
+import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
   signOutUser,
@@ -44,7 +43,7 @@ constructor(props) {
   }
 
   dailyCalChange(value) {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = this.props.jwt;
     const request = {
       'daily_kcal': value
     };
@@ -55,14 +54,15 @@ constructor(props) {
   }
 
   componentDidMount() {
-    const jwt = localStorage.getItem('jwt');
-    setTimeout(this.onLongLoading, 800);
+    setTimeout(this.onLongLoading, 600);
+    const jwt = this.props.jwt;
+    const currentDate = this.props.currentDate;
     this.props.getUser(jwt)
     .then(() => {
-        return this.props.getLog(jwt, this.props.currentDate);
+        return this.props.getLog(jwt, currentDate);
       })
     .then( () => {
-      return this.props.getMonthReport(jwt, this.props.currentDate);
+      return this.props.getMonthReport(jwt, currentDate);
     })
     .then( () => {
       return this.props.getSuggestedFood(jwt);
@@ -71,19 +71,10 @@ constructor(props) {
       if (this.props.loading) {
         this.props.hideLoadingScreen()
       } } )
-    .catch( error => {
-      let err;
-      if(error
-        && error.payload
-        && error.payload.response
-        && error.payload.response.data
-        && error.payload.response.data.message) {
-          err = error.payload.response.data.message;
-        }
-        else {
-         err  = 'Technical error';
-        }
-      this.props.fetchDashInfoFailure(err);
+    .catch( er => {
+      const message = er && er.response && er.response.data.message || 'Error';
+      Actions.error({title: 'Data fetch failed', text: message})
+      this.props.fetchDashInfoFailure(message);
     } )
   }
   render() {
@@ -94,25 +85,16 @@ constructor(props) {
     const suggestedFood = this.props.suggestedFood;
     if(loading && !error) {
       return (
-        <div className='dashboard-spinner'>
-         <FontAwesome
-          className='fas fa-spinner'
-          name='spinner'
-          spin
-          size='5x' />
-        </div>
+      <View style={{ flex: 1 }}>
+        <Spinner visible={true} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
+      </View>
       )
     } else if (!userInfo && !error && !suggestedFood) {
-      return null
-    } else if(error) {
-       return (
-        <div>
-         <div>Sorry we are experiencing technical problems. Please try later.</div>
-         <div>{error}</div>
-        </div>
-      )
+      return <View style={{ flex: 1 }}>
+           <Text>Some error + {JSON.stringify(userInfo)} + {JSON.stringify(error)} + {JSON.stringify(suggestedFood)}</Text>
+          </View>
     } else {
-     return <DashboardPanel
+     return  <DashboardPanel
      onSignOut={this.onSignOut}
      userInfo={userInfo}
      showBasketModal={this.props.showBasketModal}
@@ -175,6 +157,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 const mapStateToProps = state => ({
+  jwt: state.auth.jwt,
   userInfo: state.dash.userInfo,
   suggestedFood: state.dash.suggestedFood,
   error: state.dash.error,

@@ -9,7 +9,7 @@ export const CustomButton = ({text, func, isDisabled, customStyle, indicate}) =>
         style={[styles.buttonContainer, customStyle]}
         onPress={func}
         disabled={isDisabled}
-
+        
       >
       <View style={{
         flexDirection: 'row',

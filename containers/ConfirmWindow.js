@@ -5,9 +5,9 @@ import PopupDialog, {DialogTitle, SlideAnimation } from 'react-native-popup-dial
 import { Actions } from 'react-native-router-flux';
 import { CustomButton } from '../components/customButton'
 // import { CONFIRM } from '../containers/Modal';
-// import {
-//   hideModal
-// } from "../actions/index";
+import {
+  hideModal
+} from "../actions/index";
 const slideAnimation = new SlideAnimation({
   slideFrom: 'top',
 });
@@ -22,7 +22,7 @@ const ConfirmWindow = props => {
 
  return (
    <PopupDialog
-   ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+   ref={(popupDialog) => { popupDialog = popupDialog; }}
    dismissOnTouchOutside={false}
    width={200}
    dialogAnimation={slideAnimation}

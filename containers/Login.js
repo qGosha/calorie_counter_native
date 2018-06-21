@@ -59,10 +59,11 @@ class Login extends Component {
       },
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
-
+    // this.clearForm = this.clearForm.bind(this);
     this.onFormChange = this.onFormChange.bind(this);
     // this.onTestLogin = this.onTestLogin.bind(this);
   }
+  
 
   onFormChange = (value) => {
     this.setState({value}, () => {
@@ -71,32 +72,24 @@ class Login extends Component {
       this.setState({isSubmitDisabled: disable})
     })
   }
+  
 
   onFormSubmit() {
     Keyboard.dismiss();
     const value = this.refs.form.getValue();
     if (value) {
     const data = this.state.value;
-    // try {
-    //   const jsonData = JSON.stringify(data);
-    //   AsyncStorage.setItem('credentials', jsonData);
-    // } catch (er) {
-    //  Actions.error({title: 'Data upload failed', text: er})
-    // }
     this.props.showSpinner();
     this.props.signInUser(data);
-
     }
-
-
-    // const value = this.refs.form.getValue();
-    // const { email, password } = this.state.value;
-    // alert(password);
-    // this.props.signInUser(this.state.value);
-    // this.props.showSpinner();
-    // this.setState({ email: "", password: "" });
   }
-
+  
+  // clearForm() {
+  //   const value = this.state.value;
+  //   value.email = '';
+  //   value.password ='';
+    
+  // }
 
   // onTestLogin() {
   //   const data = {
@@ -135,21 +128,21 @@ class Login extends Component {
           indicate={isFetching}/>
           <CustomButton
           text={"SIGN UP"}
-          func={() => {
-            try {
-              AsyncStorage.getItem('credentials')
-              .then( result => {
-                if (result !== null) {
-                alert(result);
-              } else {
-                throw Error(result);
-              }
-              })
-            } catch (er) {
-              Actions.error({title: 'Data fetch failed', text: er})
-            }
-          }}
-          // func={() => Actions.signup()}
+          // func={() => {
+          //   try {
+          //     AsyncStorage.getItem('jwt')
+          //     .then( result => {
+          //       if (result !== null) {
+          //       alert(result);
+          //     } else {
+          //       return Promise.reject(result);
+          //     }
+          //     })
+          //   } catch (er) {
+          //     Actions.error({title: 'Data fetch failed', text: er})
+          //   }
+          // }}
+          func={() => Actions.signup()}
           />
           </View>
           </View>
@@ -180,16 +173,21 @@ const mapDispatchToProps = dispatch => {
       dispatch(signInUser(data))
       .then(response => {
         if(!response.error) {
-          // localStorage.setItem('jwt', response.payload.data['x-user-jwt']);
-          dispatch(signInUserSuccess(response.payload.data));
+          const data = response.payload.data['x-user-jwt'];
+          dispatch(signInUserSuccess(data));
+          try {
+            AsyncStorage.setItem('jwt', data, () => Actions.dashboard())
+          } catch (er) {
+            Actions.error({title: 'Data upload failed', text: er})
+          }
         } else {
           return Promise.reject(response.payload.response.data.message);
         }
       })
       .catch(er => {
         dispatch(signInUserFailure());
-          const message = er && er.response && er.response.data.message || 'Error';
-          Actions.error({title: 'Login failed', text: message});
+        const message = er && er.response && er.response.data.message || 'Error';
+        Actions.error({title: 'Login failed', text: message});
 
       }
     );
