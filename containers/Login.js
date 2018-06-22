@@ -128,21 +128,16 @@ class Login extends Component {
           indicate={isFetching}/>
           <CustomButton
           text={"SIGN UP"}
-          func={() => {
-            try {
-              AsyncStorage.getItem('jwt')
-              .then( result => {
-                if (result !== null) {
-                alert(result);
-              } else {
-                return Promise.reject(result);
-              }
-              })
-            } catch (er) {
-              Actions.error({title: 'Data fetch failed', text: er})
-            }
-          }}
-          // func={() => Actions.signup()}
+          // func={() => {
+          //     AsyncStorage.getItem('jwt')
+          //     .then( result => {
+          //       if (result !== null) alert(result)
+          //     })
+          //     .catch (er => {
+          //     Actions.error({title: 'Data fetch failed', text: er})
+          //   })
+          // }}
+          func={() => Actions.signup()}
           />
           </View>
           </View>
@@ -175,11 +170,10 @@ const mapDispatchToProps = dispatch => {
         if(!response.error) {
           const data = response.payload.data['x-user-jwt'];
           dispatch(signInUserSuccess(data));
-          try {
-            AsyncStorage.setItem('jwt', data, () => Actions.dashboard())
-          } catch (er) {
+          AsyncStorage.setItem('jwt', data, () => Actions.dashboard())
+          .catch (er => {
             Actions.error({title: 'Data upload failed', text: er})
-          }
+          })
         } else {
           return Promise.reject(response.payload.response.data.message);
         }

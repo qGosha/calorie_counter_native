@@ -12,7 +12,7 @@ import {
 } from "../actions/index";
 
 const RouterComponent = props => {
- const value = props.value || props.reduxJwt;
+ const value = props.value;
  if(value) {
     props.processSignIn(value);
  }
@@ -39,9 +39,9 @@ const RouterComponent = props => {
               component={Dashboard}
               title="Dashboard"
               initial={!!value}
-              navigationBarStyle={styles.nav}
-              navBarButtonColor='red'
-              // hideNavBar
+              // navigationBarStyle={styles.nav}
+              // navBarButtonColor='red'
+              hideNavBar
             />
             </Scene>
             <Scene key="error" component={ConfirmWindow} hideNavBar />
@@ -56,11 +56,11 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const mapStateToProps = state => ({
-  reduxJwt: state.auth.jwt
-});
+// const mapStateToProps = state => ({
+//   reduxJwt: state.auth.jwt
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RouterComponent)
+export default connect(null, mapDispatchToProps)(RouterComponent)
 
 const styles = StyleSheet.create({
   nav: {
