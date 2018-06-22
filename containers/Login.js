@@ -128,21 +128,21 @@ class Login extends Component {
           indicate={isFetching}/>
           <CustomButton
           text={"SIGN UP"}
-          // func={() => {
-          //   try {
-          //     AsyncStorage.getItem('jwt')
-          //     .then( result => {
-          //       if (result !== null) {
-          //       alert(result);
-          //     } else {
-          //       return Promise.reject(result);
-          //     }
-          //     })
-          //   } catch (er) {
-          //     Actions.error({title: 'Data fetch failed', text: er})
-          //   }
-          // }}
-          func={() => Actions.signup()}
+          func={() => {
+            try {
+              AsyncStorage.getItem('jwt')
+              .then( result => {
+                if (result !== null) {
+                alert(result);
+              } else {
+                return Promise.reject(result);
+              }
+              })
+            } catch (er) {
+              Actions.error({title: 'Data fetch failed', text: er})
+            }
+          }}
+          // func={() => Actions.signup()}
           />
           </View>
           </View>

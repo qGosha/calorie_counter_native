@@ -7,7 +7,7 @@ import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput
 // import DatePicker from '../containers/DatePicker';
 // import FoodLog from '../containers/FoodLog';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const myIcon = (<Icon name="rocket" size={30} color="#900" />)
+import { Actions } from 'react-native-router-flux';
 
 
 export const DashboardPanel = ({
@@ -21,7 +21,11 @@ export const DashboardPanel = ({
     return(
       <View>
       <Text>This is your Dashboard</Text>
-      <Icon name="rocket" size={30} color="#900" />
+      <Icon name="sign-out" size={40} color="#900"
+      onPress={() => {
+        onSignOut();
+        Actions.pop();
+      }}/>
       </View>
       )
 }

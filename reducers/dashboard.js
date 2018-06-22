@@ -10,10 +10,12 @@ import {
   SETDAILYCALSUCCESS,
   SETDAILYCALFAILURE,
   SETDAILYCALNOTEREMOVE,
-  CURRENTDATECALLIMIT } from '../actions/index';
+  CURRENTDATECALLIMIT,
+  SIGNOUT} from '../actions/index';
 
   const initialState = {
     userInfo: false,
+    loaded: false,
     loading: false,
     suggestedFood:false,
     dailyCalUpSuccess: false,
@@ -35,7 +37,9 @@ export function dash (state = initialState, action) {
     case DASHBOARDLOADING:
       return { ...state, loading: true }
     case DASHBOARDLOADED:
-      return { ...state, loading: false }
+      return { ...state, loading: false, loaded: true }
+    case SIGNOUT:
+      return { ...state, loaded: false}
     case SETDAILYCAL:
       return { ...state }
     case SETDAILYCALSUCCESS:

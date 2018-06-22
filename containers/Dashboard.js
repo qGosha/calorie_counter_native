@@ -22,7 +22,8 @@ import {
   setDailyCalFailure,
   setDailyCalNoteRemove,
   getMonthReport,
-  getMonthReportSuccess
+  getMonthReportSuccess,
+  dashboardLoaded
 } from "../actions/index";
 
 class Dashboard extends Component {
@@ -33,9 +34,12 @@ constructor(props) {
   this.dailyCalChange = this.dailyCalChange.bind(this);
 }
 
-  onSignOut(event) {
-   event.preventDefault();
-   this.props.signOutUser();
+  onSignOut() {
+      try {
+        AsyncStorage.removeItem('jwt', () => this.props.signOutUser())
+      } catch (er) {
+        Actions.error({title: 'Data fetch failed', text: er})
+      }
   }
   onLongLoading() {
     if (!this.props.suggestedFood) {
@@ -73,10 +77,7 @@ constructor(props) {
         'FontAwesome': require('../assets/fonts/FontAwesome.ttf'),
       });
     })
-    .then( () => {
-      if (this.props.loading) {
-        this.props.hideLoadingScreen()
-      } } )
+    .then( () => { this.props.hideLoadingScreen() } )
     .catch( er => {
       const message = er && er.response && er.response.data.message || 'Error';
       Actions.error({title: 'Data fetch failed', text: message})
@@ -88,6 +89,7 @@ constructor(props) {
     const userInfo = this.props.userInfo;
     const error = this.props.error;
     const loading = this.props.loading;
+    const loaded = this.props.loaded;
     const suggestedFood = this.props.suggestedFood;
     if(loading) {
       return (
@@ -95,7 +97,7 @@ constructor(props) {
         <Spinner visible={true} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
       </View>
       )
-    } else if(!loading && !suggestedFood) {
+    } else if(!loading && !loaded) {
       return null;
     } else {
      return  <DashboardPanel
@@ -161,6 +163,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 const mapStateToProps = state => ({
+  loaded: state.dash.loaded,
   jwt: state.auth.jwt,
   userInfo: state.dash.userInfo,
   suggestedFood: state.dash.suggestedFood,

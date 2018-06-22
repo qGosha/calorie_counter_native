@@ -62,7 +62,6 @@ export const hideLoadingScreen = () => ({
 })
 
 export const signOutUser = () => {
-  // localStorage.removeItem('jwt');
   return {
     type: SIGNOUT
   }
@@ -83,6 +82,7 @@ export const setDailyCal = (jwt, user) => {
     payload: response
   };
 }
+
 
 export const setDailyCalSuccess = response => ({
     type: SETDAILYCALSUCCESS,

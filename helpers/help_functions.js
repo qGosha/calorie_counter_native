@@ -1,3 +1,18 @@
+import { AsyncStorage } from 'react-native';
+
+export const fetchFromStorage = () => {
+      return AsyncStorage.getItem('jwt');
+      // .then( result => {
+      //   if (result !== null) {
+        
+      //   return result;
+      // } else {
+      //   return Promise.reject(result);
+      // } })
+      // .catch(er => {
+      //   return false;
+      // })
+    }
 
 export const totalNutrients = nutr => {
   if(!nutr || !nutr.length) return null;

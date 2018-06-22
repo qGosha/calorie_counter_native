@@ -1,33 +1,46 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import Dashboard from "./Dashboard";
-import  Signup  from "./Signup";
-import Login from "./Login";
-// import ModalRoot from "./Modal";
-// import ErrorHandle from "./ErrorHandle";
+import { fetchFromStorage } from '../helpers/help_functions';
+import RouterComponent from "./Router";
 import { StyleSheet, Text, View } from 'react-native';
-class AppRoot extends Component {
 
-  render() {
-    const combinedComps = (Comp) => {
-      return (
-       <View style={{
-         flex: 1
-       }}>
-        {Comp}
-       </View>
-    )
-  }
-    if (this.props.auth.logged) return combinedComps(<Login />);
-    else if (this.props.auth.signup) return combinedComps(<Signup />);
-    else return combinedComps(<Login />);
-  }
 
+export default class AppRoot extends Component {
+  
+constructor(props) {
+  super(props);
+  this.state = {
+    isLoginConfirmed: false,
+    fetchedJwt: null
+  }
 }
 
+componentDidMount() {
+  fetchFromStorage()
+  .then(value => {
+    this.setState({
+      isLoginConfirmed: true,
+      fetchedJwt: value
+    })
+  });
+}
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
+  render() {
+    const isLoginConfirmed = this.state.isLoginConfirmed;
+    const value = this.state.fetchedJwt;
+    if(isLoginConfirmed) {
+      return <RouterComponent 
+      isLoginConfirmed={isLoginConfirmed}
+      value={value} />
+    } else {
+      return null;
+    }
 
-export default connect(mapStateToProps, null)(AppRoot);
+}
+}
+
+// const mapStateToProps = state => ({
+//   auth: state.auth
+// });
+
+// export default connect(mapStateToProps, null)(AppRoot);
