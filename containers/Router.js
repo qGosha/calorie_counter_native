@@ -12,11 +12,11 @@ import {
 } from "../actions/index";
 
 const RouterComponent = props => {
- const value = props.value;
+ const value = props.value || props.reduxJwt;
  if(value) {
     props.processSignIn(value);
  }
-  return (  
+  return (
     <Router>
         <Lightbox>
           <Scene key="root">
@@ -24,6 +24,7 @@ const RouterComponent = props => {
               component={Login}
               title="Login"
               initial={!value}
+              init={true}
               navigationBarStyle={styles.nav}
               navBarButtonColor='#fff'
             />
@@ -56,7 +57,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => ({
-  logged: state.auth.logged
+  reduxJwt: state.auth.jwt
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RouterComponent)

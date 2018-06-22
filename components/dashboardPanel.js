@@ -24,7 +24,7 @@ export const DashboardPanel = ({
       <Icon name="sign-out" size={40} color="#900"
       onPress={() => {
         onSignOut();
-        Actions.pop();
+        Actions.refresh();
       }}/>
       </View>
       )

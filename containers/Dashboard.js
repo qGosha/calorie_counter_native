@@ -35,11 +35,9 @@ constructor(props) {
 }
 
   onSignOut() {
-      try {
-        AsyncStorage.removeItem('jwt', () => this.props.signOutUser())
-      } catch (er) {
-        Actions.error({title: 'Data fetch failed', text: er})
-      }
+    AsyncStorage.removeItem('jwt', () => this.props.signOutUser()).catch(er => {
+    Actions.error({title: 'Data fetch failed', text: er})
+  })
   }
   onLongLoading() {
     if (!this.props.suggestedFood) {

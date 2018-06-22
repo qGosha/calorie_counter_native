@@ -5,8 +5,8 @@ import ReduxPromise from 'redux-promise';
 import { createStore, applyMiddleware, compose } from 'redux';
 import AppRoot from "./containers/AppRoot";
 
-
-const store = createStore(rootReducer, applyMiddleware(ReduxPromise));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(ReduxPromise)));
 
 export default class App extends Component {
   render() {
@@ -17,9 +17,3 @@ export default class App extends Component {
   );
   }
 }
-
-
-
-
-
-

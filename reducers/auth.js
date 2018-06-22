@@ -1,12 +1,9 @@
 import {SHOWSPIN, SIGNUP, SIGNIN, SIGNINERROR, SIGNINSUCCESS, SIGNOUT, SIGNUPSUCCESS, SIGNUPERROR} from '../actions/index';
-// import jwtLib from 'jsonwebtoken';
-//
-// const jwt = localStorage.getItem('jwt');
-// const jwtVerify = jwtLib.decode(jwt);
 
 export function auth (state = {
   logged: false,
   error: false,
+  jwt: null,
   isFetching: false
   }, action) {
   switch (action.type) {
