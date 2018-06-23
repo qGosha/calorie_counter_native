@@ -137,7 +137,7 @@ class Login extends Component {
           //     Actions.error({title: 'Data fetch failed', text: er})
           //   })
           // }}
-          func={() => Actions.signup()}
+          func={() => Actions.drawer()}
           />
           </View>
           </View>
@@ -170,7 +170,7 @@ const mapDispatchToProps = dispatch => {
         if(!response.error) {
           const data = response.payload.data['x-user-jwt'];
           dispatch(signInUserSuccess(data));
-          AsyncStorage.setItem('jwt', data, () => Actions.dashboard())
+          AsyncStorage.setItem('jwt', data, () => Actions.drawer())
           .catch (er => {
             Actions.error({title: 'Data upload failed', text: er})
           })

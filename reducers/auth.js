@@ -18,7 +18,7 @@ export function auth (state = {
   case SIGNINERROR:
     return {...state, isFetching: false};
   case SIGNOUT:
-      return { ...state, logged: false, userInfo: false}
+      return { ...state, logged: false } 
   case SIGNUPSUCCESS:
       return { ...state, logged: true, isFetching: false, jwt: action.payload};
   case SIGNUPERROR:

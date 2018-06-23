@@ -39,7 +39,7 @@ export function dash (state = initialState, action) {
     case DASHBOARDLOADED:
       return { ...state, loading: false, loaded: true }
     case SIGNOUT:
-      return { ...state, loaded: false}
+      return { ...state, loaded: false, userInfo: false }
     case SETDAILYCAL:
       return { ...state }
     case SETDAILYCALSUCCESS:

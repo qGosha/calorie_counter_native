@@ -8,7 +8,7 @@ import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput
 // import FoodLog from '../containers/FoodLog';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Actions } from 'react-native-router-flux';
-
+import { Container, Header, Content, ListItem, CheckBox, Body } from 'native-base';
 
 export const DashboardPanel = ({
   onSignOut,
@@ -19,14 +19,17 @@ export const DashboardPanel = ({
   dailyCalUpSuccess,
   basket}) => {
     return(
-      <View>
-      <Text>This is your Dashboard</Text>
-      <Icon name="sign-out" size={40} color="#900"
-      onPress={() => {
-        onSignOut();
-        Actions.reset('login');
-        Actions.pop();
-      }}/>
-      </View>
+
+          <View>
+          <Text>This is your Dashboard</Text>
+          <Icon name="sign-out" size={40} color="#900"
+          onPress={() => {
+            onSignOut();
+            Actions.reset('login');
+            Actions.pop();
+          }}/>
+          </View>
+
+
       )
 }
