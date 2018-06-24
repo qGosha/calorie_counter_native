@@ -70,11 +70,11 @@ constructor(props) {
     .then( () => {
       return this.props.getSuggestedFood(jwt);
     })
-    .then( () => {
-      return Font.loadAsync({
-        'FontAwesome': require('../assets/fonts/FontAwesome.ttf'),
-      });
-    })
+    // .then( () => {
+    //   return Font.loadAsync({
+    //     'FontAwesome': require('../assets/fonts/FontAwesome.ttf'),
+    //   });
+    // })
     .then( () => { this.props.hideLoadingScreen() } )
     .catch( er => {
       const message = er && er.response && er.response.data.message || 'Error';

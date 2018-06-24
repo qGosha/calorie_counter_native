@@ -3,10 +3,10 @@ import { connect } from "react-redux";
 import { fetchFromStorage } from '../helpers/help_functions';
 import RouterComponent from "./Router";
 import { StyleSheet, Text, View } from 'react-native';
-
+import { Font } from 'expo';
 
 export default class AppRoot extends Component {
-  
+
 constructor(props) {
   super(props);
   this.state = {
@@ -16,7 +16,12 @@ constructor(props) {
 }
 
 componentDidMount() {
-  fetchFromStorage()
+  Font.loadAsync({
+    'FontAwesome': require('../assets/fonts/FontAwesome.ttf'),
+  })
+  .then( () => {
+    return fetchFromStorage()
+  })
   .then(value => {
     this.setState({
       isLoginConfirmed: true,
@@ -29,7 +34,7 @@ componentDidMount() {
     const isLoginConfirmed = this.state.isLoginConfirmed;
     const value = this.state.fetchedJwt;
     if(isLoginConfirmed) {
-      return <RouterComponent 
+      return <RouterComponent
       isLoginConfirmed={isLoginConfirmed}
       value={value} />
     } else {

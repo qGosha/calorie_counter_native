@@ -39,7 +39,7 @@ const options = {
       autoCapitalize: 'none'
     },
     password: {
-      error: 'Password must be 6 characters long',
+      error: 'Password must be min. 6 characters long',
       secureTextEntry: true,
       autoCapitalize: 'none'
     },
@@ -137,7 +137,7 @@ class Login extends Component {
           //     Actions.error({title: 'Data fetch failed', text: er})
           //   })
           // }}
-          func={() => Actions.drawer()}
+          func={() => Actions.signup()}
           />
           </View>
           </View>
@@ -170,7 +170,10 @@ const mapDispatchToProps = dispatch => {
         if(!response.error) {
           const data = response.payload.data['x-user-jwt'];
           dispatch(signInUserSuccess(data));
-          AsyncStorage.setItem('jwt', data, () => Actions.drawer())
+          AsyncStorage.setItem('jwt', data, () => {
+            // Actions.reset('drawer');
+            Actions.dashboard();
+          })
           .catch (er => {
             Actions.error({title: 'Data upload failed', text: er})
           })

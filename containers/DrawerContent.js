@@ -2,33 +2,60 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, ViewPropTypes, Button } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { CustomButton } from '../components/customButton'
+import Icon from 'react-native-vector-icons/FontAwesome';
+const CardSection = (props) => {
+    return (
+        <View style={[styles.CardSectionStyle, props.style]} >
+            {props.children}
+        </View>
+    );
+};
+
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: 'red',
+  sectionStyle: {
+      borderBottomWidth: 1,
+      padding: 5,
+      borderColor: '#ddd',
   },
+  viewContainer: {
+    paddingVertical: 20,
+    justifyContent:'space-between',
+    flex: 1,
+    backgroundColor: '#b3ecde'
+  },
+
 });
 
-class DrawerContent extends React.Component {
-
-  render() {
+const DrawerContent = () => {
     return (
-      <View style={styles.container}>
-        {/* <Text>Drawer Content</Text>
-        <Button onPress={Actions.closeDrawer}>Back</Button> */}
-        <Text>Title: Drawerr first screensdv</Text>
-        <Button title="back" onPress={Actions.pop}>Back</Button>
-        <Button title="234" onPress={Actions.tab_2}>Switch to tab1</Button>
-        <Button title="234" onPress={Actions.tab_2_1}>Switch to tab2</Button>
-        <Button title="234" onPress={Actions.tab_2_2}>Switch to tab2</Button>
-      </View >
+      <View style={styles.viewContainer}>
+      <View>
+       <View style={styles.sectionStyle}>
+       <Icon.Button name="home"
+       backgroundColor="#3b5998"
+       onPress={() => Actions.dashboard()}>
+       Dashboard
+       </Icon.Button>
+       </View>
+       <View style={styles.sectionStyle}>
+       <Icon.Button name="cogs"
+       backgroundColor="#3b5998"
+       onPress={() => Actions.signup()}>
+       Settings
+       </Icon.Button>
+       </View>
+       </View>
+       <View style={[styles.sectionStyle]}>
+       <Icon.Button name="sign-out"
+       backgroundColor="#3b5998"
+       onPress={() => Actions.login()}>
+       Sign out
+       </Icon.Button>
+       </View>
+      </View>
     );
-  }
 }
 
 export default DrawerContent;
