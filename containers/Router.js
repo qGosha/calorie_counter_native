@@ -6,20 +6,41 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 import ConfirmWindow from "./ConfirmWindow";
 import { connect } from "react-redux";
-import { StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import DrawerContent from './DrawerContent';
-
+import { Container, Header, Item, Input, Icon, Button, Text, Content } from 'native-base';
 import {
   signInUserSuccess,
 } from "../actions/index";
-import Icon from 'react-native-vector-icons/FontAwesome';
+
+
+const CustomNav = () => {
+  return(
+    <Container style={{flexDirection: 'row'}}>
+      <Icon type="FontAwesome" name="bars" style={{color: 'blue'}}/>
+      <Content>
+        <Header searchBar rounded>
+          <Item>
+            <Icon type="FontAwesome" name="search" />
+            <Input placeholder="Search food" />
+            <Icon type="MaterialCommunityIcons" name="food" />
+          </Item>
+          <Button transparent>
+            <Text>Search</Text>
+          </Button>
+        </Header>
+      </Content>
+    </Container>
+  )
+}
+
 
 const RouterComponent = props => {
  const value = props.value;
  if(value) {
     props.processSignIn(value);
  }
- const drawIcon = <Icon name="bars" size={30} color="blue"/>
+ const drawIcon = <Icon type="FontAwesome" name="bars" style={{color: 'blue'}}/>
  return (
         <Router>
            <Scene key="lightbox" lightbox>
@@ -28,7 +49,8 @@ const RouterComponent = props => {
              drawerWidth={200}
              gesturesEnabled={false}
              contentComponent={DrawerContent}
-             drawerIcon={drawIcon}>
+             drawerIcon={drawIcon}
+             >
                  <Scene key="root"
                  hideNavBar
                  hideTabBar

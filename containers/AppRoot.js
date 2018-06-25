@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchFromStorage } from '../helpers/help_functions';
 import RouterComponent from "./Router";
-import { StyleSheet, Text, View } from 'react-native';
-import { Font } from 'expo';
+
 
 export default class AppRoot extends Component {
 
@@ -16,12 +15,7 @@ constructor(props) {
 }
 
 componentDidMount() {
-  Font.loadAsync({
-    'FontAwesome': require('../assets/fonts/FontAwesome.ttf'),
-  })
-  .then( () => {
-    return fetchFromStorage()
-  })
+ fetchFromStorage()
   .then(value => {
     this.setState({
       isLoginConfirmed: true,
@@ -43,9 +37,3 @@ componentDidMount() {
 
 }
 }
-
-// const mapStateToProps = state => ({
-//   auth: state.auth
-// });
-
-// export default connect(mapStateToProps, null)(AppRoot);
