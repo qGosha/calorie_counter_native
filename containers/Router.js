@@ -4,6 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import Signup from "./Signup";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
+import SearchBar from "./SearchBar";
 import ConfirmWindow from "./ConfirmWindow";
 import { connect } from "react-redux";
 import { StyleSheet, View, AsyncStorage } from 'react-native';
@@ -69,6 +70,15 @@ const RouterComponent = props => {
                      navigationBarStyle={styles.nav}
                      navBarButtonColor='#fff'/>
                    </Scene>
+                   <Scene
+                     key="searchbar"
+                     back
+                     drawerLockMode='locked-closed'
+                     component={SearchBar}
+                     title="Search"
+           
+                     navigationBarStyle={styles.nav}
+                     navBarButtonColor='#fff'/>
 
                   <Scene
                      key="dashboard"

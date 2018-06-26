@@ -1,5 +1,5 @@
 import React from "react";
-
+import {Keyboard} from 'react-native'
 // import { BASKET } from '../containers/Modal';
 // import { TouchableWithoutFeedback, ScrollView, StyleSheet, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
 // import { CalorieLimit } from '../components/calorieLimit';
@@ -20,18 +20,17 @@ export const DashboardPanel = ({
     return(
 
       <Container>
-      <Content>
-      <Header searchBar rounded>
-        <Item>
-          <Icon type="FontAwesome" name="search" />
-          <Input placeholder="Search food" />
-          <Icon type="MaterialCommunityIcons" name="food" />
-        </Item>
-        <Button transparent onPress={() => Actions.drawerOpen()}>
-          <Text>Search</Text>
-        </Button>
+      <Header style={{
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+          <Button iconLeft light block onPress={() => Actions.searchbar()}>
+            <Icon type="FontAwesome" name="search"  />
+            <Text>Search food</Text>
+          </Button>
+            <Icon type="FontAwesome" name="shopping-basket"/>
       </Header>
-      </Content>
+
     </Container>
 
 

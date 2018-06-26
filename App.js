@@ -17,3 +17,10 @@ export default class App extends Component {
   );
   }
 }
+
+global.XMLHttpRequest = global.originalXMLHttpRequest ?
+  global.originalXMLHttpRequest :
+  global.XMLHttpRequest;
+global.FormData = global.originalFormData ?
+  global.originalFormData :
+  global.FormData;

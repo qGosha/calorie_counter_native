@@ -57,25 +57,26 @@ constructor(props) {
   }
 
   componentDidMount() {
-    setTimeout(this.onLongLoading, 600);
-    const jwt = this.props.jwt;
-    const currentDate = this.props.currentDate;
-    this.props.getUser(jwt)
-    .then(() => {
-        return this.props.getLog(jwt, currentDate);
-      })
-    .then( () => {
-      return this.props.getMonthReport(jwt, currentDate);
-    })
-    .then( () => {
-      return this.props.getSuggestedFood(jwt);
-    })
-    .then( () => { this.props.hideLoadingScreen() } )
-    .catch( er => {
-      const message = er && er.response && er.response.data.message || 'Error';
-      Actions.error({title: 'Data fetch failed', text: message})
-      this.props.fetchDashInfoFailure(message);
-    } )
+    this.props.hideLoadingScreen()
+    // setTimeout(this.onLongLoading, 600);
+    // const jwt = this.props.jwt;
+    // const currentDate = this.props.currentDate;
+    // this.props.getUser(jwt)
+    // .then(() => {
+    //     return this.props.getLog(jwt, currentDate);
+    //   })
+    // .then( () => {
+    //   return this.props.getMonthReport(jwt, currentDate);
+    // })
+    // .then( () => {
+    //   return this.props.getSuggestedFood(jwt);
+    // })
+    // .then( () => { this.props.hideLoadingScreen() } )
+    // .catch( er => {
+    //   const message = er && er.response && er.response.data.message || 'Error';
+    //   Actions.error({title: 'Data fetch failed', text: message})
+    //   this.props.fetchDashInfoFailure(message);
+    // } )
   }
   render() {
     const basket = this.props.basket;
