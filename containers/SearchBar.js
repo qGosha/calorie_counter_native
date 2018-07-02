@@ -1,14 +1,24 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Container, Header, Item, Input, Icon, Button, Text, Content, View } from 'native-base';
+import { AsyncStorage } from 'react-native';
 
-// import { SearchResult } from '../components/showSearchResult';
-// import { MyFoodPanel } from '../components/myFoodPanel';
-// import { SearchBarPanel } from '../components/search-bar-panel';
-import  debounce  from 'lodash.debounce';
-// import { v4 } from 'uuid';
-// import { BASKET } from './Modal';
+import {
+  Container,
+  Header,
+  Item,
+  Input,
+  Icon,
+  Button,
+  Text,
+  Content,
+  View,
+} from 'native-base';
+import { SearchResult } from '../components/showSearchResult';
+import { MyFoodPanel } from '../components/myFoodPanel';
+import { SearchBarPanel } from '../components/searchBarPanel';
+import debounce from 'lodash.debounce';
+import uuid from 'react-native-uuid';
 import {
   searchFood,
   searchFoodSuccess,
@@ -17,131 +27,148 @@ import {
   getDetailedFoodInfo,
   getDetailedFoodInfoSuccess,
   getDetailedFoodInfoFailure,
-  clearSearchResults
-} from "../actions/index";
+  clearSearchResults,
+} from '../actions/index';
 
 class SearchBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      term: "",
+      term: '',
       searchPanelView: false,
-      myFoodPanel: false
+      myFoodPanel: false,
     };
-    this.onDebouncedInput = debounce(this.props.searchFood, 300, {'leading': true});
+    this.onDebouncedInput = debounce(this.props.searchFood, 300, {
+      leading: true,
+    });
     this.onInputChange = this.onInputChange.bind(this);
-    // this.onSearchBarFocus = this.onSearchBarFocus.bind(this);
+    this.onSearchBarFocus = this.onSearchBarFocus.bind(this);
     // this.onSearchBarBlur = this.onSearchBarBlur.bind(this);
-    // this.onItemClick = this.onItemClick.bind(this);
-    // this.refreshBasket = this.refreshBasket.bind(this);
-
+    this.onItemClick = this.onItemClick.bind(this);
+    this.refreshBasket = this.refreshBasket.bind(this);
   }
-// componentDidMount() {
-//   this.nameInput.focus();
-// }
-  // refreshBasket(foodItem) {
-  //   const oldBasket = localStorage.getItem('basket') || [];
-  //   const newBasket = (oldBasket.length) ? JSON.parse(oldBasket) : [];
-  //   const newBasketForStore = newBasket.concat(foodItem);
-  //   const newBasketForStorage = JSON.stringify(newBasketForStore);
-  //   localStorage.setItem('basket', newBasketForStorage);
-  //   if (!this.props.isFromBasket) {
-  //     this.props.showBasketModal(BASKET);
-  //   }
+  // componentDidMount() {
+  //   this.nameInput.focus();
   // }
-  // onItemClick(foodItem) {
-  //   this.setState({
-  //     term: '',
-  //     searchPanelView: false,
-  //     myFoodPanel: false
-  //   });
-  //   const jwt = localStorage.getItem('jwt');
-  //   this.props.getDetailedFoodInfo(jwt, foodItem)
-  //   .then((response) => this.refreshBasket(response.payload))
-  // }
+  refreshBasket(foodItem) {
+    const oldBasket = this.props.basket;
+    // const newBasket = (oldBasket.length) ? JSON.parse(oldBasket) : [];
+    const newBasket = oldBasket.concat(foodItem);
+    const newBasketForStorage = JSON.stringify(newBasket);
+    return AsyncStorage.setItem('basket', newBasketForStorage, () => {
+      Actions.basket();
+    })
+  }
+  onItemClick(foodItem) {
+    this.setState({
+      term: '',
+      searchPanelView: false,
+      myFoodPanel: false,
+    });
+
+    this.props.getDetailedFoodInfo(this.props.jwt, foodItem)
+    .then(() => this.refreshBasket(foodItem))
+    .catch(er => {
+      Actions.error({ title: 'Error', text: er });
+    });
+  }
 
   onInputChange(term) {
-    if(!term) {
+    if (!term) {
+      const suggestedFood = this.props.suggestedFood;
       this.setState({
-        term: ''
+        term: '',
+        searchPanelView: false,
+        myFoodPanel: suggestedFood && suggestedFood.foods.length,
       });
+      this.props.clearSearchResults();
       return;
     }
-    this.setState({term});
+    this.setState({
+      term: term,
+      searchPanelView: true,
+      myFoodPanel: false,
+    });
     this.onDebouncedInput(this.props.jwt, term);
   }
 
-  // onSearchBarFocus() {
-  //   if(this.state.searchPanelView || this.state.myFoodPanel) return;
-  //   this.setState({
-  //     myFoodPanel: true
-  //   });
-  // }
-
-  // onSearchBarBlur(event) {
-  // if(!document.hasFocus()) return;
-  // if(event.relatedTarget && event.currentTarget.contains( event.relatedTarget )) return;
-  //   this.setState({
-  //     term: "",
-  //     myFoodPanel: false,
-  //     searchPanelView:false
-  //   });
-  //   this.props.clearSearchResults();
-  // }
+  onSearchBarFocus() {
+    if (this.state.searchPanelView || this.state.myFoodPanel) return;
+    const suggestedFood = this.props.suggestedFood;
+    if (suggestedFood && suggestedFood.foods.length) {
+      this.setState({
+        myFoodPanel: true,
+      });
+    }
+  }
 
   render() {
-   return (
-      <Container>
-      <Content>
-      <Header searchBar rounded  style={{
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <Item>
-          <Icon type="FontAwesome" name="search" />
-          <Input
-          placeholder="Search food"
-          autoFocus
-          value={this.state.term}
-          onChangeText={term => this.onInputChange(term)}/>
-          <Icon type="FontAwesome" name="times" onPress={() =>
-            this.setState({term: ''})
-          }/>
-        </Item>
-        <Button transparent onPress={() => Actions.drawerOpen()}>
-          <Text>Search</Text>
-        </Button>
-        <Icon type="FontAwesome" name="shopping-basket"/>
-      </Header>
-      <View style={{
-        alignSelf: 'center',
-        marginTop: 90,
-        width: 170
-      }}>
-      <Icon type="FontAwesome" name="arrow-up" style={{color: 'grey', alignSelf:'center'}}/>
-      <Text style={{color: 'grey', marginTop: 25}}>Start typing in the search field above to find food</Text>
+    let currentPanel;
+    if (this.state.searchPanelView) {
+      currentPanel = (
+        <SearchResult
+          foundFood={this.props.foundFood}
+          term={this.state.term}
+          addToBasket={this.onItemClick}
+        />
+      );
+    } else if (this.state.myFoodPanel) {
+      currentPanel = (
+        <MyFoodPanel
+          suggestedFood={this.props.suggestedFood}
+          addToBasket={this.onItemClick}
+        />
+      );
+    } else currentPanel = null;
+    const initialScreen = (
+      <View
+        style={{
+          alignSelf: 'center',
+          marginTop: 90,
+          width: 170,
+        }}>
+        <Icon
+          type="FontAwesome"
+          name="arrow-up"
+          style={{ color: 'grey', alignSelf: 'center' }}
+        />
+        <Text style={{ color: 'grey', marginTop: 25, textAlign: 'center' }}>
+          Start typing in the search field above to find food
+        </Text>
       </View>
-      </Content>
-    </Container>
-     )
-}
+    );
+    const panel =
+      !this.state.searchPanelView && !this.state.myFoodPanel
+        ? initialScreen
+        : currentPanel;
+    return (
+      <SearchBarPanel
+        term={this.state.term}
+        onSearchBarFocus={this.onSearchBarFocus}
+        onInputChange={this.onInputChange}
+        panel={panel}
+        onItemClick={this.onItemClick}
+      />
+    );
+  }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    searchFood: (jwt,term) => {
+    searchFood: (jwt, term) => {
       dispatch(searchFood(jwt, term)).then(response => {
         if (!response.error) {
           const data = response.payload.data;
           let idData;
           if (data) {
-            Object.keys(data).map((item) => {
-              if (data[item] && data[item].length) data[item].map( i => {
-                if (i && !i['id']) {
-                  // i.id = v4();
-                  return  i;
-                }
-              })
-            })
+            Object.keys(data).map(item => {
+              if (data[item] && data[item].length)
+                data[item].map(i => {
+                  if (i && !i['id']) {
+                    i.id = uuid.v4();
+                    return i;
+                  }
+                });
+            });
           }
           dispatch(searchFoodSuccess(response.payload.data));
         } else {
@@ -149,16 +176,20 @@ const mapDispatchToProps = dispatch => {
         }
       });
     },
-    getDetailedFoodInfo: (jwt, foodItem) => dispatch(getDetailedFoodInfo(jwt, foodItem))
-      .then(response => {
+    getDetailedFoodInfo: (jwt, foodItem) =>
+      dispatch(getDetailedFoodInfo(jwt, foodItem)).then(response => {
         if (!response.error) {
-          return dispatch(getDetailedFoodInfoSuccess(response.payload.data.foods));
+          return dispatch(
+            getDetailedFoodInfoSuccess(response.payload.data.foods)
+          );
         } else {
-          return dispatch(getDetailedFoodInfoFailure(response.payload.response));
+          return dispatch(
+            getDetailedFoodInfoFailure(response.payload.response)
+          );
         }
       }),
     showBasketModal: modalType => dispatch(showModal(modalType)),
-    clearSearchResults: () => dispatch(clearSearchResults())
+    clearSearchResults: () => dispatch(clearSearchResults()),
   };
 };
 const mapStateToProps = state => ({
@@ -166,6 +197,10 @@ const mapStateToProps = state => ({
   userInfo: state.dash.userInfo,
   suggestedFood: state.dash.suggestedFood,
   foundFood: state.foodSearch.foundFood,
-  error: state.foodSearch.error
+  error: state.foodSearch.error,
+  basket: state.basket
 });
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchBar);

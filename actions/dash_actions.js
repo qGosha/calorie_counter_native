@@ -27,7 +27,7 @@ export const getUser = jwt => {
 
 export const getSuggestedFood = (jwt) => {
   const path = "reports/suggested";
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const timezone = DeviceInfo.getTimezone();
   const response = axios.get(ROOT_URL + path, {
     headers: { ["x-user-jwt"]: jwt },
     params: { timezone }

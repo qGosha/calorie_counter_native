@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 
-export const fetchFromStorage = () => {
-      return AsyncStorage.getItem('jwt');
+export const fetchFromStorage = (item) => {
+      return AsyncStorage.getItem(item);
       // .then( result => {
       //   if (result !== null) {
         

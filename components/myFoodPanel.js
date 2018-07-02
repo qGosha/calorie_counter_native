@@ -1,19 +1,16 @@
 import React from 'react';
-import '../style/show_search_result.css';
 import { FoodListItem } from '../components/foodListItem';
-import {
-  ListGroup
-} from 'react-bootstrap';
+import { Text, View } from 'native-base';
 
 export const MyFoodPanel = ({ suggestedFood, addToBasket }) => {
   const foodArr = suggestedFood.foods;
-  if (!foodArr || !foodArr.length) return null;
+  if (!foodArr || !foodArr.length) return  <Text>This is my panel but there is no food</Text>;
   const foods = foodArr.slice(0,5);
 
   return(
-    <ListGroup id='dropdown-menu'>
-      <h5 className='food-group-title'>My Food</h5>
+    <View style={{flex: 1}}>
+      <Text>My Food</Text>
      <FoodListItem foods={foods} addToBasket={addToBasket}/>
-    </ListGroup>
+    </View>
   )
 }

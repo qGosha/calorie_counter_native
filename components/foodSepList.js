@@ -1,22 +1,21 @@
 import React from 'react';
-import '../style/show_search_result.css';
 import { FoodListItem } from '../components/foodListItem';
-import {
-  ListGroup
-} from 'react-bootstrap';
+import { Text, View, Separator } from 'native-base';
 
 export const SepFoodList = ({ foods, addToBasket, title }) => {
-  if(!foods.length) {
+  if (!foods.length) {
     return (
-      <ListGroup className='food-sep-list'>
-       <span>There is nothing to show at the moment...</span>
-      </ListGroup>
-    )
+      <View style={{ flex: 1, padding: 15 }}>
+        <Text>Nothing has been found...</Text>
+      </View>
+    );
   }
   return (
-    <ListGroup className='food-sep-list'>
-      <h5 className='food-group-title'>{ title }</h5>
-      <FoodListItem foods={foods} addToBasket={addToBasket}/>
-    </ListGroup>
-  )
-}
+    <View style={{ flex: 1 }}>
+      <Separator bordered>
+        <Text>{title}</Text>
+      </Separator>
+      <FoodListItem foods={foods} addToBasket={addToBasket} />
+    </View>
+  );
+};

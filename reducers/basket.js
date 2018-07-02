@@ -7,9 +7,11 @@ import {
   LOGBASKETFOODSUCCESS,
   LOGBASKETFOODFAILURE
   } from '../actions/index';
-
-// const storagedBasket = localStorage.getItem('basket');
-// const initialState = storagedBasket ? JSON.parse(storagedBasket) : [];
+  import { fetchFromStorage } from '../helpers/help_functions';
+  
+let fetchedBasket;
+fetchFromStorage('basket').then(response => fetchedBasket = response);
+const initialState = fetchedBasket ? JSON.parse(fetchedBasket) : [];
 
 export function basket(state = initialState, action) {
   const payload = action.payload;

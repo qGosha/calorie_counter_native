@@ -15,7 +15,7 @@ constructor(props) {
 }
 
 componentDidMount() {
- fetchFromStorage()
+ fetchFromStorage('jwt')
   .then(value => {
     this.setState({
       isLoginConfirmed: true,
