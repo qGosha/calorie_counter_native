@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage, Text, View } from 'react-native';
-// import { BasketPanel } from '../components/basketPanel';
+import { BasketPanel } from '../components/basketPanel';
 import {
   hideModal,
   setNewBasket,
@@ -152,24 +152,19 @@ class Basket extends Component {
   }
 
   render() {
-    return(
-      <View>
-      <Text>blb yf [eq]</Text>
-      </View>
-    )
-    // return (
-    //   <BasketPanel
-    //     handleHide={this.props.hideModal}
-    //     basket={this.props.basket}
-    //     deleteItem={this.refreshBasket}
-    //     onQtyChange={this.onQtyChange}
-    //     onMeasureChange={this.onMeasureChange}
-    //     showModal={this.props.showModal}
-    //     clearBasket={this.clearBasket}
-    //     log={this.props.log}
-    //     currentDate={this.props.currentDate}
-    //   />
-    // );
+    return (
+      <BasketPanel
+        handleHide={this.props.hideModal}
+        basket={this.props.basket}
+        deleteItem={this.refreshBasket}
+        onQtyChange={this.onQtyChange}
+        onMeasureChange={this.onMeasureChange}
+        showModal={this.props.showModal}
+        clearBasket={this.clearBasket}
+        log={this.props.log}
+        currentDate={this.props.currentDate}
+      />
+    );
   }
 }
 
@@ -201,9 +196,6 @@ const mapDispatchToProps = dispatch => {
                 } else {
                   dispatch(getMonthReportSuccess(response.payload.data.dates));
                 }
-              })
-              .then(() => {
-                dispatch(hideModal(BASKET));
               })
               .then(() => {
                 return AsyncStorage.setItem('basket', '[]');

@@ -50,10 +50,10 @@ class SearchBar extends Component {
   // componentDidMount() {
   //   this.nameInput.focus();
   // }
-  refreshBasket(foodItem) {
-    const oldBasket = this.props.basket;
+  refreshBasket(newBasket) {
+    // const oldBasket = this.props.basket;
     // const newBasket = (oldBasket.length) ? JSON.parse(oldBasket) : [];
-    const newBasket = oldBasket.concat(foodItem);
+    // const newBasket = oldBasket.concat(foodItem);
     const newBasketForStorage = JSON.stringify(newBasket);
     return AsyncStorage.setItem('basket', newBasketForStorage, () => {
       Actions.basket();
@@ -67,7 +67,7 @@ class SearchBar extends Component {
     });
 
     this.props.getDetailedFoodInfo(this.props.jwt, foodItem)
-    .then(() => this.refreshBasket(foodItem))
+    .then(() => this.refreshBasket(this.props.basket))
     .catch(er => {
       Actions.error({ title: 'Error', text: er });
     });

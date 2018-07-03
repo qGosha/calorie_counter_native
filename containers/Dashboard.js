@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { DashboardPanel } from '../components/dashboardPanel';
+import { fetchFromStorage } from '../helpers/help_functions';
 import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
@@ -22,7 +23,8 @@ import {
   setDailyCalNoteRemove,
   getMonthReport,
   getMonthReportSuccess,
-  dashboardLoaded
+  dashboardLoaded,
+  setNewBasket
 } from "../actions/index";
 
 class Dashboard extends Component {
@@ -56,7 +58,12 @@ constructor(props) {
   }
 
   componentDidMount() {
-    this.props.hideLoadingScreen()
+    fetchFromStorage('basket')
+    .then(response => {
+      const basket = response ? JSON.parse(response) : [];
+      return Promise.resolve(this.props.setNewBasket(basket));
+    })
+    .then(() => this.props.hideLoadingScreen())
     // setTimeout(this.onLongLoading, 600);
     // const jwt = this.props.jwt;
     // const currentDate = this.props.currentDate;
@@ -140,6 +147,7 @@ const mapDispatchToProps = dispatch => {
       } ),
     fetchDashInfoFailure: (error) => dispatch(fetchDashInfoFailure(error)),
     showLoadingScreen: () => dispatch(showLoadingScreen()),
+    setNewBasket: (basket) => dispatch(setNewBasket(basket)),
     hideLoadingScreen: () => dispatch(hideLoadingScreen()),
     showBasketModal: modalType => dispatch(showModal(modalType)),
     setDailyCal: (jwt, user) => dispatch(setDailyCal(jwt, user))

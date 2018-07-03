@@ -14,7 +14,7 @@ const BasketIcon = props => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => alert('sdfsdfsd')}>
+      onPress={() => Actions.basket()}>
       <Icon
         type="FontAwesome"
         name="shopping-basket"
