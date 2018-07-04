@@ -16,7 +16,6 @@ import {
   getMonthReport,
   getMonthReportSuccess,
 } from '../actions/index';
-// import { BASKET } from '../containers/Modal';
 
 class Basket extends Component {
   constructor(props) {
@@ -109,7 +108,7 @@ class Basket extends Component {
       return result[0] && result[0].value ? result[0].value : 0;
     };
     const basket = this.props.basket;
-    const value = event.target.value;
+    const value = event.nativeEvent.text;
     if (isNaN(parseInt(value)) || isNaN(value) || +value === 0) {
       basket[id].value = value;
       this.renewBasket(basket);
@@ -142,7 +141,7 @@ class Basket extends Component {
 
   refreshBasket(id) {
     const oldBasket = this.props.basket;
-    const basket = oldBasket.filter((item, i) => i !== id);
+    const basket = oldBasket.filter((item, i) => i !== +id);
     this.renewBasket(basket);
   }
 

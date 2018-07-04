@@ -18,6 +18,7 @@ import {
   Item
 } from 'native-base';
 // import { TotalPanel } from './totalPanel';
+import { MenuHeader } from './menuHeader';
 import uuid from 'react-native-uuid';
 import { round, getFullNutrition } from '../helpers/help_functions';
 
@@ -42,9 +43,17 @@ export const BasketPanel = ({ handleHide, basket, deleteItem, onQtyChange,
       if(altMesures && altMesures.length){
         select = (
           <Picker
-            iosIcon={<Icon name="ios-arrow-down-outline" />}
+            iosIcon={<Icon name="ios-arrow-down-outline" style={{
+              position: 'absolute',
+              top: 10,
+              right: 3,
+              marginRight: 0,
+              marginLeft: 0,
+              paddingTop: 0
+            }}/>}
             mode="dropdown"
-            onValueChange={false}
+            style={styles.picker}
+            onValueChange={(value)=> alert(value)}
             selectedValue={basketItem.serving_unit}>
             {options}
           </Picker>
@@ -52,91 +61,69 @@ export const BasketPanel = ({ handleHide, basket, deleteItem, onQtyChange,
       } else {
         select = (
           <Picker
-            iosIcon={<Icon name="ios-arrow-down-outline" />}
             mode="dropdown"
-            style={{ height: 25, width: 70 }}
+            style={[styles.picker, {borderColor: 'gray'}]}
             enabled={false}
-            selectedValue={basketItem.serving_unit}/>
+            placeholder={basketItem.serving_unit}/>
         )
       }
-  
+      const colorieSection =
+         <View style={{ flex: 1}}>
+          <Text style={{ color: 'green' }}>{calorie}</Text>
+          <Text>cal</Text>
+        </View>;
+
       return (
-         <ListItem style={{flex: 1, flexDirection: 'row'}}>
+         <ListItem style={styles.main}>
            <Image
             source={{ uri: basketItem.photo.thumb || foodAvatarUrl }}
             style={styles.image}
            />
-           <Item regular style={{flex: 1}}>
-            <Input 
-             value={qty}
-             onChange={false}/>
-          </Item>
-          <View style={{flex: 1}}>
-          {select}
+           <View style={{flex: 4, justifyContent: 'space-between'}}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+             <Item regular style={styles.qty}>
+              <Input
+               style={{textAlign: 'center'}}
+               bordered
+               value={qty.toString()}
+               onChange={(event)=> onQtyChange(event, i)}/>
+             </Item>
+            <View style={{flex: 1}}>
+            {select}
+            </View>
+            </View>
+            <Text style={{fontSize: 15, fontStyle: 'italic'}}>{foodName}</Text>
           </View>
-          <Icon type="FontAwesome" name="info-circle" style={{fontSize: 15}}/>
+          <Icon type="FontAwesome" name="info-circle" style={{fontSize: 18, flex: 0.5}}/>
+          {colorieSection}
         </ListItem>
         )
-    //   return(
-    //     <Row key={basketItem['consumed_at']+i} nogutter className='basket-row'>
-    //     <Col xs={2} md={1}>
-    //       <Image src={basketItem.photo.thumb || foodAvatarUrl}
-    //         alt='food'
-    //         className='food-image'/>
-    //     </Col>
-    //     <Col xs={6} md={8}>
-    //     <Row style={{justifyContent: 'space-between'}}>
-    //       <Col xs={3} sm={3} md={2}>
-    //         <FormControl
-    //           type="text"
-    //           value={qty}
-    //           onChange={(event) => onQtyChange(event, i)}
-    //           className='basket-qty'
-    //           autoFocus={true}/>
-    //       </Col>
-    //       <Col xs={8} sm={8} md={9}>
-    //         {select}
-    //       </Col>
-    //       </Row>
-    //       <Row>
-    //       <Col xs={12}>
-    //       <div className='basket-food-name'>{foodName}</div>
-    //       </Col>
-    //       </Row>
-    //     </Col>
-    //     <Col xs={1} sm={1}>
-    //     <FontAwesome
-    //       className='info-circle'
-    //       name='info-circle'
-    //       onClick={() => showModal(DETAILED_NUTR, {id: i})}
-    //         />
-    //     </Col>
-    //     <Col xs={2} sm={1}>
-    //       <div className='basket-description-group'>
-    //         <span className='basket-nutritient'>{calorie}</span>
-    //         <span className='food-calorie-name'>cal</span>
-    //       </div>
-    //     </Col>
-    //     <Col xs={1} sm={1}>
-    //       <Button bsClass="close" aria-label="Close" onClick={() => deleteItem(i)}>
-    //       <span aria-hidden="true">&times;</span>
-    //       </Button>
-    //     </Col>
-
-    // </Row>
-    //   )
     })
   }
+ if(!basketFood) {
+   return (
+   <View style={{flex: 1}}>
+    <Text>Nothing is in here</Text>
+   </View>
+   )
+ }
+
 
  const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
   return(
     <Container>
+    <MenuHeader />
     <Content>
+     <Text style={styles.tip}>Swipe left to delete</Text>
       <List
         dataSource={ds.cloneWithRows(basketFood)}
+        disableRightSwipe
         renderRow={basketFood => basketFood}
         renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-          <Button full danger onPress={() => alert(rowId)}>
+          <Button full danger onPress={() => {
+            rowMap[`${secId}${rowId}`].props.closeRow();
+            deleteItem(rowId);
+          }}>
             <Icon active name="trash" />
           </Button>}
         rightOpenValue={-75}
@@ -147,30 +134,35 @@ export const BasketPanel = ({ handleHide, basket, deleteItem, onQtyChange,
 }
 
 const styles = StyleSheet.create({
+  qty: {
+    width: 60,
+    height: 45,
+    borderRadius: 5
+  },
   main: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  innerMain: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    paddingRight: 8,
+    paddingLeft: 8,
+    paddingTop: 10,
+    paddingBottom: 5
   },
   image: {
     width: 35,
     height: 35,
+    flex: 1,
     marginRight: 10,
   },
-  serving: {
-    alignContent: 'space-between',
-    flex: 3,
-  },
-  qtyText: {
-    textAlign: 'left',
-    fontSize: 14,
-    fontStyle: 'italic',
+  tip: {
+    paddingVertical: 5,
+    fontSize: 12,
     color: 'gray',
-    paddingRight: 35
+    textAlign: 'center'
+  },
+  picker: {
+    width: 100,
+    alignSelf: 'center',
+    borderWidth: 1,
+    paddingRight: 20
   },
 });
