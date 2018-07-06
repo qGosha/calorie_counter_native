@@ -49,7 +49,7 @@ class Basket extends Component {
     });
   }
 
-  onMeasureChange(event, id) {
+  onMeasureChange(value, id) {
     const getNutrition = nutr => {
       const result = basket[id].full_nutrients.filter(a => {
         if (a.attr_id === nutr) return a;
@@ -57,9 +57,8 @@ class Basket extends Component {
       return result[0] && result[0].value ? result[0].value : 0;
     };
     const basket = this.props.basket;
-    const value = event.target.value;
-    const index = event.target.selectedIndex;
-
+    const arrMeasure = basket[id].alt_measures.map(m => m.measure);
+    const index = arrMeasure.indexOf(value);
     const servWeight = basket[id].alt_measures[index].serving_weight;
     const newQty = basket[id].alt_measures[index].qty;
     const foodWeight = basket[id].serving_weight_grams;

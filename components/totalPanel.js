@@ -1,8 +1,10 @@
 import React from "react";
-import { Container, Row, Col } from 'react-grid-system';
-import '../style/total_panel.css';
-import { INTAKELOG } from '../containers/Modal';
 import { totalNutrElem } from '../helpers/help_functions';
+import { StyleSheet } from 'react-native';
+import {
+  View,
+  Text
+} from 'native-base';
 export const TotalPanel = ({ foods, isFromLog, showModal, totalDailyNutr }) => {
 
 
@@ -12,37 +14,47 @@ export const TotalPanel = ({ foods, isFromLog, showModal, totalDailyNutr }) => {
     const totalFat = totalNutrElem(204, foods);
     const totalSodium = totalNutrElem(307, foods);
     return (
-      <Row
-      nogutter
-      style={{cursor: isFromLog ? 'pointer' : 'auto'}}
-      onClick={ () =>  isFromLog ?
-        showModal(INTAKELOG, { foods: totalDailyNutr, title: 'Daily', lessInfo: true }) : false }>
-        <Col xs={12}>
-         <Row nogutter className='calorie-total-row'>
-           <span>Totat calories: </span>
-           <span className='total-nutritient'>{totalCalories}</span>
-         </Row>
-        </Col>
-        <Col xs={12}>
-         <Row nogutter className='nutrient-total-row'>
-          <Col xs={3} className='total-description-group'>
-           <span>Protein: </span>
-           <span className='total-nutritient'>{totalProtein}g</span>
-          </Col>
-          <Col xs={3} className='total-description-group'>
-          <span>Carbs: </span>
-          <span className='total-nutritient'>{totalCarbs}g</span>
-          </Col>
-          <Col xs={3} className='total-description-group'>
-          <span>Fat:</span>
-          <span className='total-nutritient'>{totalFat}g</span>
-          </Col>
-          <Col xs={3} className='total-description-group'>
-          <span>Sodium: </span>
-          <span className='total-nutritient'>{totalSodium}mg</span>
-          </Col>
-         </Row>
-        </Col>
-      </Row>
-     )
+      <View style={{ flex: 1 }}>
+       <View style={ [styles.block, {backgroundColor: '#c1c5c9'}] }>
+        <Text>Totat calories:</Text>
+        <Text style={{ color: 'green' }}>{totalCalories}</Text>
+       </View>
+       <View style={ [styles.block, {backgroundColor: '#9c909e36'}] }>
+        <View style={styles.innerBlock}>
+          <Text>Protein:</Text>
+          <Text style={{ color: 'green' }}>{totalProtein}</Text>
+        </View>
+        <View style={styles.innerBlock}>
+          <Text>Carbs:</Text>
+          <Text style={{ color: 'green' }}>{totalCarbs}</Text>
+        </View>
+        <View style={styles.innerBlock}>
+          <Text>Fat:</Text>
+          <Text style={{ color: 'green' }}>{totalFat}</Text>
+        </View>
+        <View style={[styles.innerBlock, {borderRightWidth: 0}]}>
+          <Text>Sodium:</Text>
+          <Text style={{ color: 'green' }}>{totalSodium}</Text>
+        </View>
+       </View>
+     </View>
+    )
     }
+
+    const styles = StyleSheet.create({
+      block: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 5,
+        paddingTop: 8,
+        paddingHorizontal: 5
+      },
+      innerBlock: {
+        alignItems: 'center',
+        padding: 8,
+        borderColor: '#c1c5c9' ,
+        borderRightWidth: 1
+      }
+
+    });

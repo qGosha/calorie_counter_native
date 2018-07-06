@@ -17,7 +17,7 @@ import {
   Picker,
   Item
 } from 'native-base';
-// import { TotalPanel } from './totalPanel';
+import { TotalPanel } from './totalPanel';
 import { MenuHeader } from './menuHeader';
 import uuid from 'react-native-uuid';
 import { round, getFullNutrition } from '../helpers/help_functions';
@@ -53,7 +53,7 @@ export const BasketPanel = ({ handleHide, basket, deleteItem, onQtyChange,
             }}/>}
             mode="dropdown"
             style={styles.picker}
-            onValueChange={(value)=> alert(value)}
+            onValueChange={(value)=> onMeasureChange(value, i)}
             selectedValue={basketItem.serving_unit}>
             {options}
           </Picker>
@@ -128,6 +128,7 @@ export const BasketPanel = ({ handleHide, basket, deleteItem, onQtyChange,
           </Button>}
         rightOpenValue={-75}
           />
+          <TotalPanel foods={basket} />
      </Content>
     </Container>
   )
