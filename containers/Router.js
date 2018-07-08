@@ -14,6 +14,7 @@ import { Actions } from 'react-native-router-flux';
 import Signup from './Signup';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import DetailedNutr from './DetailedNutr';
 import Basket from './Basket';
 import SearchBar from './SearchBar';
 import ConfirmWindow from './ConfirmWindow';
@@ -107,7 +108,7 @@ const RouterComponent = props => {
             navigationBarStyle={styles.nav}
             navBarButtonColor="#fff"
           />
-         <Scene
+          <Scene
             hideDrawerButton
             hideTabBar
             panHandlers
@@ -117,6 +118,19 @@ const RouterComponent = props => {
             drawerLockMode="locked-closed"
             component={Basket}
             title="Basket"
+            navigationBarStyle={styles.nav}
+            navBarButtonColor="#fff"
+          />
+          <Scene
+            hideDrawerButton
+            hideTabBar
+            panHandlers
+            back
+            onBack={() => Actions.popTo('basket')}
+            key="detailedNutr"
+            drawerLockMode="locked-closed"
+            component={DetailedNutr}
+            title="Detailed Nutrition"
             navigationBarStyle={styles.nav}
             navBarButtonColor="#fff"
           />

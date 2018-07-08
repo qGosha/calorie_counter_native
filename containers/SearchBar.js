@@ -43,21 +43,13 @@ class SearchBar extends Component {
     });
     this.onInputChange = this.onInputChange.bind(this);
     this.onSearchBarFocus = this.onSearchBarFocus.bind(this);
-    // this.onSearchBarBlur = this.onSearchBarBlur.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
     this.refreshBasket = this.refreshBasket.bind(this);
   }
-  // componentDidMount() {
-  //   this.nameInput.focus();
-  // }
+
   refreshBasket(newBasket) {
-    // const oldBasket = this.props.basket;
-    // const newBasket = (oldBasket.length) ? JSON.parse(oldBasket) : [];
-    // const newBasket = oldBasket.concat(foodItem);
     const newBasketForStorage = JSON.stringify(newBasket);
-    return AsyncStorage.setItem('basket', newBasketForStorage, () => {
-      Actions.basket();
-    })
+    return AsyncStorage.setItem('basket', newBasketForStorage);
   }
   onItemClick(foodItem) {
     this.setState({
@@ -66,11 +58,15 @@ class SearchBar extends Component {
       myFoodPanel: false,
     });
 
-    this.props.getDetailedFoodInfo(this.props.jwt, foodItem)
-    .then(() => this.refreshBasket(this.props.basket))
-    .catch(er => {
-      Actions.error({ title: 'Error', text: er });
-    });
+    this.props
+      .getDetailedFoodInfo(this.props.jwt, foodItem)
+      .then(() => {
+        Actions.basket();
+        this.refreshBasket(this.props.basket);
+      })
+      .catch(er => {
+        Actions.error({ title: 'Error', text: er });
+      });
   }
 
   onInputChange(term) {
@@ -198,7 +194,7 @@ const mapStateToProps = state => ({
   suggestedFood: state.dash.suggestedFood,
   foundFood: state.foodSearch.foundFood,
   error: state.foodSearch.error,
-  basket: state.basket
+  basket: state.basket,
 });
 export default connect(
   mapStateToProps,
