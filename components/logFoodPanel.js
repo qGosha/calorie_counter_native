@@ -1,19 +1,39 @@
 import React from "react";
-import { Container, Row, Col } from 'react-grid-system';
-import {
-  ListGroup,
-  Panel,
-  Popover,
-  OverlayTrigger,
-  Tooltip
-} from 'react-bootstrap';
 import { FoodListItem } from '../components/foodListItem';
-import FontAwesome from 'react-fontawesome';
-import { INTAKELOG } from '../containers/Modal';
-import { totalNutrients, total, totalNutrElem } from '../helpers/help_functions';
+import { totalNutrients, total, totalNutrElem, getFullNutrition, round } from '../helpers/help_functions';
+import {
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  Keyboard,
+  AsyncStorage,
+  Image,
+  TouchableOpacity,
+  ListView,
+} from 'react-native';
+import {
+  List,
+  Container,
+  ListItem,
+  Text,
+  Separator,
+  Button,
+  Content,
+  View,
+  SwipeRow,
+  Icon,
+  Right,
+  Tab,
+  Thumbnail,
+  Left,
+  Body,
+  Tabs,
+  Input,
+  Picker,
+  Item,
+} from 'native-base';
 
-
-export const LogFoodPanel = ({ foods, showModal }) => {
+export const LogFoodPanel = ({ foods }) => {
 
   const totalPeriodNutr = (period) => {
     if(!period || !period.length) return false;
@@ -70,56 +90,79 @@ export const LogFoodPanel = ({ foods, showModal }) => {
     color: '#837474'
   }
 
-  const tooltip = (obj, name) => {
-      return (
-        <Tooltip id="tooltip" style={{ display: obj ? 'none': 'auto'}}>
-          <strong>No added food for {name}</strong>
-        </Tooltip>
-      )
-};
-
+   const foodAvatarUrl =
+        'https://d2eawub7utcl6.cloudfront.net/images/nix-apple-grey.png';
   const period = (name, totalCal, per) => {
-    return (
-      <Panel bsStyle="success" style={{margin:'0'}}>
-        <Panel.Heading style={headStyle}>
-        <Row nogutter>
-         <Col xs={9}>{name}</Col>
-         <Col style={colStyle} xs={3}>
-           <Row nogutter style={{justifyContent:'space-between'}}>
-            <Col xs={5}>
-            <OverlayTrigger
-            onClick={ () =>
-              totalIntake[name] ? showModal(INTAKELOG, { foods: totalIntake[name], title: name, lessInfo: true}) : false }
-            placement="top"
-            triger='hover'
-            overlay={tooltip(totalIntake[name], name)}
-            >
-             <FontAwesome
-               style={iconStyle}
-               name='info-circle' />
-            </OverlayTrigger>
-            </Col>
-            <Col xs={7}>
-             {totalCal}
-            </Col>
-           </Row>
-         </Col>
-        </Row>
-        </Panel.Heading>
-        <ListGroup>
-          <FoodListItem
-          foods={per}
-          showModal={showModal}/>
-        </ListGroup>
-      </Panel>
-    )
+    return per.map( item => {
+      const calorie = item.full_nutrients
+      ? round(getFullNutrition(208, item))
+      : 0;
+      return(
+         <ListItem avatar>
+          <Left>
+            <Thumbnail small square source={{ uri: item.photo ? item.photo.thumb : foodAvatarUrl }} />
+          </Left>
+          <Body>
+            <Text>{item.food_name}</Text>
+            <Text note>{item.brand_name ? item.brand_name + ', ' : null}{item.serving_qty} {item.serving_unit}</Text>
+          </Body>
+          <Right>
+            <Text style={{color: 'green'}}>{calorie}</Text>
+            <Text note>cal</Text>
+          </Right>
+        </ListItem>
+      )
+    })    
   }
   return (
-    <Container fluid className='food-log-panel'>
-     { period('Breakfast', breakfastCal, breakfast) }
-     { period('Lunch', lunchCal, lunch) }
-     { period('Dinner', dinnerCal, dinner) }
-     { period('Snacks', snacksCal, snacks) }
-    </Container>
+      <List>
+        <ListItem itemDivider>
+          <Text>Breakfast</Text>
+          <TouchableOpacity style={styles.iconContainer}>
+            <Icon type="FontAwesome" name="info-circle" style={
+              [styles.icon, {color: breakfast && breakfast.length ? 'green': 'gray'}]
+              }/>
+          </TouchableOpacity>
+        </ListItem>  
+        { period('Breakfast', breakfastCal, breakfast) }
+        <ListItem itemDivider>
+          <Text>Lunch</Text>
+          <TouchableOpacity style={styles.iconContainer}>
+            <Icon type="FontAwesome" name="info-circle" style={
+              [styles.icon, {color: lunch && lunch.length ? 'green': 'gray'}]
+              }/>
+           </TouchableOpacity>   
+        </ListItem> 
+        { period('Lunch', lunchCal, lunch) }
+         <ListItem itemDivider>
+          <Text>Dinner</Text>
+          <TouchableOpacity style={styles.iconContainer}>
+            <Icon type="FontAwesome" name="info-circle" style={
+              [styles.icon, {color: dinner && dinner.length ? 'green': 'gray'}]
+            }/>
+          </TouchableOpacity> 
+        </ListItem>  
+        { period('Dinner', dinnerCal, dinner) } 
+        <ListItem itemDivider>
+          <Text>Snacks</Text>
+          <TouchableOpacity style={styles.iconContainer}>
+            <Icon type="FontAwesome" name="info-circle" style={
+            [styles.icon, {color: snacks && snacks.length ? 'green': 'gray'}]
+            }/>
+          </TouchableOpacity> 
+        </ListItem>   
+        { period('Snacks', snacksCal, snacks) }   
+      </List> 
   )
 }
+
+const styles = StyleSheet.create({
+  icon: {
+   fontSize: 20, 
+   alignSelf: 'center'
+  },
+  iconContainer: {
+    flex: 1, 
+    alignItems: 'center'
+    }
+  })

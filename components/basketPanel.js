@@ -33,16 +33,12 @@ import uuid from 'react-native-uuid';
 import { round, getFullNutrition } from '../helpers/help_functions';
 
 export const BasketPanel = ({
-  handleHide,
   basket,
   deleteItem,
   onQtyChange,
   onMeasureChange,
-  sendItemToTheBasketState,
-  showModal,
   clearBasket,
-  log,
-  currentDate,
+  log
 }) => {
   let basketFood;
   if (!basket.length) {
@@ -103,8 +99,8 @@ export const BasketPanel = ({
       }
       const colorieSection = (
         <View style={{ flex: 1 }}>
-          <Text style={{ color: 'green' }}>{calorie}</Text>
-          <Text>cal</Text>
+          <Text style={{ color: 'green', textAlign: 'right' }}>{calorie}</Text>
+          <Text style={{textAlign: 'right'}}>cal</Text>
         </View>
       );
 
@@ -130,8 +126,13 @@ export const BasketPanel = ({
               {foodName}
             </Text>
           </View>
-          <TouchableOpacity style={{flex: 0.5}} onPress={() => Actions.detailedNutr({id: i, title: foodName})}>
-           <Icon type="FontAwesome" name="info-circle" style={{fontSize: 18}}/>
+          <TouchableOpacity style={{flex: 1, alignItems: 'center'}} onPress={() => Actions.detailedNutr({
+            id: i, 
+            title: foodName, 
+            onBack: () => Actions.basket(),
+            isFromBasket: true
+          }) }>
+           <Icon type="FontAwesome" name="info-circle" style={{fontSize: 20}}/>
           </TouchableOpacity>
           {colorieSection}
         </ListItem>
@@ -189,9 +190,10 @@ export const BasketPanel = ({
                 <Button
                   iconLeft
                   success
+                  onPress={log}
                   style={[styles.buttons, { marginBottom: 8 }]}>
                   <Icon type="FontAwesome" name="pencil" />
-                  <Text>Log food</Text>
+                  <Text>Log {basket.length ? basket.length : null} food</Text>
                 </Button>
               </View>
               <View style={{ flex: 1 }}>

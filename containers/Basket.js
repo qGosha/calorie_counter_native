@@ -26,6 +26,7 @@ class Basket extends Component {
     this.onQtyChange = this.onQtyChange.bind(this);
     this.onMeasureChange = this.onMeasureChange.bind(this);
     this.clearBasket = this.clearBasket.bind(this);
+    this.log = this.log.bind(this);
   }
 
   renewBasket(basket) {
@@ -47,6 +48,13 @@ class Basket extends Component {
     AsyncStorage.setItem('basket', newBasketForStorage).catch(er => {
       Actions.error({ title: 'Data upload failed', text: er });
     });
+  }
+
+  log() {
+   const currentDate=this.props.currentDate;
+   const jwt = this.props.jwt;
+   const basket = this.props.basket;
+   this.props.log(jwt, basket, currentDate);
   }
 
   onMeasureChange(value, id) {
@@ -152,15 +160,12 @@ class Basket extends Component {
   render() {
     return (
       <BasketPanel
-        handleHide={this.props.hideModal}
         basket={this.props.basket}
         deleteItem={this.refreshBasket}
         onQtyChange={this.onQtyChange}
         onMeasureChange={this.onMeasureChange}
-        showModal={this.props.showModal}
         clearBasket={this.clearBasket}
-        log={this.props.log}
-        currentDate={this.props.currentDate}
+        log={this.log}
       />
     );
   }
@@ -197,6 +202,9 @@ const mapDispatchToProps = dispatch => {
               })
               .then(() => {
                 return AsyncStorage.setItem('basket', '[]');
+              })
+              .then(() => {
+                return Actions.dashboard()
               });
           } else {
             return Promise.reject(response.payload.response.data.message);
@@ -214,6 +222,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => ({
   basket: state.basket,
   currentDate: state.dates.currentDate,
+  jwt: state.auth.jwt,
 });
 export default connect(
   mapStateToProps,

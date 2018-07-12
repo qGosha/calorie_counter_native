@@ -1,10 +1,8 @@
 import React from 'react';
-// import { BASKET } from '../containers/Modal';
 // import { TouchableWithoutFeedback, ScrollView, StyleSheet, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
 // import { CalorieLimit } from '../components/calorieLimit';
-// import SearchBar from '../containers/search-bar';
 // import DatePicker from '../containers/DatePicker';
-// import FoodLog from '../containers/FoodLog';
+import FoodLog from '../containers/FoodLog';
 import { MenuHeader } from './menuHeader';
 import { Actions } from 'react-native-router-flux';
 import {
@@ -30,6 +28,9 @@ export const DashboardPanel = ({
   return (
     <Container>
       <MenuHeader />
+      <Content>
+      <FoodLog />
+      </Content>
     </Container>
   );
 };

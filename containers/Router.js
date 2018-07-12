@@ -126,7 +126,6 @@ const RouterComponent = props => {
             hideTabBar
             panHandlers
             back
-            onBack={() => Actions.popTo('basket')}
             key="detailedNutr"
             drawerLockMode="locked-closed"
             component={DetailedNutr}

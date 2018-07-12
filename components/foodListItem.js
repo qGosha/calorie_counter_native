@@ -20,9 +20,6 @@ export const FoodListItem = ({ foods, addToBasket }) => {
     const brandName = foodItem.brand_name || '';
     const servingQty = foodItem.serving_qty || '';
     const servingUnit = foodItem.serving_unit || '';
-    // const calorie = foodItem.full_nutrients
-    //   ? round(getFullNutrition(208, foodItem))
-    //   : 0;
     const ifCaloried = foodItem.hasOwnProperty('nf_calories');
     const calorie = ifCaloried ? round(foodItem.nf_calories) : null;
 
