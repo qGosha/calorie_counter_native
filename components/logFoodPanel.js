@@ -1,5 +1,6 @@
 import React from "react";
 import { FoodListItem } from '../components/foodListItem';
+import { Actions } from 'react-native-router-flux';
 import { totalNutrients, total, totalNutrElem, getFullNutrition, round } from '../helpers/help_functions';
 import {
   StyleSheet,
@@ -92,13 +93,21 @@ export const LogFoodPanel = ({ foods }) => {
 
    const foodAvatarUrl =
         'https://d2eawub7utcl6.cloudfront.net/images/nix-apple-grey.png';
-  const period = (name, totalCal, per) => {
+  const period = (name, per) => {
     return per.map( item => {
       const calorie = item.full_nutrients
       ? round(getFullNutrition(208, item))
       : 0;
       return(
-         <ListItem avatar>
+         <ListItem
+           avatar
+           key={item.id} 
+           onPress={() => Actions.detailedNutr({
+             id: item,
+             title: item.food_name,
+             onBack: () => Actions.dashboard(),
+             isFromBasket: false
+           }) }>
           <Left>
             <Thumbnail small square source={{ uri: item.photo ? item.photo.thumb : foodAvatarUrl }} />
           </Left>
@@ -112,57 +121,66 @@ export const LogFoodPanel = ({ foods }) => {
           </Right>
         </ListItem>
       )
-    })    
+    })
   }
+
   return (
       <List>
-        <ListItem itemDivider>
+        <ListItem itemDivider style={styles.container}>
           <Text>Breakfast</Text>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconCont}>
             <Icon type="FontAwesome" name="info-circle" style={
               [styles.icon, {color: breakfast && breakfast.length ? 'green': 'gray'}]
               }/>
           </TouchableOpacity>
-        </ListItem>  
-        { period('Breakfast', breakfastCal, breakfast) }
-        <ListItem itemDivider>
+          {breakfastCal && <Text>{breakfastCal}</Text>}
+        </ListItem>
+        { period('Breakfast', breakfast) }
+        <ListItem itemDivider style={styles.container}>
           <Text>Lunch</Text>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconCont}>
             <Icon type="FontAwesome" name="info-circle" style={
               [styles.icon, {color: lunch && lunch.length ? 'green': 'gray'}]
               }/>
-           </TouchableOpacity>   
-        </ListItem> 
-        { period('Lunch', lunchCal, lunch) }
-         <ListItem itemDivider>
+           </TouchableOpacity>
+           {lunchCal && <Text>{lunchCal}</Text>}
+        </ListItem>
+        { period('Lunch', lunch) }
+         <ListItem itemDivider style={styles.container}>
           <Text>Dinner</Text>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconCont}>
             <Icon type="FontAwesome" name="info-circle" style={
               [styles.icon, {color: dinner && dinner.length ? 'green': 'gray'}]
             }/>
-          </TouchableOpacity> 
-        </ListItem>  
-        { period('Dinner', dinnerCal, dinner) } 
-        <ListItem itemDivider>
+          </TouchableOpacity>
+          {dinnerCal && <Text>{dinnerCal}</Text>}
+        </ListItem>
+        { period('Dinner', dinner) }
+        <ListItem itemDivider style={styles.container}>
           <Text>Snacks</Text>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconCont}>
             <Icon type="FontAwesome" name="info-circle" style={
             [styles.icon, {color: snacks && snacks.length ? 'green': 'gray'}]
             }/>
-          </TouchableOpacity> 
-        </ListItem>   
-        { period('Snacks', snacksCal, snacks) }   
-      </List> 
+          </TouchableOpacity>
+          {snacksCal && <Text>{snacksCal}</Text>}
+        </ListItem>
+        { period('Snacks', snacks) }
+      </List>
   )
 }
 
 const styles = StyleSheet.create({
   icon: {
-   fontSize: 20, 
-   alignSelf: 'center'
+   fontSize: 20,
   },
-  iconContainer: {
-    flex: 1, 
-    alignItems: 'center'
+  iconCont: {
+    position: 'absolute',
+    left: 100
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
     }
   })

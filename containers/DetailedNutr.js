@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { DynamicItem } from '../components/dynamicItem';
 import { fixed, round, getFullNutrition } from '../helpers/help_functions';
 import { Text, Button, View, Container, Content, ListItem, Left, Body, Right, Thumbnail } from 'native-base';
 import { StyleSheet, Image,  } from 'react-native';
 const DetailedNutr = props => {
+  const isFromBasket = props.isFromBasket;
   const id = props.id;
-  const foodObj = props.basket[id];
+  const foodObj = isFromBasket ? props.basket[id] : id;
   const dailyCal = props.dailyCal;
-  if (!props.basket.length) return null;
+  if (isFromBasket && !props.basket.length) return null;
   const hideDetailedModal = props.hideDetailedModal;
   const basketItem = props.basket[props.id];
 
@@ -92,7 +94,7 @@ const DetailedNutr = props => {
   return (
     <Container>
       <Content style={{ paddingHorizontal: 15, paddingVertical: 4 }}>
-        {props.isFromBasket && (
+        {props.isFromBasket ? (
           <View style={{ flex: 1, paddingVertical: 8 }}>
            <ListItem avatar>
               <Left>
@@ -108,7 +110,7 @@ const DetailedNutr = props => {
               </Right>
             </ListItem>
           </View>
-        )}
+        ) : <DynamicItem item={foodObj} withInfo={false}/>}
         <View style={{ borderWidth: 1, padding: 12 }}>
           <View
             style={[styles.row, { borderTopWidth: 8, borderBottomWidth: 4 }]}>

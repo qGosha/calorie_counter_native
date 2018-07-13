@@ -28,8 +28,8 @@ import {
 } from 'native-base';
 import { TotalPanel } from './totalPanel';
 import { MenuHeader } from './menuHeader';
+import { DynamicItem } from './dynamicItem';
 import { Actions } from 'react-native-router-flux';
-import uuid from 'react-native-uuid';
 import { round, getFullNutrition } from '../helpers/help_functions';
 
 export const BasketPanel = ({
@@ -45,101 +45,15 @@ export const BasketPanel = ({
     basketFood = null;
   } else {
     basketFood = basket.map((basketItem, i) => {
-      const foodAvatarUrl =
-        'https://d2eawub7utcl6.cloudfront.net/images/nix-apple-grey.png';
-
-      const qty =
-        basketItem.value === undefined
-          ? basketItem.serving_qty
-          : basketItem.value;
-      const altMesures = basketItem.alt_measures;
-      const foodName = basketItem.food_name;
-      const calorie = basketItem.full_nutrients
-        ? round(getFullNutrition(208, basketItem))
-        : 0;
-      const options = altMesures
-        ? altMesures.map((option, j) => {
-            const value = option.measure;
-            return <Picker.Item key={uuid.v4()} label={value} value={value} />;
-          })
-        : null;
-      let select;
-      if (altMesures && altMesures.length) {
-        select = (
-          <Picker
-            iosIcon={
-              <Icon
-                name="ios-arrow-down-outline"
-                style={{
-                  position: 'absolute',
-                  top: 10,
-                  right: 3,
-                  marginRight: 0,
-                  marginLeft: 0,
-                  paddingTop: 0,
-                }}
-              />
-            }
-            mode="dropdown"
-            style={styles.picker}
-            onValueChange={value => onMeasureChange(value, i)}
-            selectedValue={basketItem.serving_unit}>
-            {options}
-          </Picker>
-        );
-      } else {
-        select = (
-          <Picker
-            mode="dropdown"
-            style={[styles.picker, { borderColor: 'gray' }]}
-            enabled={false}
-            placeholder={basketItem.serving_unit}
-          />
-        );
-      }
-      const colorieSection = (
-        <View style={{ flex: 1 }}>
-          <Text style={{ color: 'green', textAlign: 'right' }}>{calorie}</Text>
-          <Text style={{textAlign: 'right'}}>cal</Text>
-        </View>
-      );
-
-      return (
-        <ListItem style={styles.main}>
-          <Image
-            source={{ uri: basketItem.photo.thumb || foodAvatarUrl }}
-            style={styles.image}
-          />
-          <View style={{ flex: 4, justifyContent: 'space-between' }}>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Item regular style={styles.qty}>
-                <Input
-                  style={{ textAlign: 'center' }}
-                  bordered
-                  value={qty.toString()}
-                  onChange={event => onQtyChange(event, i)}
-                />
-              </Item>
-              <View style={{ flex: 1 }}>{select}</View>
-            </View>
-            <Text style={{ fontSize: 15, fontStyle: 'italic' }}>
-              {foodName}
-            </Text>
-          </View>
-          <TouchableOpacity style={{flex: 1, alignItems: 'center'}} onPress={() => Actions.detailedNutr({
-            id: i, 
-            title: foodName, 
-            onBack: () => Actions.basket(),
-            isFromBasket: true
-          }) }>
-           <Icon type="FontAwesome" name="info-circle" style={{fontSize: 20}}/>
-          </TouchableOpacity>
-          {colorieSection}
-        </ListItem>
-      );
-    });
-  }
-
+     return <DynamicItem
+      withInfo={true}
+      i={i}
+      item={basketItem}
+      onMeasureChange={onMeasureChange}
+      onQtyChange={onQtyChange}
+     />
+  })
+}
   const noFoodAdded = (
     <View
       style={{
@@ -237,35 +151,10 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
   },
-  qty: {
-    width: 60,
-    height: 45,
-    borderRadius: 5,
-  },
-  main: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingRight: 8,
-    paddingLeft: 8,
-    paddingTop: 10,
-    paddingBottom: 5,
-  },
-  image: {
-    width: 35,
-    height: 35,
-    flex: 1,
-    marginRight: 10,
-  },
   tip: {
     paddingVertical: 5,
     fontSize: 12,
     color: 'gray',
     textAlign: 'center',
-  },
-  picker: {
-    width: 100,
-    alignSelf: 'center',
-    borderWidth: 1,
-    paddingRight: 20,
   },
 });
