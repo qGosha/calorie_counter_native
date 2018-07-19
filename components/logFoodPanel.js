@@ -101,12 +101,11 @@ export const LogFoodPanel = ({ foods }) => {
       return(
          <ListItem
            avatar
-           key={item.id} 
-           onPress={() => Actions.detailedNutr({
-             id: item,
+           key={item.id}
+           onPress={() => Actions.intakeLog({
+             foodItem: item,
              title: item.food_name,
              onBack: () => Actions.dashboard(),
-             isFromBasket: false
            }) }>
           <Left>
             <Thumbnail small square source={{ uri: item.photo ? item.photo.thumb : foodAvatarUrl }} />

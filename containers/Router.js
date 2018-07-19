@@ -17,6 +17,7 @@ import Dashboard from './Dashboard';
 import DetailedNutr from './DetailedNutr';
 import Basket from './Basket';
 import SearchBar from './SearchBar';
+import IntakeLog from './IntakeLog';
 import ConfirmWindow from './ConfirmWindow';
 import { connect } from 'react-redux';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
@@ -130,6 +131,18 @@ const RouterComponent = props => {
             drawerLockMode="locked-closed"
             component={DetailedNutr}
             title="Detailed Nutrition"
+            navigationBarStyle={styles.nav}
+            navBarButtonColor="#fff"
+          />
+          <Scene
+            hideDrawerButton
+            hideTabBar
+            panHandlers
+            back
+            key="intakeLog"
+            drawerLockMode="locked-closed"
+            component={IntakeLog}
+            title="Intake Log"
             navigationBarStyle={styles.nav}
             navBarButtonColor="#fff"
           />

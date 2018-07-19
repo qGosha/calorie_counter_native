@@ -1,29 +1,26 @@
 import React, { Component } from "react";
-import { Modal, Button } from "react-bootstrap";
 import {
-  hideModal,
   getFoodLog,
   getFoodLogSuccess,
   getFoodLogFailure,
   deleteFoodLogItem,
   deleteFoodLogItemFailure,
-  showModal,
   setNewBasket,
   updateQty,
-
   updateQtyFailure,
   getMonthReport,
   getMonthReportSuccess,
   getMonthReportFailure
 } from "../actions/index";
-import "../style/nutr_details.css";
-import { Container, Row, Col } from 'react-grid-system';
-import { INTAKELOG, CONFIRM, BASKET } from "../containers/Modal";
 import { DetailedNutrPanel } from "../components/detailedNutrPanel";
-import { FoodListItem } from "../components/foodListItem";
 import { connect } from "react-redux";
 import { v4 } from "uuid";
-import FontAwesome from 'react-fontawesome';
+import { Container, Content,Button, Text, View, Icon } from 'native-base';
+import {
+  StyleSheet
+} from 'react-native';
+import { Actions } from 'react-native-router-flux';
+
 
 class IntakeLog extends Component {
   constructor(props) {
@@ -36,12 +33,12 @@ class IntakeLog extends Component {
     this.updateQty = this.updateQty.bind(this);
   }
   componentDidMount() {
-    const foods = this.props.foods;
+    const foods = this.props.foodItem;
     this.setState({foods})
   }
 
   updateQty() {
-    const jwt = localStorage.getItem("jwt");
+    const jwt = this.props.jwt;
     const foods = this.state.foods;
     const currentDate = this.props.currentDate;
     foods["serving_qty"] = +foods.serving_qty
@@ -49,13 +46,12 @@ class IntakeLog extends Component {
       : foods.last_good_value;
     foods["last_good_value"] = undefined;
     this.props.updateQty(jwt, foods, currentDate);
-    this.props.hideModal(INTAKELOG)
 
   }
 
   onQtyChange(event) {
     const newFoods = Object.assign({}, this.state.foods);
-    const newValue = event.target.value;
+    const newValue = event.nativeEvent.text;
     const oldValue = newFoods["serving_qty"];
     const isnan = value => isNaN(parseInt(value)) || isNaN(value) || !+value;
     if (isnan(newValue)) {
@@ -88,102 +84,67 @@ class IntakeLog extends Component {
       serving_qty: +item.serving_qty ? item.serving_qty : item.last_good_value
     };
     const newBasket = basket.concat(newItem);
-    this.props.hideModal(INTAKELOG);
+
     this.props.setNewBasket(newBasket);
-    this.props.showModal(BASKET);
+    Actions.dashboard();
   }
 
   render() {
     const foods = this.state.foods;
     if (!foods) return null;
     const props = this.props;
-    const title = props.title;
-    const lessInfo = props.lessInfo;
-    const hideModal = props.hideModal;
     const deleteFoodLogItem = props.deleteFoodLogItem;
-    const showModal = props.showModal;
-    const jwt = localStorage.getItem("jwt");
     const confirmText = "Are you sure you want to delete this item?";
+    const jwt = this.props.jwt;
+    const deleteButton =
+    <Button
+      iconLeft
+      danger
+      style={styles.buttons}
+      onPress={() =>
+        Actions.error({
+          confirm: true,
+          title: 'Confirm',
+          text:confirmText,
+          func: () => this.props.deleteFoodLogItem(jwt, foods, this.props.currentDate),
+          positiveText: 'Yes',
+          negativeText: 'No',
+        })
+      }>
+      <Icon type="FontAwesome" name="trash" />
+      <Text>Delete</Text>
+    </Button>
 
-    const deleteButton = !lessInfo ? (
+
+
+    const copyButton =
+    <Button
+      iconLeft
+      info
+      style={styles.buttons}
+      onPress={() =>this.renewBasket(foods)}>
+      <Icon type="FontAwesome" name="copy" />
+      <Text>Copy</Text>
+    </Button>
+
+    const updateButton =
       <Button
-        bsStyle="danger"
-        onClick={() =>
-          showModal(CONFIRM, {
-            text: confirmText,
-            confirmFunk: () => this.props.deleteFoodLogItem(jwt, foods, this.props.currentDate)
-          })
-        }
-      >
-        <FontAwesome
-          className='fas fa-trash'
-          name='fa-trash'
-        /> Delete
+        iconLeft
+        success
+        style={styles.buttons}
+        onPress={this.updateQty}>
+        <Icon type="FontAwesome" name="pencil" />
+        <Text>Update</Text>
       </Button>
-    ) : null;
-
-    const copyButton = !lessInfo ? (
-      <Button bsStyle="info" onClick={() => this.renewBasket(foods)}>
-        <FontAwesome
-          className='fas fa-copy'
-          name='fa-copy'
-        /> Copy
-      </Button>
-    ) : null;
-
-    const updateSection = !lessInfo ? (
-      <Modal.Footer>
-       <Row style={{justifyContent:'center'}}>
-        <Button
-        bsStyle='success'
-        onClick={this.updateQty}>
-         <FontAwesome
-          className='fas fa-pencil'
-          name='fa-pencil'
-         /> Update
-        </Button>
-       </Row>
-      </Modal.Footer>
-    ) : null;
-
-    const qtyPanelAdjust = !lessInfo ? (
-      <FoodListItem foods={[foods]} onQtyChange={this.onQtyChange} />
-    ) : null;
 
     return (
-      <Modal
-        show={true}
-        keyboard={true}
-        onHide={() => hideModal(INTAKELOG)}
-        aria-labelledby="nutr-modal-title"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="nutr-modal-title-lg">{title} Total</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {qtyPanelAdjust}
-          <DetailedNutrPanel
-            foodObj={foods}
-            isFromBasket={false}
-            dailyCal={props.dailyCal} />
-        </Modal.Body>
-         {updateSection}
-         <Modal.Footer>
-         <Container>
-          <Row style={{ justifyContent: !lessInfo ? 'center' : 'flex-end' }}>
-          {deleteButton}
-          {copyButton}
-          <Button
-           onClick={() => hideModal(INTAKELOG)}>
-            <FontAwesome
-              className='fas fa-times'
-              name='fa-times'
-            /> Close
-            </Button>
-          </Row>
-          </Container>
-         </Modal.Footer>
-      </Modal>
+      <Container>
+        <Content style={{ paddingHorizontal: 15, paddingVertical: 4 }}>
+        <DetailedNutrPanel
+          foodObj={foods}
+          dailyCal={props.dailyCal} />
+        </Content>
+      </Container>
     );
   }
 }
@@ -191,43 +152,25 @@ class IntakeLog extends Component {
 const mapStateToProps = state => ({
   dailyCal: state.dash.userInfo["daily_kcal"],
   basket: state.basket,
+  jwt: state.auth.jwt,
   currentDate: state.dates.currentDate
 });
 
 const mapDispatchToProps = dispatch => {
   return {
-    hideModal: modalType => dispatch(hideModal(modalType)),
     deleteFoodLogItem: (jwt, item, currentDate) => {
       dispatch(deleteFoodLogItem(jwt, item)).then(response => {
-        dispatch(hideModal(INTAKELOG));
         if (!response.error) {
-          dispatch(getFoodLog(jwt, currentDate)).then(response => {
-            if (!response.error) {
-              dispatch(getFoodLogSuccess(response.payload.data.foods));
-            } else {
-              dispatch(
-                getFoodLogFailure(response.payload.response)
-              );
-            }
-          })
-
+           return Promise.resolve();
         } else {
-          dispatch(deleteFoodLogItemFailure(response.payload.response));
+          return Promise.reject(response.payload.response);
         }
       })
-      .then(() => {
-        dispatch(getMonthReport(jwt, currentDate))
-         .then( response => {
-           if(!response.error) {
-             dispatch(getMonthReportSuccess(response.payload.data.dates));
-           } else {
-             dispatch(getMonthReportFailure(response.payload.response));
-           }
-          } )
-      })
+      .catch( er => {
+        const message = er && er.response && er.response.data.message || 'Error';
+        Actions.error({title: 'Data fetch failed', text: message})
+      } )
     },
-    showModal: (modalType, modalProps) =>
-      dispatch(showModal(modalType, modalProps)),
     setNewBasket: basket => dispatch(setNewBasket(basket)),
     updateQty: (jwt, foods, currentDate) =>
       dispatch(updateQty(jwt, foods)).then(response => {
@@ -236,26 +179,35 @@ const mapDispatchToProps = dispatch => {
             if (!response.error) {
               dispatch(getFoodLogSuccess(response.payload.data.foods));
             } else {
-              dispatch(
-                getFoodLogFailure(response.payload.response)
-              );
+                Promise.reject(response.payload.response)
             }
           })
-          .then(() => {
-            dispatch(getMonthReport(jwt, currentDate))
-             .then( response => {
-               if(!response.error) {
-                 dispatch(getMonthReportSuccess(response.payload.data.dates));
-               } else {
-                 dispatch(getMonthReportFailure(response.payload.response));
-               }
-              } )
-          })
         } else {
-          dispatch(updateQtyFailure(response.payload.response));
+          Promise.reject(response.payload.response);
         }
       })
+      .catch( er => {
+        const message = er && er.response && er.response.data.message || 'Error';
+        Actions.error({title: 'Data fetch failed', text: message})
+      } )
   };
 };
-
+const styles = StyleSheet.create({
+  buttons: {
+    width: 200,
+    justifyContent: 'flex-start',
+    paddingLeft: 30,
+  },
+  control: {
+    flex: 1,
+    marginTop: 25,
+    alignItems: 'center',
+  },
+  tip: {
+    paddingVertical: 5,
+    fontSize: 12,
+    color: 'gray',
+    textAlign: 'center',
+  },
+});
 export default connect(mapStateToProps, mapDispatchToProps)(IntakeLog);

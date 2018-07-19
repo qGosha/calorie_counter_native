@@ -62,12 +62,8 @@ constructor(props) {
     const jwt = this.props.jwt;
     const currentDate = this.props.currentDate;
     this.props.getUser(jwt)
-    .then(() => {
-      return fetchFromStorage('basket')
-    })
-    .then(() => {
-      return this.props.getLog(jwt, currentDate);
-    })
+    .then(() => this.props.getLog(jwt, currentDate))
+    .then(() => fetchFromStorage('basket'))
     .then(response => {
       const basket = response ? JSON.parse(response) : [];
       return Promise.resolve(this.props.setNewBasket(basket));
