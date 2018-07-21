@@ -13,9 +13,10 @@ import {
   getMonthReportFailure
 } from "../actions/index";
 import { DetailedNutrPanel } from "../components/detailedNutrPanel";
+import { getFullNutrition, round } from '../helpers/help_functions';
 import { connect } from "react-redux";
 import { v4 } from "uuid";
-import { Container, Content,Button, Text, View, Icon } from 'native-base';
+import { Container,Input, Content,Button, Text, View, Icon, ListItem, Item, Left, Body, Right, Thumbnail} from 'native-base';
 import {
   StyleSheet
 } from 'react-native';
@@ -26,15 +27,11 @@ class IntakeLog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      foods: false
+      foods: this.props.foodItem
     };
     this.onQtyChange = this.onQtyChange.bind(this);
     this.renewBasket = this.renewBasket.bind(this);
     this.updateQty = this.updateQty.bind(this);
-  }
-  componentDidMount() {
-    const foods = this.props.foodItem;
-    this.setState({foods})
   }
 
   updateQty() {
@@ -136,10 +133,40 @@ class IntakeLog extends Component {
         <Icon type="FontAwesome" name="pencil" />
         <Text>Update</Text>
       </Button>
-
+  const foodAvatarUrl =
+    'https://d2eawub7utcl6.cloudfront.net/images/nix-apple-grey.png';
+  const foodName = foods.food_name;
+  const qty =  foods.serving_qty;
+  const value = (foods.value === undefined || isNaN(parseInt(foods.value)) || isNaN(foods.value))
+  ? qty : foods.value;
+  const servingUnit = foods.serving_unit;
+  const calorie = round(getFullNutrition(208, foods));
     return (
       <Container>
         <Content style={{ paddingHorizontal: 15, paddingVertical: 4 }}>
+          <View style={{ flex: 1, paddingVertical: 8 }}>
+           <ListItem avatar>
+              <Left>
+                <Thumbnail square source={{ uri: foods.photo ? foods.photo.thumb : foodAvatarUrl }} />
+              </Left>
+              <Body style={{borderBottomWidth: 0}}>
+                <Text>{foodName}</Text>
+                <View style={{flex: 1, flexDirection: 'row', alignItems:'space-between', borderBottomWidth: 0, justifyContent: 'center'}}>
+                <Input
+                  style={{ textAlign: 'center', borderWidth:1, backgroundColor: '#fff', width: 20, height: 40 }}
+                  bordered
+                  value={value.toString()}
+                  onChange={event => this.onQtyChange(event)}
+                /> 
+                <Text note>{servingUnit}</Text>
+                </View>
+              </Body>
+              <Right style={{borderBottomWidth: 0}}>
+                <Text style={{color: 'green'}}>{calorie}</Text>
+                <Text note>cal</Text>
+              </Right>
+            </ListItem>
+          </View>        
         <DetailedNutrPanel
           foodObj={foods}
           dailyCal={props.dailyCal} />

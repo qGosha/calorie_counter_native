@@ -12,7 +12,8 @@ const DetailedNutr = props => {
       <Content style={{ paddingHorizontal: 15, paddingVertical: 4 }}>
       <DetailedNutrPanel
         foodObj={basketItem}
-        dailyCal={props.dailyCal} />
+        dailyCal={props.dailyCal} 
+        isFromBasket={true}/>
       </Content>
     </Container>
   );

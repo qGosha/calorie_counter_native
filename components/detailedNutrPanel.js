@@ -3,7 +3,7 @@ import { fixed, round, getFullNutrition } from '../helpers/help_functions';
 import { Text, Button, View, Container, Content, ListItem, Left, Body, Right, Thumbnail } from 'native-base';
 import { StyleSheet, Image,  } from 'react-native';
 
-export const DetailedNutrPanel = ({ foodObj, dailyCal }) => {
+export const DetailedNutrPanel = ({ foodObj, dailyCal, isFromBasket }) => {
 
   const getNutrition = (nutr) => {
     return getFullNutrition(nutr, foodObj);
@@ -85,7 +85,7 @@ export const DetailedNutrPanel = ({ foodObj, dailyCal }) => {
 }
 return(
         <View>
-          <View style={{ flex: 1, paddingVertical: 8 }}>
+          {isFromBasket && <View style={{ flex: 1, paddingVertical: 8 }}>
            <ListItem avatar>
               <Left>
                 <Thumbnail square source={{ uri: foodObj.photo ? foodObj.photo.thumb : foodAvatarUrl }} />
@@ -99,7 +99,7 @@ return(
                 <Text note>cal</Text>
               </Right>
             </ListItem>
-          </View>
+          </View>}
         <View style={{ borderWidth: 1, padding: 12 }}>
           <View
             style={[styles.row, { borderTopWidth: 8, borderBottomWidth: 4 }]}>
