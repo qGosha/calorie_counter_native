@@ -18,7 +18,8 @@ import { connect } from "react-redux";
 import { v4 } from "uuid";
 import { Container,Input, Content,Button, Text, View, Icon, ListItem, Item, Left, Body, Right, Thumbnail} from 'native-base';
 import {
-  StyleSheet
+  StyleSheet,
+  AsyncStorage
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
@@ -83,7 +84,11 @@ class IntakeLog extends Component {
     const newBasket = basket.concat(newItem);
 
     this.props.setNewBasket(newBasket);
-    Actions.dashboard();
+    const newBasketForStorage = JSON.stringify(newBasket);
+    AsyncStorage.setItem('basket', newBasketForStorage).catch(er => {
+      Actions.error({ title: 'Data upload failed', text: er });
+    });
+    Actions.basket();
   }
 
   render() {
@@ -96,6 +101,7 @@ class IntakeLog extends Component {
     const deleteButton =
     <Button
       iconLeft
+      small
       danger
       style={styles.buttons}
       onPress={() =>
@@ -103,7 +109,10 @@ class IntakeLog extends Component {
           confirm: true,
           title: 'Confirm',
           text:confirmText,
-          func: () => this.props.deleteFoodLogItem(jwt, foods, this.props.currentDate),
+          func: () =>  {
+            this.props.deleteFoodLogItem(jwt, foods, this.props.currentDate);
+            Actions.dashboard();
+          },
           positiveText: 'Yes',
           negativeText: 'No',
         })
@@ -112,10 +121,9 @@ class IntakeLog extends Component {
       <Text>Delete</Text>
     </Button>
 
-
-
     const copyButton =
     <Button
+      small
       iconLeft
       info
       style={styles.buttons}
@@ -126,6 +134,7 @@ class IntakeLog extends Component {
 
     const updateButton =
       <Button
+        small
         iconLeft
         success
         style={styles.buttons}
@@ -151,13 +160,13 @@ class IntakeLog extends Component {
               </Left>
               <Body style={{borderBottomWidth: 0}}>
                 <Text>{foodName}</Text>
-                <View style={{flex: 1, flexDirection: 'row', alignItems:'space-between', borderBottomWidth: 0, justifyContent: 'center'}}>
+                <View style={styles.inputCont}>
                 <Input
-                  style={{ textAlign: 'center', borderWidth:1, backgroundColor: '#fff', width: 20, height: 40 }}
+                  style={styles.input}
                   bordered
                   value={value.toString()}
                   onChange={event => this.onQtyChange(event)}
-                /> 
+                />
                 <Text note>{servingUnit}</Text>
                 </View>
               </Body>
@@ -166,7 +175,15 @@ class IntakeLog extends Component {
                 <Text note>cal</Text>
               </Right>
             </ListItem>
-          </View>        
+          </View>
+          <View style={{flex: 1, paddingBottom: 10, paddingTop: 7, borderTopWidth: 1, borderColor: '#ddd'}}>
+           <View style={styles.buttonsCont}>
+           {updateButton}{copyButton}
+           </View>
+           <View style={{flex: 1, justifyContent: 'center', flexDirection: 'row'}}>
+           {deleteButton}
+           </View>
+          </View>
         <DetailedNutrPanel
           foodObj={foods}
           dailyCal={props.dailyCal} />
@@ -220,21 +237,28 @@ const mapDispatchToProps = dispatch => {
   };
 };
 const styles = StyleSheet.create({
-  buttons: {
-    width: 200,
-    justifyContent: 'flex-start',
-    paddingLeft: 30,
-  },
-  control: {
+  buttonsCont: {
     flex: 1,
-    marginTop: 25,
-    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 8
   },
-  tip: {
-    paddingVertical: 5,
-    fontSize: 12,
-    color: 'gray',
+  buttons: {
+    justifyContent: 'flex-start',
+  },
+  input: {
+    flex: 0.5,
     textAlign: 'center',
+    borderWidth:1,
+    backgroundColor: '#fff',
+    marginRight: 5,
+    height: 35
+  },
+  inputCont: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems:'center',
+    justifyContent: 'flex-start'
   },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(IntakeLog);

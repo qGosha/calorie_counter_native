@@ -30,16 +30,11 @@ import {
 class Dashboard extends Component {
 constructor(props) {
   super(props);
-  this.onSignOut = this.onSignOut.bind(this);
   this.onLongLoading = this.onLongLoading.bind(this);
   this.dailyCalChange = this.dailyCalChange.bind(this);
 }
 
-  onSignOut() {
-    AsyncStorage.removeItem('jwt', () => this.props.signOutUser()).catch(er => {
-    Actions.error({title: 'Data fetch failed', text: er})
-  })
-  }
+
   onLongLoading() {
     if (!this.props.suggestedFood) {
       this.props.showLoadingScreen();
@@ -100,7 +95,6 @@ constructor(props) {
       return null;
     } else {
      return  <DashboardPanel
-     onSignOut={this.onSignOut}
      userInfo={userInfo}
      showBasketModal={this.props.showBasketModal}
      basket={basket}

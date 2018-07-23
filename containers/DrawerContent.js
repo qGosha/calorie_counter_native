@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Container, Content, Button, Icon, Text } from 'native-base';
-
+import { connect } from 'react-redux';
+import {
+  signOutUser,
+} from "../actions/index";
 const CardSection = (props) => {
     return (
         <View style={[styles.CardSectionStyle, props.style]} >
@@ -11,6 +14,7 @@ const CardSection = (props) => {
         </View>
     );
 };
+
 
 
 const styles = StyleSheet.create({
@@ -28,7 +32,17 @@ const styles = StyleSheet.create({
 
 });
 
-const DrawerContent = () => {
+const DrawerContent = (props) => {
+
+  const onSignOut = () => {
+    AsyncStorage.removeItem('jwt', () => {
+      props.signOutUser();
+      Actions.login();
+    })
+    .catch(er => {
+    Actions.error({title: 'Data fetch failed', text: er})
+  })
+  }
     return (
       <Container>
       <View style={styles.viewContainer}>
@@ -56,7 +70,7 @@ const DrawerContent = () => {
        </View>
        <View style={styles.sectionStyle}>
        <Button
-       onPress={() => Actions.login()}
+       onPress={onSignOut}
        iconLeft
        block
        style={{justifyContent: "flex-start"}}>
@@ -69,4 +83,10 @@ const DrawerContent = () => {
     );
 }
 
-export default DrawerContent;
+const mapDispatchToProps = dispatch => {
+  return {
+    signOutUser: () => dispatch(signOutUser()),
+ }
+}
+
+export default connect(null, mapDispatchToProps)(DrawerContent);

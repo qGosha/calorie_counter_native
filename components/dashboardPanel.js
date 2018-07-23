@@ -17,7 +17,6 @@ import {
 } from 'native-base';
 
 export const DashboardPanel = ({
-  onSignOut,
   userInfo,
   showBasketModal,
   dailyCalChange,

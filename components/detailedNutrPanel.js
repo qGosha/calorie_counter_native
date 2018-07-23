@@ -25,7 +25,7 @@ export const DetailedNutrPanel = ({ foodObj, dailyCal, isFromBasket }) => {
   ) : null;
 
   const multiplier = value / qty || 0;
-  const servingWeightGram = servingWeight * multiplier;
+  const servingWeightGram = foodObj.isFromFoodLog ? servingWeight : servingWeight * multiplier;
 
   const calorie = round(getNutrition(208));
   const fat = fixed(getNutrition(204));

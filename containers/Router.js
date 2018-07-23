@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Router,
   Scene,
+  Reducer,
   Lightbox,
   Modal,
   Drawer,
@@ -19,6 +20,7 @@ import Basket from './Basket';
 import SearchBar from './SearchBar';
 import IntakeLog from './IntakeLog';
 import ConfirmWindow from './ConfirmWindow';
+import { DetailedPeriod } from '../components/detailedPeriod';
 import { connect } from 'react-redux';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
 import DrawerContent from './DrawerContent';
@@ -54,6 +56,14 @@ const CustomNav = () => {
   );
 };
 
+const reducerCreate = params => {
+  const defaultReducer = new Reducer(params);
+  return (state, action) => {
+    console.log('ACTION:', action);
+    return defaultReducer(state, action);
+  };
+};
+
 const RouterComponent = props => {
   const value = props.value;
   if (value) {
@@ -63,7 +73,7 @@ const RouterComponent = props => {
     <Icon type="FontAwesome" name="bars" style={{ color: 'blue' }} />
   );
   return (
-    <Router>
+    <Router createReducer={reducerCreate}>
       <Scene key="lightbox" lightbox>
         <Scene
           key="drawer"
@@ -72,81 +82,98 @@ const RouterComponent = props => {
           gesturesEnabled={false}
           contentComponent={DrawerContent}
           drawerIcon={drawIcon}>
-          <Scene
-            key="root"
-            hideNavBar
-            hideTabBar
-            drawerLockMode="locked-closed"
-            panHandlers
-            hideDrawerButton>
-            <Scene key="login" component={Login} initial={!value} />
+          <Scene key='root'>
+              <Scene
+              key="login"
+              hideNavBar
+              hideTabBar
+              drawerLockMode="locked-closed"
+              panHandlers
+              hideDrawerButton
+              component={Login}
+              initial={!value}
+              />
+              <Scene
+                drawerLockMode="locked-closed"
+                panHandlers
+                hideDrawerButton
+                key="signup"
+                back
+                component={Signup}
+                title="Signup"
+                navigationBarStyle={styles.nav}
+                navBarButtonColor="#fff"
+              />
             <Scene
-              key="signup"
+              key="dashboard"
+              component={Dashboard}
+              title="Dashboard"
+              type='reset'
+              initial={!!value}
+            />
+            <Scene
+              hideDrawerButton
+              hideTabBar
+              panHandlers
               back
-              component={Signup}
-              title="Signup"
-              hideNavBar={false}
+              key="searchbar"
+              drawerLockMode="locked-closed"
+              component={SearchBar}
+              title="Search"
               navigationBarStyle={styles.nav}
               navBarButtonColor="#fff"
             />
-          </Scene>
-          <Scene
-            key="dashboard"
-            component={Dashboard}
-            title="Dashboard"
-            initial={!!value}
-          />
-          <Scene
-            hideDrawerButton
-            hideTabBar
-            panHandlers
-            back
-            onBack={() => Actions.dashboard()}
-            key="searchbar"
-            drawerLockMode="locked-closed"
-            component={SearchBar}
-            title="Search"
-            navigationBarStyle={styles.nav}
-            navBarButtonColor="#fff"
-          />
-          <Scene
-            hideDrawerButton
-            hideTabBar
-            panHandlers
-            back
-            onBack={() => Actions.dashboard()}
-            key="basket"
-            drawerLockMode="locked-closed"
-            component={Basket}
-            title="Basket"
-            navigationBarStyle={styles.nav}
-            navBarButtonColor="#fff"
-          />
-          <Scene
-            hideDrawerButton
-            hideTabBar
-            panHandlers
-            back
-            key="detailedNutr"
-            drawerLockMode="locked-closed"
-            component={DetailedNutr}
-            title="Detailed Nutrition"
-            navigationBarStyle={styles.nav}
-            navBarButtonColor="#fff"
-          />
-          <Scene
-            hideDrawerButton
-            hideTabBar
-            panHandlers
-            back
-            key="intakeLog"
-            drawerLockMode="locked-closed"
-            component={IntakeLog}
-            title="Intake Log"
-            navigationBarStyle={styles.nav}
-            navBarButtonColor="#fff"
-          />
-        </Scene>
+            <Scene
+              hideDrawerButton
+              hideTabBar
+              panHandlers
+              back
+              onBack={() => Actions.popTo('dashboard')}
+              key="basket"
+              drawerLockMode="locked-closed"
+              component={Basket}
+              title="Basket"
+              navigationBarStyle={styles.nav}
+              navBarButtonColor="#fff"
+            />
+            <Scene
+              hideDrawerButton
+              hideTabBar
+              panHandlers
+              back
+              key="detailedNutr"
+              drawerLockMode="locked-closed"
+              component={DetailedNutr}
+              title="Detailed Nutrition"
+              navigationBarStyle={styles.nav}
+              navBarButtonColor="#fff"
+            />
+            <Scene
+              hideDrawerButton
+              hideTabBar
+              panHandlers
+              back
+              key="intakeLog"
+              drawerLockMode="locked-closed"
+              component={IntakeLog}
+              title="Intake Log"
+              navigationBarStyle={styles.nav}
+              navBarButtonColor="#fff"
+            />
+            <Scene
+              hideDrawerButton
+              hideTabBar
+              panHandlers
+              back
+              key="detailedPeriod"
+              drawerLockMode="locked-closed"
+              component={DetailedPeriod}
+              navigationBarStyle={styles.nav}
+              navBarButtonColor="#fff"
+            />
+            </Scene>
+           </Scene>
+
         <Scene key="error" component={ConfirmWindow} hideNavBar />
       </Scene>
     </Router>

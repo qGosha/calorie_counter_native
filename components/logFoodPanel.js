@@ -34,7 +34,7 @@ import {
   Item,
 } from 'native-base';
 
-export const LogFoodPanel = ({ foods }) => {
+export const LogFoodPanel = ({ foods, dailyCal }) => {
 
   const totalPeriodNutr = (period) => {
     if(!period || !period.length) return false;
@@ -104,8 +104,7 @@ export const LogFoodPanel = ({ foods }) => {
            key={item.id}
            onPress={() => Actions.intakeLog({
              foodItem: item,
-             title: item.food_name,
-             onBack: () => Actions.dashboard(),
+             title: item.food_name
            }) }>
           <Left>
             <Thumbnail small square source={{ uri: item.photo ? item.photo.thumb : foodAvatarUrl }} />
@@ -127,7 +126,13 @@ export const LogFoodPanel = ({ foods }) => {
       <List>
         <ListItem itemDivider style={styles.container}>
           <Text>Breakfast</Text>
-          <TouchableOpacity style={styles.iconCont}>
+          <TouchableOpacity
+           style={styles.iconCont}
+           onPress={() => breakfast.length && Actions.detailedPeriod({
+             title:'Breakfast',
+             foods: totalIntake['Breakfast'],
+             dailyCal: dailyCal
+           })}>
             <Icon type="FontAwesome" name="info-circle" style={
               [styles.icon, {color: breakfast && breakfast.length ? 'green': 'gray'}]
               }/>
@@ -137,7 +142,13 @@ export const LogFoodPanel = ({ foods }) => {
         { period('Breakfast', breakfast) }
         <ListItem itemDivider style={styles.container}>
           <Text>Lunch</Text>
-          <TouchableOpacity style={styles.iconCont}>
+          <TouchableOpacity
+           style={styles.iconCont}
+           onPress={() => lunch.length && Actions.detailedPeriod({
+             title:'Lunch',
+             foods: totalIntake['Lunch'],
+             dailyCal: dailyCal
+           })}>
             <Icon type="FontAwesome" name="info-circle" style={
               [styles.icon, {color: lunch && lunch.length ? 'green': 'gray'}]
               }/>
@@ -147,7 +158,13 @@ export const LogFoodPanel = ({ foods }) => {
         { period('Lunch', lunch) }
          <ListItem itemDivider style={styles.container}>
           <Text>Dinner</Text>
-          <TouchableOpacity style={styles.iconCont}>
+          <TouchableOpacity
+           style={styles.iconCont}
+           onPress={() => dinner.length && Actions.detailedPeriod({
+             title:'Dinner',
+             foods: totalIntake['Dinner'],
+             dailyCal: dailyCal
+           })}>
             <Icon type="FontAwesome" name="info-circle" style={
               [styles.icon, {color: dinner && dinner.length ? 'green': 'gray'}]
             }/>
@@ -157,7 +174,13 @@ export const LogFoodPanel = ({ foods }) => {
         { period('Dinner', dinner) }
         <ListItem itemDivider style={styles.container}>
           <Text>Snacks</Text>
-          <TouchableOpacity style={styles.iconCont}>
+          <TouchableOpacity
+           style={styles.iconCont}
+           onPress={() => snacks.length && Actions.detailedPeriod({
+             title:'Snacks',
+             foods: totalIntake['Snacks'],
+             dailyCal: dailyCal
+           })}>
             <Icon type="FontAwesome" name="info-circle" style={
             [styles.icon, {color: snacks && snacks.length ? 'green': 'gray'}]
             }/>

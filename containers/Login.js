@@ -137,7 +137,7 @@ class Login extends Component {
               }}
               indicate={isFetching}
             />
-            <CustomButton text={'SIGN UP'} func={() => AsyncStorage.removeItem('basket')} />
+            <CustomButton text={'SIGN UP'} func={() => AsyncStorage.getItem('jwt')} />
           </View>
         </View>
       </KeyboardAwareScrollView>

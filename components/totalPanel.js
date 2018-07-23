@@ -5,7 +5,7 @@ import {
   View,
   Text
 } from 'native-base';
-export const TotalPanel = ({ foods, isFromLog, showModal, totalDailyNutr }) => {
+export const TotalPanel = ({ foods }) => {
 
 
     const totalCalories = totalNutrElem(208, foods);
