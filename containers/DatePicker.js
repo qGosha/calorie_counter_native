@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Calendar from 'react-calendar'
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import {
   getMonthReport,
   getMonthReportSuccess,
@@ -10,7 +10,8 @@ import {
   getFoodLog,
   setCurrentDateCalLimit
 } from "../actions/index";
-import '../style/date_picker.css';
+import { Text, View } from 'native-base';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 class DatePicker extends Component {
   constructor(props) {
@@ -39,10 +40,10 @@ class DatePicker extends Component {
 
 
   onDateChange = date => {
+    const jwt = this.props.jwt;
     const dates = this.props.dates;
     const dateArr = dates.filter(i => new Date(i['date']).getUTCDate() === new Date(date).getDate());
     const newLimit = (dateArr && dateArr.length) ? dateArr[0]['daily_kcal_limit'] : null;
-    const jwt = localStorage.getItem('jwt');
     this.props.getLog(jwt, date)
       .then(() => Promise.resolve(this.props.setCurrentDateCalLimit(newLimit)) )
       .then(() => this.props.changeCurrentDate(date))
@@ -53,7 +54,7 @@ class DatePicker extends Component {
 
 
   onMonthChange = (date) => {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = this.props.jwt;
     this.setState({ green: [], red: [] },
       () => this.props.getMonthReport(jwt, date))
   }
@@ -67,17 +68,46 @@ class DatePicker extends Component {
   }
 
   render() {
-    return(
-      <Calendar
-       onChange={this.onDateChange}
-       value={this.props.currentDate}
-       showNeighboringMonth={false}
-       className={'custom-calendar'}
-       tileClassName={(date, view) => this.daysColor(date, view)}
-       onActiveDateChange={value => this.onMonthChange(value['activeStartDate'])}
-       onClickMonth={value => this.onMonthChange(value)}
-       />
+    return (
+      <View>
+       <Calendar
+  current={this.props.currentDate}
+  // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+  onDayPress={(day) => alert(day)}
+  // Handler which gets executed on day long press. Default = undefined
+  onDayLongPress={(day) => {console.log('selected day', day)}}
+  // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+  monthFormat={'MMM yyyy'}
+  // Handler which gets executed when visible month changes in calendar. Default = undefined
+  onMonthChange={(month) => {console.log('month changed', month)}}
+  // Hide month navigation arrows. Default = false
+  hideArrows={false}
+  // Replace default arrows with custom ones (direction can be 'left' or 'right')
+  // Do not show days of other months in month page. Default = false
+  hideExtraDays={true}
+  // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
+  // day from another month that is visible in calendar page. Default = false
+  disableMonthChange={true}
+  // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+  firstDay={1}
+  // Hide day names. Default = false
+  onPressArrowLeft={substractMonth => substractMonth()}
+  // Handler which gets executed when press arrow icon left. It receive a callback can go next month
+  onPressArrowRight={addMonth => addMonth()}
+/>
+      </View>
     )
+    // return(
+    //   <Calendar
+    //    onChange={this.onDateChange}
+    //    value={this.props.currentDate}
+    //    showNeighboringMonth={false}
+    //    className={'custom-calendar'}
+    //    tileClassName={(date, view) => this.daysColor(date, view)}
+    //    onActiveDateChange={value => this.onMonthChange(value['activeStartDate'])}
+    //    onClickMonth={value => this.onMonthChange(value)}
+    //    />
+    // )
   }
 
 }
@@ -85,7 +115,8 @@ class DatePicker extends Component {
 
 const mapStateToProps = state => ({
   currentDate: state.dates.currentDate,
-  dates: state.dates.dates
+  dates: state.dates.dates,
+  jwt: state.auth.jwt
 });
 
 const mapDispatchToProps = dispatch => {

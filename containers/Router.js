@@ -19,6 +19,7 @@ import DetailedNutr from './DetailedNutr';
 import Basket from './Basket';
 import SearchBar from './SearchBar';
 import IntakeLog from './IntakeLog';
+import DatePicker from './DatePicker';
 import ConfirmWindow from './ConfirmWindow';
 import { DetailedPeriod } from '../components/detailedPeriod';
 import { connect } from 'react-redux';
@@ -112,6 +113,12 @@ const RouterComponent = props => {
               initial={!!value}
             />
             <Scene
+            hideTabBar={false}
+              key="datePicker"
+              component={DatePicker}
+              title='Calendar'
+            />
+            <Scene
               hideDrawerButton
               hideTabBar
               panHandlers
@@ -171,6 +178,7 @@ const RouterComponent = props => {
               navigationBarStyle={styles.nav}
               navBarButtonColor="#fff"
             />
+
             </Scene>
            </Scene>
 
