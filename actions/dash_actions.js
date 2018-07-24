@@ -13,6 +13,7 @@ export const SETDAILYCAL = "SETDAILYCAL";
 export const SETDAILYCALSUCCESS = "SETDAILYCALSUCCESS";
 export const SETDAILYCALFAILURE = "SETDAILYCALFAILURE";
 export const SETDAILYCALNOTEREMOVE = "SETDAILYCALNOTEREMOVE";
+export const SETTIMEZONE = "SETTIMEZONE";
 
 export const getUser = jwt => {
   const path = "me";
@@ -25,9 +26,8 @@ export const getUser = jwt => {
   };
 };
 
-export const getSuggestedFood = (jwt) => {
+export const getSuggestedFood = (jwt, timezone) => {
   const path = "reports/suggested";
-  const timezone = DeviceInfo.getTimezone();
   const response = axios.get(ROOT_URL + path, {
     headers: { ["x-user-jwt"]: jwt },
     params: { timezone }
@@ -96,4 +96,9 @@ export const setDailyCalFailure = response => ({
 
 export const setDailyCalNoteRemove = response => ({
   type: SETDAILYCALNOTEREMOVE
+});
+
+export const setTimezone = response => ({
+  type: SETTIMEZONE,
+  payload: response
 });

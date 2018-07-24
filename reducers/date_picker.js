@@ -25,9 +25,9 @@ import {
       case GETMONTHREPORTFAILURE:
         return { ...state, error: payload }
       case CURRENTDATECALLIMIT:
-        return { ...state, currentDateLimit: payload } 
+        return { ...state, currentDateLimit: payload }
       case CLEARERROR:
-        return { ...state, error: false };     
+        return { ...state, error: false };
       default:
         return state;
     }

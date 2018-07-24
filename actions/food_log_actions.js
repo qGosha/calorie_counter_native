@@ -1,5 +1,7 @@
 import axios from "axios";
 import { dateFunc, getFullNutrition } from '../helpers/help_functions';
+import { store } from '../App';
+
 
 export const GETFOODLOG = "GETFOODLOG";
 export const GETFOODLOGSUCCESS = "GETFOODLOGSUCCESS";
@@ -19,7 +21,7 @@ export const getFoodLog = (jwt, date) => {
   const headers = {
     ["x-user-jwt"]: jwt
   }
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const timezone = store.getState().dash.timezone;
 
 
   const query = {

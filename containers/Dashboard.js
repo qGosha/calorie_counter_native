@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import { DangerZone } from 'expo';
 import { DashboardPanel } from '../components/dashboardPanel';
 import { fetchFromStorage } from '../helpers/help_functions';
 import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
@@ -24,7 +25,8 @@ import {
   getMonthReport,
   getMonthReportSuccess,
   dashboardLoaded,
-  setNewBasket
+  setNewBasket,
+  setTimezone
 } from "../actions/index";
 
 class Dashboard extends Component {
@@ -53,7 +55,7 @@ constructor(props) {
   }
 
   componentDidMount() {
-    // setTimeout(this.onLongLoading, 600);
+    setTimeout(this.onLongLoading, 600);
     const jwt = this.props.jwt;
     const currentDate = this.props.currentDate;
     this.props.getUser(jwt)
@@ -63,15 +65,13 @@ constructor(props) {
       const basket = response ? JSON.parse(response) : [];
       return Promise.resolve(this.props.setNewBasket(basket));
     })
+    .then( () => this.props.getMonthReport(jwt, currentDate))
+    .then(() => DangerZone.Localization.getCurrentTimeZoneAsync())
+    .then( (timezone) => {
+      this.props.setTimezone(timezone);
+      return this.props.getSuggestedFood(jwt, timezone);
+    })
     .then(() => this.props.hideLoadingScreen())
-
-    // .then( () => {
-    //   return this.props.getMonthReport(jwt, currentDate);
-    // })
-    // .then( () => {
-    //   return this.props.getSuggestedFood(jwt);
-    // })
-    // .then( () => { this.props.hideLoadingScreen() } )
     .catch( er => {
       const message = er && er.response && er.response.data.message || 'Error';
       Actions.error({title: 'Data fetch failed', text: message})
@@ -143,6 +143,7 @@ const mapDispatchToProps = dispatch => {
     setNewBasket: (basket) => dispatch(setNewBasket(basket)),
     hideLoadingScreen: () => dispatch(hideLoadingScreen()),
     showBasketModal: modalType => dispatch(showModal(modalType)),
+    setTimezone: timezone => dispatch(setTimezone(timezone)),
     setDailyCal: (jwt, user) => dispatch(setDailyCal(jwt, user))
       .then(response => {
         if (!response.error) {

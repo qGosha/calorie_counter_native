@@ -40,13 +40,15 @@ class DatePicker extends Component {
 
 
   onDateChange = date => {
+    console.log(date);
+    const newDate = new Date(date.timestamp);
     const jwt = this.props.jwt;
     const dates = this.props.dates;
-    const dateArr = dates.filter(i => new Date(i['date']).getUTCDate() === new Date(date).getDate());
+    const dateArr = dates.filter(i => new Date(i['date']).getUTCDate() === date.dateString);
     const newLimit = (dateArr && dateArr.length) ? dateArr[0]['daily_kcal_limit'] : null;
-    this.props.getLog(jwt, date)
+    this.props.getLog(jwt, newDate)
       .then(() => Promise.resolve(this.props.setCurrentDateCalLimit(newLimit)) )
-      .then(() => this.props.changeCurrentDate(date))
+      .then(() => this.props.changeCurrentDate(newDate))
       .catch(error => {
         this.props.getMonthReportFailure(error);
       })
@@ -73,7 +75,7 @@ class DatePicker extends Component {
        <Calendar
   current={this.props.currentDate}
   // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-  onDayPress={(day) => alert(day)}
+  onDayPress={(date) => this.onDateChange(date)}
   // Handler which gets executed on day long press. Default = undefined
   onDayLongPress={(day) => {console.log('selected day', day)}}
   // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
@@ -116,7 +118,7 @@ class DatePicker extends Component {
 const mapStateToProps = state => ({
   currentDate: state.dates.currentDate,
   dates: state.dates.dates,
-  jwt: state.auth.jwt
+  jwt: state.auth.jwt,
 });
 
 const mapDispatchToProps = dispatch => {

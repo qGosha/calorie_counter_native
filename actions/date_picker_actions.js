@@ -1,5 +1,6 @@
 import axios from "axios";
 import { dateFunc } from '../helpers/help_functions';
+import { store } from '../App';
 const ROOT_URL = "https://trackapi.nutritionix.com/v2/";
 
 
@@ -16,8 +17,9 @@ export const changeCurrentDate = date => ({
 
 
 export const getMonthReport = (jwt, date) => {
+  console.dir(store);
+  const timezone = store.getState().dash.timezone;
   const path = "reports/totals";
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const headers = {
     ["x-user-jwt"]: jwt
   }

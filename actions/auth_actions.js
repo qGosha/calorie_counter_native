@@ -1,9 +1,4 @@
 import axios from "axios";
-// const headers = {
-//   "x-app-id": "62102386",
-//   "x-app-key": "22ebb62ee3322813bd62ad63cab1e9f3",
-//   "x-remote-user-id": 0
-// };
 const ROOT_URL = "https://trackapi.nutritionix.com/v2/";
 
 

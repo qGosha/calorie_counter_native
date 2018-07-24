@@ -11,7 +11,10 @@ import {
   SETDAILYCALFAILURE,
   SETDAILYCALNOTEREMOVE,
   CURRENTDATECALLIMIT,
-  SIGNOUT} from '../actions/index';
+  SIGNOUT,
+  SETTIMEZONE
+} from '../actions/index';
+
 
   const initialState = {
     userInfo: false,
@@ -19,7 +22,8 @@ import {
     loading: false,
     suggestedFood:false,
     dailyCalUpSuccess: false,
-    calLimitError: false
+    calLimitError: false,
+    timezone: false
   }
 
 export function dash (state = initialState, action) {
@@ -48,7 +52,8 @@ export function dash (state = initialState, action) {
       return { ...state, calLimitError: action.payload, dailyCalUpSuccess: false }
     case SETDAILYCALNOTEREMOVE:
       return { ...state, dailyCalUpSuccess: false, calLimitError: false}
-
+    case SETTIMEZONE:
+      return { ...state, timezone: action.payload }
     default:
       return state;
   }
