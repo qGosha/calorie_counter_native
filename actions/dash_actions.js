@@ -1,4 +1,5 @@
 import axios from "axios";
+import { store } from '../App';
 const ROOT_URL = "https://trackapi.nutritionix.com/v2/";
 
 export const GETUSEROBJECT = "GETUSEROBJECT";
@@ -14,6 +15,7 @@ export const SETDAILYCALSUCCESS = "SETDAILYCALSUCCESS";
 export const SETDAILYCALFAILURE = "SETDAILYCALFAILURE";
 export const SETDAILYCALNOTEREMOVE = "SETDAILYCALNOTEREMOVE";
 export const SETTIMEZONE = "SETTIMEZONE";
+export const STARTDASHLOADING = "STARTDASHLOADING";
 
 export const getUser = jwt => {
   const path = "me";
@@ -26,8 +28,9 @@ export const getUser = jwt => {
   };
 };
 
-export const getSuggestedFood = (jwt, timezone) => {
+export const getSuggestedFood = (jwt) => {
   const path = "reports/suggested";
+  const timezone = store.getState().dash.timezone;
   const response = axios.get(ROOT_URL + path, {
     headers: { ["x-user-jwt"]: jwt },
     params: { timezone }
@@ -101,4 +104,8 @@ export const setDailyCalNoteRemove = response => ({
 export const setTimezone = response => ({
   type: SETTIMEZONE,
   payload: response
+});
+
+export const startDashLoading = () => ({
+  type: STARTDASHLOADING
 });

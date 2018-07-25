@@ -12,7 +12,8 @@ import {
   SETDAILYCALNOTEREMOVE,
   CURRENTDATECALLIMIT,
   SIGNOUT,
-  SETTIMEZONE
+  SETTIMEZONE,
+  STARTDASHLOADING
 } from '../actions/index';
 
 
@@ -28,8 +29,10 @@ import {
 
 export function dash (state = initialState, action) {
   switch (action.type) {
+    case STARTDASHLOADING:
+      return { ...state, loaded: false };
     case GETUSEROBJECT:
-      return { ...state};
+      return { ...state };
     case GETSUGGESTEDFOOD:
       return {...state};
     case FETCHUSEROBJECTSUCCESS:

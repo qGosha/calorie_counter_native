@@ -6,9 +6,10 @@ import {
   CURRENTDATECALLIMIT,
   CLEARERROR
  } from '../actions/index';
+import { dateFunc } from '../helpers/help_functions';
 
  const initialState = {
-   currentDate: new Date(),
+   currentDate: dateFunc(new Date()),
    dates: [],
    error: false,
    currentDateLimit: false

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FoodListItem } from '../components/foodListItem';
-import { Text, View } from 'native-base';
+import { Text, View, Content, Separator} from 'native-base';
 
 export const MyFoodPanel = ({ suggestedFood, addToBasket }) => {
   const foodArr = suggestedFood.foods;
@@ -9,8 +9,14 @@ export const MyFoodPanel = ({ suggestedFood, addToBasket }) => {
 
   return(
     <View style={{flex: 1}}>
+    <Content>
+    <Separator bordered>
       <Text>My Food</Text>
+    </Separator>
+    <View style={{flex: 1, backgroundColor:'#fff'}}>
      <FoodListItem foods={foods} addToBasket={addToBasket}/>
+     </View>
+     </Content>
     </View>
   )
 }

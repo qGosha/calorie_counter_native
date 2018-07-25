@@ -26,8 +26,8 @@ export const getFoodLog = (jwt, date) => {
 
   const query = {
    timezone,
-   begin: dateFunc(date.setHours(0,0,0,0), 'full'),
-   end: dateFunc(date.setHours(23,59,59,999), 'full')
+   begin: date + ' 00:00:00',
+   end: date + ' 23:59:59'
  }
    const response = axios({
       method: "GET",

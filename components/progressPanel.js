@@ -63,7 +63,7 @@ export const ProgressPanel = ({
       <TouchableOpacity
         style={{ flex: 1, flexDirection: 'row' }}
         onPress={() =>
-          Actions.detailedPeriod({
+          foods.length && Actions.detailedPeriod({
             title: 'Daily Total',
             foods: totalDailyNutr,
             dailyCal: dailyCal,

@@ -26,7 +26,8 @@ import {
   getMonthReportSuccess,
   dashboardLoaded,
   setNewBasket,
-  setTimezone
+  setTimezone,
+  startDashLoading
 } from "../actions/index";
 
 class Dashboard extends Component {
@@ -38,7 +39,7 @@ constructor(props) {
 
 
   onLongLoading() {
-    if (!this.props.suggestedFood) {
+    if (!this.props.loaded) {
       this.props.showLoadingScreen();
     }
   }
@@ -58,7 +59,26 @@ constructor(props) {
     setTimeout(this.onLongLoading, 600);
     const jwt = this.props.jwt;
     const currentDate = this.props.currentDate;
-    this.props.getUser(jwt)
+    Promise.resolve(this.props.startDashLoading())
+    .then(() => {
+      if(this.props.userInfo) {
+        return Promise.resolve();
+      }
+      return this.props.getUser(jwt)
+    })
+    .then(() => {
+      const timezone = this.props.timezone;
+      if(timezone) {
+        return Promise.resolve(timezone);
+      }
+      return DangerZone.Localization.getCurrentTimeZoneAsync();
+    })
+    .then( (timezone) => {
+      if(!this.props.timezone) {
+        this.props.setTimezone(timezone);
+      }
+      return this.props.getSuggestedFood(jwt);
+    })
     .then(() => this.props.getLog(jwt, currentDate))
     .then(() => fetchFromStorage('basket'))
     .then(response => {
@@ -66,11 +86,6 @@ constructor(props) {
       return Promise.resolve(this.props.setNewBasket(basket));
     })
     .then( () => this.props.getMonthReport(jwt, currentDate))
-    .then(() => DangerZone.Localization.getCurrentTimeZoneAsync())
-    .then( (timezone) => {
-      this.props.setTimezone(timezone);
-      return this.props.getSuggestedFood(jwt, timezone);
-    })
     .then(() => this.props.hideLoadingScreen())
     .catch( er => {
       const message = er && er.response && er.response.data.message || 'Error';
@@ -142,6 +157,7 @@ const mapDispatchToProps = dispatch => {
     showLoadingScreen: () => dispatch(showLoadingScreen()),
     setNewBasket: (basket) => dispatch(setNewBasket(basket)),
     hideLoadingScreen: () => dispatch(hideLoadingScreen()),
+    startDashLoading: () => dispatch(startDashLoading()),
     showBasketModal: modalType => dispatch(showModal(modalType)),
     setTimezone: timezone => dispatch(setTimezone(timezone)),
     setDailyCal: (jwt, user) => dispatch(setDailyCal(jwt, user))
@@ -159,6 +175,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => ({
   loaded: state.dash.loaded,
+  timezone: state.dash.timezone,
   jwt: state.auth.jwt,
   userInfo: state.dash.userInfo,
   suggestedFood: state.dash.suggestedFood,

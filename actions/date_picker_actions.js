@@ -23,11 +23,11 @@ export const getMonthReport = (jwt, date) => {
   const headers = {
     ["x-user-jwt"]: jwt
   }
-  const currentDate = date || new Date();
+  const currentDate = date;
   const query = {
    timezone,
-   begin: dateFunc(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)),
-   end: dateFunc(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0))
+   begin: dateFunc(new Date(new Date(currentDate).getUTCFullYear(), new Date(currentDate).getUTCMonth(), 1)),
+   end: dateFunc(new Date(new Date(currentDate).getUTCFullYear(), new Date(currentDate).getUTCMonth() + 1, 0))
  }
    const response = axios({
       method: "GET",
