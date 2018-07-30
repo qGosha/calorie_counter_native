@@ -1,4 +1,13 @@
-import {SHOWSPIN, SIGNUP, SIGNIN, SIGNINERROR, SIGNINSUCCESS, SIGNOUT, SIGNUPSUCCESS, SIGNUPERROR} from '../actions/index';
+import {
+  SHOWSPIN,
+  SIGNUP,
+  SIGNIN,
+  SIGNINERROR,
+  SIGNINSUCCESS,
+  SIGNOUT,
+  SIGNUPSUCCESS,
+  SIGNUPERROR
+} from '../actions/index';
 
 export function auth (state = {
   logged: false,
@@ -18,7 +27,7 @@ export function auth (state = {
   case SIGNINERROR:
     return {...state, isFetching: false};
   case SIGNOUT:
-      return { ...state, logged: false, jwt:null } 
+      return { ...state, logged: false, jwt:null }
   case SIGNUPSUCCESS:
       return { ...state, logged: true, isFetching: false, jwt: action.payload};
   case SIGNUPERROR:

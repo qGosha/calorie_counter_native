@@ -20,7 +20,8 @@ import Basket from './Basket';
 import SearchBar from './SearchBar';
 import IntakeLog from './IntakeLog';
 import DatePicker from './DatePicker';
-import ConfirmWindow from './ConfirmWindow';
+import { ConfirmWindow } from '../components/confirmWindow';
+import CalorieLimit from './CalorieLimit';
 import { DetailedPeriod } from '../components/detailedPeriod';
 import { connect } from 'react-redux';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
@@ -113,10 +114,16 @@ const RouterComponent = props => {
               initial={!!value}
             />
             <Scene
-            hideTabBar={false}
+              hideTabBar={false}
               key="datePicker"
               component={DatePicker}
               title='Calendar'
+            />
+            <Scene
+              hideTabBar={false}
+              key="settings"
+              component={CalorieLimit}
+              title='Settings'
             />
             <Scene
               hideDrawerButton
@@ -178,66 +185,12 @@ const RouterComponent = props => {
               navigationBarStyle={styles.nav}
               navBarButtonColor="#fff"
             />
-
             </Scene>
            </Scene>
-
         <Scene key="error" component={ConfirmWindow} hideNavBar />
       </Scene>
     </Router>
   );
-  //   return (
-  //     <Router>
-  //     <Overlay>
-  //         <Lightbox>
-  //             <Scene key="login"
-  //               component={Login}
-  //               title="Login"
-  //               initial={!value}
-  //               init={true}
-  //               hideNavBar
-  //             />
-  //             <Scene
-  //               key="signup"
-  //               component={Signup}
-  //               title="Signup"
-  //               navigationBarStyle={styles.nav}
-  //               navBarButtonColor='#fff'
-  //             />
-  //             <Scene key="drawer"
-  //               drawer
-  //
-  //               key="drawer"
-  //               contentComponent={DrawerContent}
-  //               drawerWidth={300}
-  //               open={false}
-  //               initial={!!value}
-  //             >
-  //             <Scene key="root">
-  //               <Scene
-  //                 key="tab_2_1"
-  //                 component={Dashboard}
-  //                 title="Tab #2_1"
-  //                 renderRightButton={() => <Text>Right</Text>}
-  //               />
-  //               <Scene
-  //                 key="tab_2_2"
-  //                 component={Signup}
-  //                 title="Tab #2_2"
-  //                 onBack={() => alert('onBack button!')}
-  //                 backTitle="Back!"
-  //                 panHandlers={null}
-  //               />
-  //               </Scene>
-  //
-  //             </Scene>
-  //
-  //
-  // <Scene key="error" component={ConfirmWindow} hideNavBar />
-  //           </Lightbox>
-  //           </Overlay>
-  //         </Router>
-  //         )
 };
 
 const mapDispatchToProps = dispatch => {
@@ -245,10 +198,6 @@ const mapDispatchToProps = dispatch => {
     processSignIn: data => dispatch(signInUserSuccess(data)),
   };
 };
-
-// const mapStateToProps = state => ({
-//   reduxJwt: state.auth.jwt
-// });
 
 export default connect(
   null,

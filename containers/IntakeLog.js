@@ -16,13 +16,26 @@ import { DetailedNutrPanel } from "../components/detailedNutrPanel";
 import { getFullNutrition, round } from '../helpers/help_functions';
 import { connect } from "react-redux";
 import { v4 } from "uuid";
-import { Container,Input, Content,Button, Text, View, Icon, ListItem, Item, Left, Body, Right, Thumbnail} from 'native-base';
+import {
+  Container,
+  Input,
+  Content,
+  Button,
+  Text,
+  View,
+  Icon,
+  ListItem,
+  Item,
+  Left,
+  Body,
+  Right,
+  Thumbnail
+} from 'native-base';
 import {
   StyleSheet,
   AsyncStorage
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-
 
 class IntakeLog extends Component {
   constructor(props) {
@@ -44,7 +57,6 @@ class IntakeLog extends Component {
       : foods.last_good_value;
     foods["last_good_value"] = undefined;
     this.props.updateQty(jwt, foods, currentDate);
-
   }
 
   onQtyChange(event) {

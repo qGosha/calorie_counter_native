@@ -21,7 +21,7 @@ export const ProgressPanel = ({
   if (!now) now = 0;
   if (
     currentDateLimit &&
-    new Date(currentDate).getDate() !== new Date().getDate()
+    new Date(currentDate).getUTCDate() !== new Date().getDate()
   )
     value = currentDateLimit;
   const progress = value && now ? now / value : 0;

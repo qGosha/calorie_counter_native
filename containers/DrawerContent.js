@@ -1,29 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View, AsyncStorage, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Container, Content, Button, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import { signOutUser } from '../actions/index';
-const CardSection = props => {
-  return (
-    <View style={[styles.CardSectionStyle, props.style]}>{props.children}</View>
-  );
-};
-
-const styles = StyleSheet.create({
-  sectionStyle: {
-    borderBottomWidth: 1,
-    padding: 5,
-    borderColor: '#ddd',
-  },
-  viewContainer: {
-    paddingVertical: 20,
-    justifyContent: 'space-between',
-    flex: 1,
-    backgroundColor: '#b3ecde',
-  },
-});
 
 const DrawerContent = props => {
   const onSignOut = () => {
@@ -50,7 +31,7 @@ const DrawerContent = props => {
           </View>
           <View style={styles.sectionStyle}>
             <Button
-              onPress={() => Actions.signup()}
+              onPress={() => Actions.settings()}
               iconLeft
               block
               style={{ justifyContent: 'flex-start' }}>
@@ -78,11 +59,35 @@ const DrawerContent = props => {
             <Icon type="FontAwesome" name="sign-out" />
             <Text>Sign out</Text>
           </Button>
+          <Image
+            source={require('../assets/copyright.png')}
+            style={styles.image}
+          />
         </View>
       </View>
     </Container>
   );
 };
+
+
+const styles = StyleSheet.create({
+  sectionStyle: {
+    borderBottomWidth: 1,
+    padding: 5,
+    borderColor: '#ddd',
+  },
+  viewContainer: {
+    paddingVertical: 20,
+    justifyContent: 'space-between',
+    flex: 1,
+    backgroundColor: '#b3ecde',
+  },
+  image: {
+    width: 160,
+    height: 40,
+    paddingTop: 6
+  }
+});
 
 const mapDispatchToProps = dispatch => {
   return {

@@ -4,13 +4,10 @@ import { Actions } from 'react-native-router-flux';
 import {
   Header,
   Item,
-  Input,
   Icon,
   Button,
   Text,
   Content,
-  Badge,
-  View
 } from 'native-base';
 import { StyleSheet } from 'react-native';
 export const MenuHeader = () => {

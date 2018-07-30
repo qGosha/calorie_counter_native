@@ -24,7 +24,8 @@ import {
     suggestedFood:false,
     dailyCalUpSuccess: false,
     calLimitError: false,
-    timezone: false
+    timezone: false,
+    disableSaveButton: false
   }
 
 export function dash (state = initialState, action) {
@@ -48,11 +49,11 @@ export function dash (state = initialState, action) {
     case SIGNOUT:
       return { ...state, loaded: false, userInfo: false }
     case SETDAILYCAL:
-      return { ...state }
+      return { ...state, disableSaveButton: true }
     case SETDAILYCALSUCCESS:
-      return { ...state, userInfo: action.payload, dailyCalUpSuccess: true, calLimitError:false }
+      return { ...state, userInfo: action.payload, dailyCalUpSuccess: true, calLimitError:false, disableSaveButton: false }
     case SETDAILYCALFAILURE:
-      return { ...state, calLimitError: action.payload, dailyCalUpSuccess: false }
+      return { ...state, calLimitError: action.payload, dailyCalUpSuccess: false, disableSaveButton: false }
     case SETDAILYCALNOTEREMOVE:
       return { ...state, dailyCalUpSuccess: false, calLimitError: false}
     case SETTIMEZONE:

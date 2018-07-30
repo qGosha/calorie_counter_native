@@ -1,6 +1,11 @@
 import React from 'react';
 import { FoodListItem } from '../components/foodListItem';
-import { Text, View, Content, Separator} from 'native-base';
+import {
+  Text,
+  View,
+  Content,
+  Separator
+} from 'native-base';
 
 export const MyFoodPanel = ({ suggestedFood, addToBasket }) => {
   const foodArr = suggestedFood.foods;

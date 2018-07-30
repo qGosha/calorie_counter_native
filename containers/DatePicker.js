@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import {
   getMonthReport,
   getMonthReportSuccess,
@@ -23,102 +23,77 @@ class DatePicker extends Component {
     }
   }
 
- static getDerivedStateFromProps(props, state) {
-   const dates = props.dates;
-   if (!dates || !dates.length) return {green: [], red: []}
-   const green = dates.map(i => {
-     if (i['total_cal'] && i['total_cal'] <= i['daily_kcal_limit']) {
-       return new Date(i['date']).getUTCDate();
-     }
-   })
-   const red = dates.map(i => {
-     if (i['total_cal'] && i['total_cal'] > i['daily_kcal_limit']) {
-       return new Date(i['date']).getUTCDate();
-     }
-   })
-   return {green, red}
- }
-
-
   onDateChange = date => {
     console.log(date);
     const jwt = this.props.jwt;
     const dates = this.props.dates;
-    const dateArr = dates.filter(i => new Date(i['date']).getUTCDate() === date.dateString);
+    const dateArr = dates.filter(i => i['date'] === date.dateString);
     const newLimit = (dateArr && dateArr.length) ? dateArr[0]['daily_kcal_limit'] : null;
-    // this.props.getLog(jwt, date.dateString)
-      // .then(() => Promise.resolve(this.props.setCurrentDateCalLimit(newLimit)) )
-      // .then(() => Promise.resolve(this.props.setCurrentDateCalLimit(newLimit)) )
-      // .then(() => this.props.changeCurrentDate(date.dateString))
-      // .catch(error => {
-      //   this.props.getMonthReportFailure(error);
-      // })
       this.props.setCurrentDateCalLimit(newLimit)
       this.props.changeCurrentDate(date.dateString)
       Actions.dashboard();
   }
 
-
   onMonthChange = (date) => {
     const jwt = this.props.jwt;
-    this.setState({ green: [], red: [] },
-      () => this.props.getMonthReport(jwt, date.dateString))
-  }
-
-  daysColor = ({ date, view }) => {
-    const green = this.state.green;
-    const red = this.state.red;
-    if (view === 'month' && green.includes(date.getDate())) return 'green';
-    else if (view === 'month' && red.includes(date.getDate())) return 'red';
-    else return null
+    this.props.getMonthReport(jwt, date.dateString);
+    this.props.changeCurrentDate(date.dateString)
   }
 
   render() {
+    const dates = this.props.dates;
+    let green;
+    let red;
+    if (!dates || !dates.length) {
+      green = [];
+      red = [];
+    } else {
+       green = dates.map(i => {
+        if (i['total_cal'] && i['total_cal'] <= i['daily_kcal_limit']) {
+          return i['date'];
+        }
+      })
+       red = dates.map(i => {
+        if (i['total_cal'] && i['total_cal'] > i['daily_kcal_limit']) {
+          return i['date'];
+        }
+      })
+    }
+
+    const greenD = green.length ?  green.filter( i => i).reduce( (res, c ) => {
+      if(c) {
+        res[c] = {selected: true, selectedColor: 'green'};
+        return res;
+      }
+    }, {}) : {};
+    const redD = red.length ? red.filter( i => i).reduce( (res, c) => {
+      if(c) {
+        res[c] = {selected: true, selectedColor: 'red'};
+        return res;
+      }
+    }, {}): {};
+    const markedDates = {
+      ...greenD,
+      ...redD,
+      [this.props.currentDate]: {selected: true, selectedColor: 'blue'},
+    };
     return (
       <View>
        <Calendar
-   markedDates={{
-     [this.props.currentDate]: {selected: true, selectedColor: 'blue'},
-   }}
-  current={this.props.currentDate}
-  // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-  onDayPress={(date) => this.onDateChange(date)}
-  // Handler which gets executed on day long press. Default = undefined
-  onDayLongPress={(day) => onMonthChange(day)}
-  // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-  monthFormat={'MMM yyyy'}
-  // Handler which gets executed when visible month changes in calendar. Default = undefined
-  onMonthChange={(month) => {console.log('month changed', month)}}
-  // Hide month navigation arrows. Default = false
-  hideArrows={false}
-  // Replace default arrows with custom ones (direction can be 'left' or 'right')
-  // Do not show days of other months in month page. Default = false
-  hideExtraDays={true}
-  // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-  // day from another month that is visible in calendar page. Default = false
-  disableMonthChange={true}
-  // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-  firstDay={1}
-  // Hide day names. Default = false
-  onPressArrowLeft={substractMonth => substractMonth()}
-  // Handler which gets executed when press arrow icon left. It receive a callback can go next month
-  onPressArrowRight={addMonth => addMonth()}
-/>
+        markedDates={{...markedDates}}
+        current={this.props.currentDate}
+        onPressArrowLeft={substractMonth => substractMonth()}
+        onPressArrowRight={addMonth => addMonth()}
+        onDayPress={(date) => this.onDateChange(date)}
+        monthFormat={'MMM yyyy'}
+        onMonthChange={(month) => this.onMonthChange(month)}
+        hideArrows={false}
+        hideExtraDays={true}
+        firstDay={1}
+       />
       </View>
     )
-    // return(
-    //   <Calendar
-    //    onChange={this.onDateChange}
-    //    value={this.props.currentDate}
-    //    showNeighboringMonth={false}
-    //    className={'custom-calendar'}
-    //    tileClassName={(date, view) => this.daysColor(date, view)}
-    //    onActiveDateChange={value => this.onMonthChange(value['activeStartDate'])}
-    //    onClickMonth={value => this.onMonthChange(value)}
-    //    />
-    // )
   }
-
 }
 
 

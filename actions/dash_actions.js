@@ -1,5 +1,6 @@
 import axios from "axios";
 import { store } from '../App';
+
 const ROOT_URL = "https://trackapi.nutritionix.com/v2/";
 
 export const GETUSEROBJECT = "GETUSEROBJECT";

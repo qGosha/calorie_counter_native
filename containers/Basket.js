@@ -4,9 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import { AsyncStorage, Text, View } from 'react-native';
 import { BasketPanel } from '../components/basketPanel';
 import {
-  hideModal,
   setNewBasket,
-  showModal,
   logBasketFood,
   logBasketFoodSuccess,
   logBasketFoodFailure,
@@ -173,10 +171,7 @@ class Basket extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    hideModal: modalType => dispatch(hideModal(modalType)),
     setNewBasket: basket => dispatch(setNewBasket(basket)),
-    showModal: (modalType, modalProps) =>
-      dispatch(showModal(modalType, modalProps)),
     log: (jwt, basket, currentDate) => {
       dispatch(logBasketFood(jwt, basket))
         .then(response => {

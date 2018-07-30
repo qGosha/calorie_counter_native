@@ -1,17 +1,11 @@
 import React from 'react';
-// import { TouchableWithoutFeedback, ScrollView, StyleSheet, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
-// import { CalorieLimit } from '../components/calorieLimit';
-// import DatePicker from '../containers/DatePicker';
 import FoodLog from '../containers/FoodLog';
 import { MenuHeader } from './menuHeader';
 import { Actions } from 'react-native-router-flux';
 import {
   Container,
   Header,
-  Item,
-  Input,
-  Icon,
-  Button,
+  View,
   Text,
   Content,
 } from 'native-base';
@@ -23,11 +17,20 @@ export const DashboardPanel = ({
   calLimitError,
   dailyCalUpSuccess,
   basket,
+  currentDate
 }) => {
   return (
     <Container>
       <MenuHeader />
       <Content>
+      <View style={{
+        flexDirection: 'row',
+        justifyContent:'center',
+        paddingVertical: 3,
+        borderBottomWidth: 1,
+        borderColor: '#ddd'}}>
+       <Text style={{fontSize: 14, fontWeight: '700'}}>{currentDate}</Text>
+      </View>
       <FoodLog />
       </Content>
     </Container>

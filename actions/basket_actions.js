@@ -1,6 +1,6 @@
 import axios from "axios";
-
 import { getFullNutrition } from '../helpers/help_functions';
+
 export const SETNEWBASKET = "SETNEWBASKET";
 export const GETDETAILEDFOODINFO = "GETDETAILEDFOODINFO";
 export const GETDETAILEDFOODINFOSUCCESS = "GETDETAILEDFOODINFOSUCCESS";

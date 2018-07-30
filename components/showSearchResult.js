@@ -6,9 +6,7 @@ import {
   ListItem,
   Text,
   Separator,
-  Button,
   Content,
-  View,
   Tab,
   Tabs,
 } from 'native-base';

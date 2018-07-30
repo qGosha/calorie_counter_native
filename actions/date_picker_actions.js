@@ -17,7 +17,6 @@ export const changeCurrentDate = date => ({
 
 
 export const getMonthReport = (jwt, date) => {
-  console.dir(store);
   const timezone = store.getState().dash.timezone;
   const path = "reports/totals";
   const headers = {

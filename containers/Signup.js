@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Keyboard, AsyncStorage } from 'react-native';
 import { CustomButton } from '../components/customButton'
 import t from 'tcomb-form-native';
 import {
@@ -24,8 +24,6 @@ const RepeatPassword = t.refinement(t.String, pass => {
 const Password = t.refinement(t.String, pass => {
   return pass.length > 5;
 });
-
-// const stylesheet = cloneDeep(t.form.Form.stylesheet);
 
 const Sign = t.struct({
   first_name: t.String,
@@ -98,7 +96,6 @@ onFormSubmit = () => {
   Keyboard.dismiss();
     const value = this.refs.form.getValue();
     const { password, repeatpassword } = this.state.value;
-   // Actions.error({title: 'Signup failed', text: 'Credentials are wrong'})
       if (password !== repeatpassword) {
         const options = t.update(this.state.options, {
           fields: {
@@ -122,7 +119,6 @@ onFormSubmit = () => {
         this.setState({value: initialState});
         this.props.signUpUser(value);
       }
-
   }
 
   render() {
@@ -148,11 +144,11 @@ onFormSubmit = () => {
 
          <View style={{paddingTop:15}}>
            <CustomButton
-          text={"SIGN UP"}
-          func={this.onFormSubmit}
-          isDisabled={isSubmitDisabled || isFetching}
-          customStyle={{opacity: (isSubmitDisabled || isFetching) ? 0.4 : 1}}
-          indicate={isFetching}/>
+            text={"SIGN UP"}
+            func={this.onFormSubmit}
+            isDisabled={isSubmitDisabled || isFetching}
+            customStyle={{opacity: (isSubmitDisabled || isFetching) ? 0.4 : 1}}
+            indicate={isFetching}/>
           </View>
           </View>
         </KeyboardAwareScrollView>
@@ -183,11 +179,11 @@ const mapDispatchToProps = dispatch => {
         if(!response.error) {
           const data = response.payload.data['x-user-jwt'];
           dispatch(signUpUserSuccess(data));
-          try {
-            AsyncStorage.setItem('jwt', data, () => Actions.dashboard())
-          } catch (er) {
-            Actions.error({title: 'Data upload failed', text: er})
-          }
+          AsyncStorage.setItem('jwt', data, () => {
+            Actions.dashboard();
+          }).catch(er => {
+            Actions.error({ title: 'Data upload failed', text: er });
+          });
         } else {
           return Promise.reject(response.payload.response.data.message);
         }

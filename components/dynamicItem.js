@@ -2,27 +2,16 @@ import React from 'react';
 import { totalNutrients, total, totalNutrElem, getFullNutrition, round } from '../helpers/help_functions';
 import {
   StyleSheet,
-  TextInput,
-  KeyboardAvoidingView,
-  Keyboard,
-  AsyncStorage,
   Image,
   TouchableOpacity,
-  ListView,
 } from 'react-native';
 import {
   List,
-  Container,
   ListItem,
   Text,
-  Separator,
-  Button,
   Content,
   View,
-  SwipeRow,
   Icon,
-  Tab,
-  Tabs,
   Input,
   Picker,
   Item,

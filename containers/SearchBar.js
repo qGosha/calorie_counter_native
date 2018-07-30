@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
-
 import {
-  Container,
   Header,
   Item,
   Input,
   Icon,
-  Button,
   Text,
-  Content,
   View,
 } from 'native-base';
 import { SearchResult } from '../components/showSearchResult';

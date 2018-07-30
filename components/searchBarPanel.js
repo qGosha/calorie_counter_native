@@ -7,7 +7,6 @@ import {
   Item,
   Input,
   Icon,
-  Button,
   Text,
   Content,
   View,

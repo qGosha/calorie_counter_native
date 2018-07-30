@@ -1,26 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, TextInput, Modal, TouchableHighlight } from 'react-native';
 import PopupDialog, {
   DialogTitle,
   SlideAnimation,
 } from 'react-native-popup-dialog';
 import { Actions } from 'react-native-router-flux';
-import { CustomButton } from '../components/customButton';
+import {
+  StyleSheet,
+  ListView,
+} from 'react-native';
 import { Text, Button, View } from 'native-base';
-import { hideModal } from '../actions/index';
 const slideAnimation = new SlideAnimation({
   slideFrom: 'top',
 });
 
-const ConfirmWindow = props => {
-  // const hideModal = props.hideModal;
-  // const modalText = props.text;
-  // const confirmFunc = () => {
-  //   props.confirmFunk();
-  //   hideModal(CONFIRM);
-  // };
-
+export const ConfirmWindow = props => {
   return (
     <PopupDialog
       ref={popupDialog => {
@@ -40,7 +34,11 @@ const ConfirmWindow = props => {
         <View style={{flex: 1, marginTop: 50}}>
           <Text style={{ alignSelf: 'center' }}>{props.text}</Text>
         </View>
-        <View style={{flexDirection: 'row', flex: 1, justifyContent: props.confirm ? 'space-between' : 'center'}}>
+        <View style={{
+          flexDirection: 'row',
+          flex: 1,
+          justifyContent: props.confirm ? 'space-between' : 'center'
+        }}>
         {props.confirm && (
           <Button
             primary
@@ -48,14 +46,14 @@ const ConfirmWindow = props => {
               props.func();
               Actions.pop();
             } }
-            style={{ backgroundColor: '#007bff', width: 70,  }}>
+            style={styles.buttonsText}>
             <Text>{props.positiveText || 'Yes'}</Text>
           </Button>
         )}
         <Button
           primary
           onPress={() => Actions.pop()}
-          style={{ backgroundColor: '#007bff', width: 70,}}>
+          style={styles.buttonsText}>
           <Text>{props.negativeText || 'Hide'}</Text>
         </Button>
         </View>
@@ -64,13 +62,11 @@ const ConfirmWindow = props => {
   );
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    hideModal: modalType => dispatch(hideModal(modalType)),
-  };
-};
+const styles = StyleSheet.create({
+  buttonsText: {
+    backgroundColor: '#007bff',
+    width: 70,
+    justifyContent: 'center'
+  },
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(ConfirmWindow);
+});

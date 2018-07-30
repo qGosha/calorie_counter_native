@@ -1,29 +1,16 @@
 import React from 'react';
 import {
   StyleSheet,
-  TextInput,
-  KeyboardAvoidingView,
-  Keyboard,
-  AsyncStorage,
-  Image,
-  TouchableOpacity,
   ListView,
 } from 'react-native';
 import {
   List,
   Container,
-  ListItem,
   Text,
-  Separator,
   Button,
   Content,
   View,
-  SwipeRow,
   Icon,
-  Tab,
-  Tabs,
-  Input,
-  Picker,
   Item,
 } from 'native-base';
 import { TotalPanel } from './totalPanel';

@@ -1,36 +1,29 @@
 import React from "react";
 import { FoodListItem } from '../components/foodListItem';
 import { Actions } from 'react-native-router-flux';
-import { totalNutrients, total, totalNutrElem, getFullNutrition, round } from '../helpers/help_functions';
+import {
+  totalNutrients,
+  total,
+  totalNutrElem,
+  getFullNutrition,
+  round
+} from '../helpers/help_functions';
 import {
   StyleSheet,
-  TextInput,
-  KeyboardAvoidingView,
-  Keyboard,
-  AsyncStorage,
-  Image,
   TouchableOpacity,
-  ListView,
 } from 'react-native';
 import {
   List,
   Container,
   ListItem,
   Text,
-  Separator,
-  Button,
   Content,
   View,
-  SwipeRow,
   Icon,
   Right,
-  Tab,
   Thumbnail,
   Left,
   Body,
-  Tabs,
-  Input,
-  Picker,
   Item,
 } from 'native-base';
 

@@ -3,13 +3,10 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
-  TouchableWithoutFeedback,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  TextInput,
-  KeyboardAvoidingView,
   Keyboard,
   AsyncStorage,
 } from 'react-native';
@@ -67,9 +64,8 @@ class Login extends Component {
       },
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
-    // this.clearForm = this.clearForm.bind(this);
     this.onFormChange = this.onFormChange.bind(this);
-    // this.onTestLogin = this.onTestLogin.bind(this);
+    this.onTestLogin = this.onTestLogin.bind(this);
   }
 
   onFormChange = value => {
@@ -90,20 +86,13 @@ class Login extends Component {
     }
   }
 
-  // clearForm() {
-  //   const value = this.state.value;
-  //   value.email = '';
-  //   value.password ='';
-
-  // }
-
-  // onTestLogin() {
-  //   const data = {
-  //     email: "zxoxz@mail.ru",
-  //     password: "123456"
-  //   }
-  //   this.props.signInUser(data);
-  // }
+  onTestLogin() {
+    const data = {
+      email: "zxoxz@mail.ru",
+      password: "123456"
+    }
+    this.props.signInUser(data);
+  }
 
   render() {
     const isSubmitDisabled = this.state.isSubmitDisabled;
@@ -136,7 +125,15 @@ class Login extends Component {
               }}
               indicate={isFetching}
             />
-            <CustomButton text={'SIGN UP'} func={() => AsyncStorage.getItem('jwt')} />
+            <CustomButton text={'SIGN UP'} func={() => Actions.signup()} />
+            <CustomButton
+              isDisabled={isFetching}
+              text={'Test login'}
+              func={this.onTestLogin}
+              customStyle={{
+                opacity: isFetching ? 0.4 : 1,
+              }}
+              indicate={isFetching} />
           </View>
         </View>
       </KeyboardAwareScrollView>

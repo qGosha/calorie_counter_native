@@ -4,7 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import { DangerZone } from 'expo';
 import { DashboardPanel } from '../components/dashboardPanel';
 import { fetchFromStorage } from '../helpers/help_functions';
-import { TouchableWithoutFeedback, ScrollView, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Keyboard,AsyncStorage } from 'react-native';
+import { View, } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
   signOutUser,
@@ -18,10 +18,6 @@ import {
   showModal,
   getFoodLog,
   getFoodLogSuccess,
-  setDailyCal,
-  setDailyCalSuccess,
-  setDailyCalFailure,
-  setDailyCalNoteRemove,
   getMonthReport,
   getMonthReportSuccess,
   dashboardLoaded,
@@ -34,9 +30,7 @@ class Dashboard extends Component {
 constructor(props) {
   super(props);
   this.onLongLoading = this.onLongLoading.bind(this);
-  this.dailyCalChange = this.dailyCalChange.bind(this);
 }
-
 
   onLongLoading() {
     if (!this.props.loaded) {
@@ -44,16 +38,6 @@ constructor(props) {
     }
   }
 
-  dailyCalChange(value) {
-    const jwt = this.props.jwt;
-    const request = {
-      'daily_kcal': value
-    };
-    this.props.setDailyCal(jwt, request)
-    .then( () => {
-      return this.props.getMonthReport(jwt, this.props.currentDate);
-    })
-  }
 
   componentDidMount() {
     setTimeout(this.onLongLoading, 600);
@@ -85,7 +69,7 @@ constructor(props) {
       const basket = response ? JSON.parse(response) : [];
       return Promise.resolve(this.props.setNewBasket(basket));
     })
-    .then( () => this.props.getMonthReport(jwt, currentDate))
+    .then(() => this.props.getMonthReport(jwt, currentDate))
     .then(() => this.props.hideLoadingScreen())
     .catch( er => {
       const message = er && er.response && er.response.data.message || 'Error';
@@ -115,7 +99,8 @@ constructor(props) {
      basket={basket}
      dailyCalChange={this.dailyCalChange}
      dailyCalUpSuccess={this.props.dailyCalUpSuccess}
-     calLimitError={this.props.calLimitError}/>
+     calLimitError={this.props.calLimitError}
+     currentDate={this.props.currentDate}/>
     }
 
   }

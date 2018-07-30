@@ -1,15 +1,13 @@
 import React from "react";
 import { StyleSheet,Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 
-
-
 export const CustomButton = ({text, func, isDisabled, customStyle, indicate}) => {
   return (
     <TouchableOpacity
         style={[styles.buttonContainer, customStyle]}
         onPress={func}
         disabled={isDisabled}
-        
+
       >
       <View style={{
         flexDirection: 'row',
