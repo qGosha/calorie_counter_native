@@ -1,5 +1,12 @@
 {
   "expo": {
-    "sdkVersion": "33.0.0"
+    "sdkVersion": "36.0.0",
+    "name": "calcount_native",
+    "slug": "calcount_native",
+    "version": "0.1.0",
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }

@@ -4,6 +4,7 @@ import rootReducer from './reducers';
 import ReduxPromise from 'redux-promise';
 import { createStore, applyMiddleware, compose } from 'redux';
 import AppRoot from "./containers/AppRoot";
+import { AppRegistry } from 'react-native';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(ReduxPromise)));
@@ -17,6 +18,8 @@ export default class App extends Component {
   );
   }
 }
+
+AppRegistry.registerComponent('calcount_native', () => App);
 
 global.XMLHttpRequest = global.originalXMLHttpRequest ?
   global.originalXMLHttpRequest :
