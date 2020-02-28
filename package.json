@@ -21,10 +21,10 @@
   "dependencies": {
     "axios": "^0.18.0",
     "buffer": "^5.1.0",
-    "expo": "^32.0.0",
+    "expo": "^36.0.2",
     "lodash.debounce": "^4.0.8",
     "moment-timezone": "^0.5.21",
-    "native-base": "^2.6.1",
+    "native-base": "^2.13.8",
     "npm": "^6.1.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
