@@ -7,7 +7,6 @@ import PopupDialog, {
 import { Actions } from 'react-native-router-flux';
 import {
   StyleSheet,
-  ListView,
 } from 'react-native';
 import { Text, Button, View } from 'native-base';
 const slideAnimation = new SlideAnimation({

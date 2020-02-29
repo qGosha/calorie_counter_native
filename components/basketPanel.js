@@ -1,8 +1,9 @@
 import React from 'react';
 import {
   StyleSheet,
-  ListView,
 } from 'react-native';
+import ListView from "deprecated-react-native-listview";
+
 import {
   List,
   Container,
