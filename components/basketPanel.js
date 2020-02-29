@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
 } from 'react-native';
-import ListView from "deprecated-react-native-listview";
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 import {
   List,
@@ -28,20 +28,7 @@ export const BasketPanel = ({
   clearBasket,
   log
 }) => {
-  let basketFood;
-  if (!basket.length) {
-    basketFood = null;
-  } else {
-    basketFood = basket.map((basketItem, i) => {
-     return <DynamicItem
-      withInfo={true}
-      i={i}
-      item={basketItem}
-      onMeasureChange={onMeasureChange}
-      onQtyChange={onQtyChange}
-     />
-  })
-}
+
   const noFoodAdded = (
     <View
       style={{
@@ -60,31 +47,38 @@ export const BasketPanel = ({
     </View>
   );
 
-  const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
   return (
     <Container>
       <MenuHeader />
       <Content>
-        {basketFood ? (
+        {basket.length ? (
           <View style={{ flex: 1 }}>
             <Text style={styles.tip}>Swipe left to delete</Text>
-            <List
-              dataSource={ds.cloneWithRows(basketFood)}
-              disableRightSwipe
-              renderRow={basketFood => basketFood}
-              renderRightHiddenRow={(data, secId, rowId, rowMap) => (
+            <SwipeListView
+              data={basketFood}
+              renderItem={(data, rowMap) => (
+                <DynamicItem
+                  withInfo={true}
+                  i={rowMap}
+                  item={basketItem}
+                  onMeasureChange={onMeasureChange}
+                  onQtyChange={onQtyChange}
+                />
+              )}
+              renderHiddenItem={(data, rowMap) => (
                 <Button
                   full
                   danger
                   onPress={() => {
-                    rowMap[`${secId}${rowId}`].props.closeRow();
                     deleteItem(rowId);
                   }}>
                   <Icon active name="trash" />
                 </Button>
               )}
+              leftOpenValue={75}
               rightOpenValue={-75}
+              closeOnRowPress={true}
             />
             <TotalPanel foods={basket} />
             <View style={styles.control}>
@@ -121,8 +115,8 @@ export const BasketPanel = ({
             </View>
           </View>
         ) : (
-          noFoodAdded
-        )}
+            noFoodAdded
+          )}
       </Content>
     </Container>
   );
