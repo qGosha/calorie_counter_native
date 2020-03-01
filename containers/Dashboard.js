@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { DangerZone } from 'expo';
+import * as Localization from 'expo-localization';
 import { DashboardPanel } from '../components/dashboardPanel';
 import { fetchFromStorage } from '../helpers/help_functions';
 import { View, } from 'react-native';
@@ -51,11 +51,8 @@ constructor(props) {
       return this.props.getUser(jwt)
     })
     .then(() => {
-      const timezone = this.props.timezone;
-      if(timezone) {
-        return Promise.resolve(timezone);
-      }
-      return DangerZone.Localization.getCurrentTimeZoneAsync();
+      const timezone = this.props.timezone || Localization.timezone
+      return Promise.resolve(timezone);
     })
     .then( (timezone) => {
       if(!this.props.timezone) {

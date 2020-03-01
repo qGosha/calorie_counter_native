@@ -3,13 +3,13 @@ import { FoodListItem } from '../components/foodListItem';
 import { SepFoodList } from '../components/foodSepList';
 import {
   List,
-  ListItem,
   Text,
   Separator,
   Content,
   Tab,
   Tabs,
 } from 'native-base';
+// import { FlatList } from "react-native";
 
 export const SearchResult = ({ foundFood, term, addToBasket }) => {
   if (!foundFood) return null;

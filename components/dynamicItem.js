@@ -86,7 +86,7 @@ export const DynamicItem = ({
   );
 
   return (
-    <ListItem style={styles.main}>
+    <View style={styles.main}>
       <Image
         source={{ uri: item.photo.thumb || foodAvatarUrl }}
         style={styles.image}
@@ -116,7 +116,7 @@ export const DynamicItem = ({
        <Icon type="FontAwesome" name="info-circle" style={{fontSize: 20}}/>
       </TouchableOpacity>}
       {colorieSection}
-    </ListItem>
+    </View>
   );
 }
 
@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingTop: 10,
     paddingBottom: 5,
+    backgroundColor: '#fff',
   },
   image: {
     width: 35,

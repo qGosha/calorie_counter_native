@@ -121,8 +121,8 @@ class IntakeLog extends Component {
           confirm: true,
           title: 'Confirm',
           text:confirmText,
-          func: () =>  {
-            this.props.deleteFoodLogItem(jwt, foods, this.props.currentDate);
+          func: async () =>  {
+            await this.props.deleteFoodLogItem(jwt, foods, this.props.currentDate);
             Actions.dashboard();
           },
           positiveText: 'Yes',

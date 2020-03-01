@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {
-  List,
   Container,
   ListItem,
   Text,
@@ -25,6 +24,7 @@ import {
   Left,
   Body,
   Item,
+  List,
 } from 'native-base';
 
 export const LogFoodPanel = ({ foods, dailyCal }) => {
@@ -104,11 +104,11 @@ export const LogFoodPanel = ({ foods, dailyCal }) => {
           </Left>
           <Body>
             <Text>{item.food_name}</Text>
-            <Text note>{item.brand_name ? item.brand_name + ', ' : null}{item.serving_qty} {item.serving_unit}</Text>
+            <Text>{item.brand_name ? item.brand_name + ', ' : null}{item.serving_qty} {item.serving_unit}</Text>
           </Body>
           <Right>
             <Text style={{color: 'green'}}>{calorie}</Text>
-            <Text note>cal</Text>
+            <Text>cal</Text>
           </Right>
         </ListItem>
       )
@@ -130,7 +130,7 @@ export const LogFoodPanel = ({ foods, dailyCal }) => {
               [styles.icon, {color: breakfast && breakfast.length ? 'green': 'gray'}]
               }/>
           </TouchableOpacity>
-          {breakfastCal && <Text>{breakfastCal}</Text>}
+          {breakfastCal ? <Text>{breakfastCal}</Text> : null}
         </ListItem>
         { period('Breakfast', breakfast) }
         <ListItem itemDivider style={styles.container}>
@@ -146,9 +146,9 @@ export const LogFoodPanel = ({ foods, dailyCal }) => {
               [styles.icon, {color: lunch && lunch.length ? 'green': 'gray'}]
               }/>
            </TouchableOpacity>
-           {lunchCal && <Text>{lunchCal}</Text>}
+           {lunchCal ? <Text>{lunchCal}</Text> : null}
         </ListItem>
-        { period('Lunch', lunch) }
+         { period('Lunch', lunch) }
          <ListItem itemDivider style={styles.container}>
           <Text>Dinner</Text>
           <TouchableOpacity
@@ -162,7 +162,7 @@ export const LogFoodPanel = ({ foods, dailyCal }) => {
               [styles.icon, {color: dinner && dinner.length ? 'green': 'gray'}]
             }/>
           </TouchableOpacity>
-          {dinnerCal && <Text>{dinnerCal}</Text>}
+          {dinnerCal ? <Text>{dinnerCal}</Text> : null}
         </ListItem>
         { period('Dinner', dinner) }
         <ListItem itemDivider style={styles.container}>
@@ -178,7 +178,7 @@ export const LogFoodPanel = ({ foods, dailyCal }) => {
             [styles.icon, {color: snacks && snacks.length ? 'green': 'gray'}]
             }/>
           </TouchableOpacity>
-          {snacksCal && <Text>{snacksCal}</Text>}
+          {snacksCal ? <Text>{snacksCal}</Text> : null}
         </ListItem>
         { period('Snacks', snacks) }
       </List>

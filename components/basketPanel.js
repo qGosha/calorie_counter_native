@@ -56,29 +56,29 @@ export const BasketPanel = ({
           <View style={{ flex: 1 }}>
             <Text style={styles.tip}>Swipe left to delete</Text>
             <SwipeListView
-              data={basketFood}
+              data={basket}
               renderItem={(data, rowMap) => (
                 <DynamicItem
                   withInfo={true}
-                  i={rowMap}
-                  item={basketItem}
+                  i={data.index}
+                  item={data.item}
                   onMeasureChange={onMeasureChange}
                   onQtyChange={onQtyChange}
                 />
               )}
               renderHiddenItem={(data, rowMap) => (
-                <Button
-                  full
-                  danger
-                  onPress={() => {
-                    deleteItem(rowId);
-                  }}>
-                  <Icon active name="trash" />
-                </Button>
+                <View style={styles.rowBack}>
+                  <Button
+                    danger
+                    onPress={() => {
+                      deleteItem(data.index);
+                    }}>
+                    <Icon active name="trash" />
+                  </Button>
+                  </View>
               )}
-              leftOpenValue={75}
-              rightOpenValue={-75}
-              closeOnRowPress={true}
+              rightOpenValue={-75} 
+              disableRightSwipe
             />
             <TotalPanel foods={basket} />
             <View style={styles.control}>
@@ -138,5 +138,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'gray',
     textAlign: 'center',
+  },
+  rowBack: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingLeft: 15,
   },
 });

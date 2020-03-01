@@ -7,6 +7,7 @@ import { Container, Content, } from 'native-base';
 
 const DetailedNutr = props => {
   const basketItem = props.basket[props.id];
+  if (!basketItem) return null
   return (
     <Container>
       <Content style={{ paddingHorizontal: 15, paddingVertical: 4 }}>

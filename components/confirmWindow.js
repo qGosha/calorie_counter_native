@@ -1,36 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import PopupDialog, {
-  DialogTitle,
-  SlideAnimation,
-} from 'react-native-popup-dialog';
+// import Modal, { SlideAnimation, ModalContent, ModalTitle } from 'react-native-modals';
+import Modal from "react-native-modal";
+
 import { Actions } from 'react-native-router-flux';
 import {
   StyleSheet,
 } from 'react-native';
 import { Text, Button, View } from 'native-base';
-const slideAnimation = new SlideAnimation({
-  slideFrom: 'top',
-});
 
 export const ConfirmWindow = props => {
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    return () => setVisible(false)
+  }, [])
   return (
-    <PopupDialog
-      ref={popupDialog => {
-        popupDialog = popupDialog;
-      }}
-      dismissOnTouchOutside={false}
-      width={230}
-      dialogAnimation={slideAnimation}
-      show={true}>
-      <DialogTitle title={props.title} />
+    // <Modal
+    //   visible={true}
+    //   modalAnimation={new SlideAnimation({
+    //     slideFrom: 'top',
+    //   })}
+    //   modalTitle={<ModalTitle title={props.title} />}
+    // >
+      //  <ModalContent>
+      <Modal isVisible={visible} supportedOrientations={['portrait', 'landscape']}>
       <View
         style={{
+          alignSelf: 'center',
           paddingLeft: 10,
           paddingRight: 10,
-          flex: 1,
+          justifyContent: 'center',
+          backgroundColor: '#fff',
+          width: 300,
+          height: 200
         }}>
-        <View style={{flex: 1, marginTop: 50}}>
+        <View style={{ flex: 1, marginTop: 50 }}>
           <Text style={{ alignSelf: 'center' }}>{props.text}</Text>
         </View>
         <View style={{
@@ -38,26 +43,27 @@ export const ConfirmWindow = props => {
           flex: 1,
           justifyContent: props.confirm ? 'space-between' : 'center'
         }}>
-        {props.confirm && (
+          {props.confirm && (
+            <Button
+              primary
+              onPress={() => {
+                props.func();
+                Actions.pop();
+              }}
+              style={styles.buttonsText}>
+              <Text>{props.positiveText || 'Yes'}</Text>
+            </Button>
+          )}
           <Button
             primary
-            onPress={() => {
-              props.func();
-              Actions.pop();
-            } }
+            onPress={() => Actions.pop()}
             style={styles.buttonsText}>
-            <Text>{props.positiveText || 'Yes'}</Text>
+            <Text>{props.negativeText || 'Hide'}</Text>
           </Button>
-        )}
-        <Button
-          primary
-          onPress={() => Actions.pop()}
-          style={styles.buttonsText}>
-          <Text>{props.negativeText || 'Hide'}</Text>
-        </Button>
         </View>
       </View>
-    </PopupDialog>
+      {/* </ModalContent> */}
+    </Modal>
   );
 };
 
