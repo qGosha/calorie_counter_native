@@ -15,7 +15,8 @@ import {
 import { DetailedNutrPanel } from "../components/detailedNutrPanel";
 import { getFullNutrition, round } from '../helpers/help_functions';
 import { connect } from "react-redux";
-import { v4 } from "uuid";
+import uuid from 'react-native-uuid';
+
 import {
   Container,
   Input,
@@ -88,7 +89,7 @@ class IntakeLog extends Component {
     const basket = this.props.basket;
     const newItem = {
       ...item,
-      id: v4(),
+      id: uuid.v4(),
       full_nutrients: this.state.foods["full_nutrients"],
       isFromFoodLog: true,
       serving_qty: +item.serving_qty ? item.serving_qty : item.last_good_value

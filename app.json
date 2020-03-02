@@ -1,12 +1,13 @@
 {
   "expo": {
     "sdkVersion": "36.0.0",
-    "name": "calcount_native",
-    "slug": "calcount_native",
+    "name": "Calorie counter",
+    "slug": "calorie_counter",
     "version": "0.1.0",
     "platforms": [
       "android",
       "ios"
     ]
-  }
+  },
+  "icon": "./assets/app_avatar.png"
 }
