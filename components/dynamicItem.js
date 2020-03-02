@@ -50,7 +50,7 @@ export const DynamicItem = ({
       <Picker
         iosIcon={
           <Icon
-            name="ios-arrow-down-outline"
+            name="ios-arrow-dropdown"
             style={{
               position: 'absolute',
               top: 10,

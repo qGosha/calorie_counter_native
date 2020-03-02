@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   viewContainer: {
+    paddingTop: 40,
     paddingVertical: 20,
     justifyContent: 'space-between',
     flex: 1,
