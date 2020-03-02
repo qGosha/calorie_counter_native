@@ -3,11 +3,9 @@ import BasketIcon from '../containers/BasketIcon.js';
 import { Actions } from 'react-native-router-flux';
 import {
   Header,
-  Item,
   Icon,
   Button,
   Text,
-  Content,
 } from 'native-base';
 import { StyleSheet } from 'react-native';
 export const MenuHeader = () => {

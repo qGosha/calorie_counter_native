@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { LogFoodPanel } from '../components/logFoodPanel';
 import { ProgressPanel } from '../components/progressPanel';
-import { totalNutrients, total, getFullNutrition } from '../helpers/help_functions';
-import { StyleSheet, View } from 'react-native';
+import { totalNutrients } from '../helpers/help_functions';
+import { View } from 'react-native';
 
 const FoodLog = props => {
 

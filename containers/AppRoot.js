@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { fetchFromStorage } from '../helpers/help_functions';
 import RouterComponent from "./Router";
 

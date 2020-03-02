@@ -20,7 +20,6 @@ import {
   getFoodLogSuccess,
   getMonthReport,
   getMonthReportSuccess,
-  dashboardLoaded,
   setNewBasket,
   setTimezone,
   startDashLoading

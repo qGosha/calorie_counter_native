@@ -5,20 +5,17 @@ import {
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 import {
-  List,
   Container,
   Text,
   Button,
   Content,
   View,
   Icon,
-  Item,
 } from 'native-base';
 import { TotalPanel } from './totalPanel';
 import { MenuHeader } from './menuHeader';
 import { DynamicItem } from './dynamicItem';
 import { Actions } from 'react-native-router-flux';
-import { round, getFullNutrition } from '../helpers/help_functions';
 
 export const BasketPanel = ({
   basket,

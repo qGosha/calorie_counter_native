@@ -9,7 +9,6 @@ import {
   Tab,
   Tabs,
 } from 'native-base';
-// import { FlatList } from "react-native";
 
 export const SearchResult = ({ foundFood, term, addToBasket }) => {
   if (!foundFood) return null;

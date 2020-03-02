@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { AsyncStorage, Text, View } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { BasketPanel } from '../components/basketPanel';
 import {
   setNewBasket,

@@ -2,15 +2,9 @@ import React, { Component } from "react";
 import {
   getFoodLog,
   getFoodLogSuccess,
-  getFoodLogFailure,
   deleteFoodLogItem,
-  deleteFoodLogItemFailure,
   setNewBasket,
   updateQty,
-  updateQtyFailure,
-  getMonthReport,
-  getMonthReportSuccess,
-  getMonthReportFailure
 } from "../actions/index";
 import { DetailedNutrPanel } from "../components/detailedNutrPanel";
 import { getFullNutrition, round } from '../helpers/help_functions';
@@ -26,7 +20,6 @@ import {
   View,
   Icon,
   ListItem,
-  Item,
   Left,
   Body,
   Right,

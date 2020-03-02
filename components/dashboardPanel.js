@@ -1,22 +1,14 @@
 import React from 'react';
 import FoodLog from '../containers/FoodLog';
 import { MenuHeader } from './menuHeader';
-import { Actions } from 'react-native-router-flux';
 import {
   Container,
-  Header,
   View,
   Text,
   Content,
 } from 'native-base';
 
 export const DashboardPanel = ({
-  userInfo,
-  showBasketModal,
-  dailyCalChange,
-  calLimitError,
-  dailyCalUpSuccess,
-  basket,
   currentDate
 }) => {
   return (

@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
-  ScrollView,
   StyleSheet,
-  Text,
   View,
   Keyboard,
   AsyncStorage,

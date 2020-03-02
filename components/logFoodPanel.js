@@ -1,9 +1,7 @@
 import React from "react";
-import { FoodListItem } from '../components/foodListItem';
 import { Actions } from 'react-native-router-flux';
 import {
   totalNutrients,
-  total,
   totalNutrElem,
   getFullNutrition,
   round
@@ -13,17 +11,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {
-  Container,
   ListItem,
   Text,
-  Content,
-  View,
   Icon,
   Right,
   Thumbnail,
   Left,
   Body,
-  Item,
   List,
 } from 'native-base';
 

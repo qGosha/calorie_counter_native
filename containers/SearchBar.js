@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
 import {
-  Header,
-  Item,
-  Input,
   Icon,
   Text,
   View,

@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { DynamicItem } from '../components/dynamicItem';
-import { fixed, round, getFullNutrition } from '../helpers/help_functions';
 import { DetailedNutrPanel } from '../components/detailedNutrPanel'
 import { Container, Content, } from 'native-base';
 

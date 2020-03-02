@@ -1,15 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Router,
   Scene,
   Reducer,
-  Lightbox,
-  Modal,
-  Drawer,
-  Stack,
-  Tabs,
-  ActionConst,
-  Overlay,
 } from 'react-native-router-flux';
 import { Actions } from 'react-native-router-flux';
 import Signup from './Signup';
@@ -24,7 +17,7 @@ import { ConfirmWindow } from '../components/confirmWindow';
 import CalorieLimit from './CalorieLimit';
 import { DetailedPeriod } from '../components/detailedPeriod';
 import { connect } from 'react-redux';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet} from 'react-native';
 import DrawerContent from './DrawerContent';
 import {
   Container,

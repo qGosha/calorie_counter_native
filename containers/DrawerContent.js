@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, View, AsyncStorage, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { Container, Content, Button, Icon, Text } from 'native-base';
+import { Container, Button, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import { signOutUser } from '../actions/index';
 

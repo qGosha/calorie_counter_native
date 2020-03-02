@@ -1,15 +1,12 @@
 import React from 'react';
-import { totalNutrients, total, totalNutrElem, getFullNutrition, round } from '../helpers/help_functions';
+import { getFullNutrition, round } from '../helpers/help_functions';
 import {
   StyleSheet,
   Image,
   TouchableOpacity,
 } from 'react-native';
 import {
-  List,
-  ListItem,
   Text,
-  Content,
   View,
   Icon,
   Input,

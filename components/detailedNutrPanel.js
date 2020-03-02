@@ -3,15 +3,13 @@ import { fixed, round, getFullNutrition } from '../helpers/help_functions';
 import {
   Text,
   View,
-  Container,
-  Content,
   ListItem,
   Left,
   Body,
   Right,
   Thumbnail
 } from 'native-base';
-import { StyleSheet, Image,  } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const DetailedNutrPanel = ({ foodObj, dailyCal, isFromBasket }) => {
 

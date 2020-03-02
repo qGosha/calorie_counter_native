@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-// import Modal, { SlideAnimation, ModalContent, ModalTitle } from 'react-native-modals';
 import Modal from "react-native-modal";
 
 import { Actions } from 'react-native-router-flux';
@@ -16,14 +14,6 @@ export const ConfirmWindow = props => {
     return () => setVisible(false)
   }, [])
   return (
-    // <Modal
-    //   visible={true}
-    //   modalAnimation={new SlideAnimation({
-    //     slideFrom: 'top',
-    //   })}
-    //   modalTitle={<ModalTitle title={props.title} />}
-    // >
-      //  <ModalContent>
       <Modal isVisible={visible} supportedOrientations={['portrait', 'landscape']}>
       <View
         style={{
@@ -62,7 +52,6 @@ export const ConfirmWindow = props => {
           </Button>
         </View>
       </View>
-      {/* </ModalContent> */}
     </Modal>
   );
 };
@@ -73,5 +62,4 @@ const styles = StyleSheet.create({
     width: 70,
     justifyContent: 'center'
   },
-
 });
